@@ -1,6 +1,6 @@
 import './Footer.scss';
 import { FaFacebookF, FaTwitter, FaYoutube } from 'react-icons/fa';
-// npm i reac
+// npm i react-icons
 
 export default function Footer() {
 	return (
