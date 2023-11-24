@@ -1,0 +1,23 @@
+.Header {
+	display: flex;
+	justify-content: space-between;
+	width: 70vw;
+	margin: 0 auto;
+	padding: 30px 5px;
+	border-bottom: 1px solid #aaa;
+
+	h1 {
+		font-size: var(--titSize2);
+	}
+
+	ul {
+		display: flex;
+		align-items: center;
+		gap: 50px;
+
+		a.on {
+			color: var(--pointColor);
+			font-weight: bold;
+		}
+	}
+}

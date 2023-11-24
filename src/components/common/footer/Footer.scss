@@ -1,0 +1,26 @@
+footer {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	width: 70vw;
+	margin: 0 auto;
+	padding: 60px 0;
+	border-top: 1px solid #bbb;
+
+	h1 {
+		font-size: var(--titSize2);
+		opacity: 0.8;
+	}
+
+	p {
+		opacity: 0.6;
+	}
+
+	ul {
+		display: flex;
+		align-items: center;
+		gap: 30px;
+		opacity: 0.7;
+	}
+}
