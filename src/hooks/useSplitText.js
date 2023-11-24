@@ -7,7 +7,14 @@
 
 export function useSplitText(txt) {
 	// 해당 useSplitText hook은 아래의 함수를 리턴
-	return (txt) => {
-		console.log(txt);
+	return (ref, txt) => {
+		let tags = '';
+		for (let letter of txt) {
+			tags += `
+        <span>${letter}</span>
+      `;
+		}
+		console.log(tags);
+		ref.innerHTML = tags;
 	};
 }
