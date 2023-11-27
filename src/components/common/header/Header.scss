@@ -4,7 +4,7 @@
 	width: 70vw;
 	margin: 0 auto;
 	padding: 30px 5px;
-	border-bottom: 1px solid #aaa;
+	border-bottom: 1px solid rgba(var(--baseColor-code), 0.2);
 
 	h1 {
 		font-size: var(--titSize2);

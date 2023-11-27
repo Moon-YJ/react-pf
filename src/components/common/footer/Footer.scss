@@ -6,7 +6,7 @@ footer {
 	width: 70vw;
 	margin: 0 auto;
 	padding: 60px 0;
-	border-top: 1px solid #bbb;
+	border-top: 1px solid rgba(var(--baseColor-code), 0.3);
 
 	h1 {
 		font-size: var(--titSize2);

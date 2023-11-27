@@ -22,7 +22,7 @@
 	.bar {
 		width: 50px;
 		height: 1px;
-		background: #111;
+		background: var(--baseColor);
 		opacity: 0.7;
 		margin-bottom: 50px;
 	}
