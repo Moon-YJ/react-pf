@@ -19,7 +19,6 @@ export function useSplitText(txt) {
 			}s; display: inline-block;'>${letter}</span>
       `;
 		}
-		console.log(tags);
 		ref.innerHTML = tags;
 	};
 }

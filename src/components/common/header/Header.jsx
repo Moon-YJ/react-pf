@@ -1,7 +1,7 @@
 import './Header.scss';
 import { NavLink, Link } from 'react-router-dom';
 
-export default function Header() {
+export default function Header({ setDark, Dark }) {
 	return (
 		<header className='Header'>
 			<h1>
@@ -40,6 +40,7 @@ export default function Header() {
 					</NavLink>
 				</li>
 			</ul>
+			<button onClick={() => setDark(!Dark)}>{Dark ? 'Light 모드' : 'Dark 모드'}</button>
 		</header>
 	);
 }

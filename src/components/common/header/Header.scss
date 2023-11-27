@@ -20,4 +20,11 @@
 			font-weight: bold;
 		}
 	}
+
+	button {
+		width: 80px;
+		font-size: 0.7rem;
+		border-radius: 20px;
+		border: 1px solid var(--baseColor);
+	}
 }
