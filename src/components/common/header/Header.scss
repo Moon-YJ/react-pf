@@ -1,6 +1,7 @@
 .Header {
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 	width: 70vw;
 	margin: 0 auto;
 	padding: 30px 5px;
@@ -28,6 +29,7 @@
 		border: 1px solid rgba(var(--baseColor-code), 0.6);
 		border-radius: 13px;
 		cursor: pointer;
+		transform: scale(0.7);
 		.ball {
 			position: absolute;
 			top: 2px;
