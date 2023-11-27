@@ -21,10 +21,27 @@
 		}
 	}
 
-	button {
-		width: 80px;
-		font-size: 0.7rem;
-		border-radius: 20px;
-		border: 1px solid var(--baseColor);
+	.themeBox {
+		position: relative;
+		width: 60px;
+		height: 26px;
+		border: 1px solid rgba(var(--baseColor-code), 0.6);
+		border-radius: 13px;
+		cursor: pointer;
+		.ball {
+			position: absolute;
+			top: 2px;
+			left: 2px;
+			width: 20px;
+			height: 20px;
+			border-radius: 10px;
+			background-color: rgba(var(--baseColor-code), 0.6);
+			transition: 0.7s;
+		}
+		&.dark {
+			.ball {
+				left: 35px;
+			}
+		}
 	}
 }

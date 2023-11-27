@@ -40,7 +40,15 @@ export default function Header({ setDark, Dark }) {
 					</NavLink>
 				</li>
 			</ul>
-			<button onClick={() => setDark(!Dark)}>{Dark ? 'Light 모드' : 'Dark 모드'}</button>
+
+			<div
+				className={Dark ? 'themeBox dark' : 'themeBox'}
+				onClick={() => {
+					setDark(!Dark);
+				}}
+			>
+				<div className='ball'></div>
+			</div>
 		</header>
 	);
 }
