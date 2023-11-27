@@ -8,8 +8,10 @@ export default function Layout({ children, title }) {
 	const splitTxt = useSplitText();
 
 	useEffect(() => {
-		splitTxt(refTitle.current, title);
-		refFrame.current.classList.add('on');
+		splitTxt(refTitle.current, title, 0.7, 0.1);
+		setTimeout(() => {
+			refFrame.current.classList.add('on');
+		}, 300);
 	}, []);
 
 	return (

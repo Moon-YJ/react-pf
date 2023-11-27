@@ -7,11 +7,16 @@
 
 export function useSplitText(txt) {
 	// 해당 useSplitText hook은 아래의 함수를 리턴
-	return (ref, txt) => {
+	return (ref, txt, speed = 0, interval = 0) => {
 		let tags = '';
+		let count = 0;
+
 		for (let letter of txt) {
+			count++;
 			tags += `
-        <span>${letter}</span>
+        <span style='transition-duration:${speed}s; transition-delay:${
+				interval * count
+			}s; display: inline-block;'>${letter}</span>
       `;
 		}
 		console.log(tags);
