@@ -19,8 +19,23 @@ a {
 }
 
 .wrap {
+	width: 100%;
+	height: 100vh;
+	overflow-y: auto;
 	color: var(--baseColor);
 	font-family: var(--baseFont);
 	background-color: var(--bgColor);
 	transition: color 1s, background-color 1s;
+	// scrollbar디자인 변경
+	// 리액트에서 테마변경(다크모드 적용) 이벤트가 발생했을때 scrollbar변경 이벤트도 발생해야하기 때문에 리액트에서 관리하지 못하는 html요소의 scrollbar가 아닌 wrap요소에 스크롤바 생성
+	&::-webkit-scrollbar {
+		width: 8px;
+		background: transparent;
+		// background: var(--bgColor);
+		// transition: background 1s;
+	}
+	&::-webkit-scrollbar-thumb {
+		background: var(--pointColor);
+		border-radius: 4px;
+	}
 }
