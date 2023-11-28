@@ -8,7 +8,10 @@ export default function Department() {
 	const [MemberTit, setMemberTit] = useState('');
 	const path = useRef(process.env.PUBLIC_URL);
 	const customTitle = useCustomText('title');
-	const shortenTxt = useCustomText('shorten');
+
+	const test1 = 'our-members';
+	const combinedTxt = useCustomText('combined');
+	console.log(combinedTxt(test1, '-'));
 
 	const fetchDepartment = () => {
 		fetch(`${path.current}/DB/department.json`)
@@ -36,7 +39,7 @@ export default function Department() {
 								<img src={`${path.current}/img/${member.pic}`} alt={member.name} />
 							</div>
 							<h2>{member.name}</h2>
-							<p>{shortenTxt(member.position, 9)}</p>
+							<p>{member.position}</p>
 						</article>
 					);
 				})}
