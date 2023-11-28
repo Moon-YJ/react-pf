@@ -24,11 +24,10 @@ export function useSplitText() {
 }
 
 export function useCustomText(type) {
-	if (type === 'title') {
-		return (txt) => {
-			return txt.charAt(0).toUpperCase() + txt.slice(1);
-		};
-	}
+	const toUpperText = (txt) => {
+		return txt.charAt(0).toUpperCase() + txt.slice(1);
+	};
+
 	if (type === 'shorten') {
 		return (txt, len = 50) => {
 			if (txt.length > len) {
@@ -39,12 +38,14 @@ export function useCustomText(type) {
 		};
 	}
 	if (type === 'combined') {
-		return (txt, seperate) => {
-			const resultText = txt //원본텍스트를 가져옴
-				.split(seperate) //split으로 두번째 인수로 받은 구분자로 분리해서 배열로 반환
-				.map((data) => data.charAt(0).toUpperCase() + data.slice(1)) //배열값을 map으로 반복돌며 첫글자만 대문자로 변환해서 새로운 배열로 반환
-				.join(' '); //새롭게 반환된 배열을 다시 빈칸을 구분자로 해서 하나의 문자열로 이어붙여줌
-			return resultText; //위에서 만들어진 문자값을 최종적으로 반환
+		// regEx (regular expression: 정규표현식) - 문자열에서 특정 문자 조합을 찾기 위한 패턴
+		// /정규표현식/
+		return (txt) => {
+			const resultText = txt
+				.split(/-|_|\+/) //인수로 들어가는 특수문자가 -,_,+일때는 해당 구분자로 문자를 분리함 (예약어 문자열은 앞에 \붙여서 처리)
+				.map((data) => toUpperText(data))
+				.join(' ');
+			return resultText;
 		};
 	}
 }

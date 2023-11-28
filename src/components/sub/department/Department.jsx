@@ -7,11 +7,8 @@ export default function Department() {
 	const [MemberData, setMemberData] = useState([]);
 	const [MemberTit, setMemberTit] = useState('');
 	const path = useRef(process.env.PUBLIC_URL);
-	const customTitle = useCustomText('title');
 
-	const test1 = 'our-members';
 	const combinedTxt = useCustomText('combined');
-	console.log(combinedTxt(test1, '-'));
 
 	const fetchDepartment = () => {
 		fetch(`${path.current}/DB/department.json`)
@@ -19,7 +16,7 @@ export default function Department() {
 			.catch((err) => console.log(err))
 			.then((json) => {
 				//setMemberData(Object.values(json)[0]); //객체 반복돌면서 value값만 배열로 반환
-				setMemberData(json.members);
+				setMemberData(Object.values(json)[0]);
 				setMemberTit(Object.keys(json)[0]); //객체 반복돌면서 key값만 배열로 반환
 			});
 	};
@@ -31,7 +28,7 @@ export default function Department() {
 	return (
 		<Layout title={'Department'}>
 			<section className='memberBox'>
-				<h2>{customTitle(MemberTit)}</h2>
+				<h2>{combinedTxt(MemberTit)}</h2>
 				{MemberData.map((member, idx) => {
 					return (
 						<article key={member + idx}>
