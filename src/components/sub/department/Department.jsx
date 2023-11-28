@@ -1,14 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Department.scss';
 
 export default function Department() {
 	const [MemberData, setMemberData] = useState([]);
 	const [MemberTit, setMemberTit] = useState('');
-
-	const path = process.env.PUBLIC_URL; // public폴더까지의 경로를 구하는 구문
+	const path = useRef(process.env.PUBLIC_URL);
 	const fetchDepartment = () => {
-		fetch(`${path}/DB/department.json`)
+		fetch(`${path.current}/DB/department.json`)
 			.then((data) => data.json())
 			.catch((err) => console.log(err))
 			.then((json) => {
@@ -29,7 +28,7 @@ export default function Department() {
 					return (
 						<article key={member + idx}>
 							<div className='pic'>
-								<img src={`${path}/img/${member.pic}`} alt={member.name} />
+								<img src={`${path.current}/img/${member.pic}`} alt={member.name} />
 							</div>
 							<h2>{member.name}</h2>
 							<p>{member.position}</p>
