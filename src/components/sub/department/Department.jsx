@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Department.scss';
+import { useCustomText } from '../../../hooks/useText';
 
 export default function Department() {
 	const [MemberData, setMemberData] = useState([]);
 	const [MemberTit, setMemberTit] = useState('');
 	const path = useRef(process.env.PUBLIC_URL);
+	const customTitle = useCustomText('title');
+
 	const fetchDepartment = () => {
 		fetch(`${path.current}/DB/department.json`)
 			.then((data) => data.json())
@@ -16,6 +19,7 @@ export default function Department() {
 				setMemberTit(Object.keys(json)[0]); //객체 반복돌면서 key값만 배열로 반환
 			});
 	};
+
 	useEffect(() => {
 		fetchDepartment();
 	}, []);
@@ -23,7 +27,7 @@ export default function Department() {
 	return (
 		<Layout title={'Department'}>
 			<section className='memberBox'>
-				<h2>{`${MemberTit.charAt(0).toUpperCase()}${MemberTit.slice(1)}`}</h2>
+				<h2>{customTitle(MemberTit)}</h2>
 				{MemberData.map((member, idx) => {
 					return (
 						<article key={member + idx}>

@@ -5,7 +5,7 @@
   - 일반 핸들러 함수 안쪽에서 커스텀hook자체는 호출 불가하지만 커스텀hook이 리턴한 자식 함수는 호출 가능
 */
 
-export function useSplitText(txt) {
+export function useSplitText() {
 	// 해당 useSplitText hook은 아래의 함수를 리턴
 	return (ref, txt, speed = 0, interval = 0) => {
 		let tags = '';
@@ -21,4 +21,17 @@ export function useSplitText(txt) {
 		}
 		ref.innerHTML = tags;
 	};
+}
+
+export function useCustomText(type) {
+	if (type === 'title') {
+		return (txt) => {
+			return txt.charAt(0).toUpperCase() + txt.slice(1);
+		};
+	}
+	// if(type === 'short'){
+	// 	return (txt) => {
+
+	// 	}
+	// }
 }
