@@ -8,13 +8,14 @@ export default function Department() {
 	const [MemberTit, setMemberTit] = useState('');
 	const path = useRef(process.env.PUBLIC_URL);
 	const customTitle = useCustomText('title');
+	const shortenTxt = useCustomText('shorten');
 
 	const fetchDepartment = () => {
 		fetch(`${path.current}/DB/department.json`)
 			.then((data) => data.json())
 			.catch((err) => console.log(err))
 			.then((json) => {
-				//setMemberData(Object.values(json)[0]); // 객체 반복돌면서 value값만 배열로 반환
+				//setMemberData(Object.values(json)[0]); //객체 반복돌면서 value값만 배열로 반환
 				setMemberData(json.members);
 				setMemberTit(Object.keys(json)[0]); //객체 반복돌면서 key값만 배열로 반환
 			});
@@ -35,7 +36,7 @@ export default function Department() {
 								<img src={`${path.current}/img/${member.pic}`} alt={member.name} />
 							</div>
 							<h2>{member.name}</h2>
-							<p>{member.position}</p>
+							<p>{shortenTxt(member.position, 9)}</p>
 						</article>
 					);
 				})}
