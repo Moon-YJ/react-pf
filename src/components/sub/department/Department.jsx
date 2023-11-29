@@ -4,9 +4,23 @@ import './Department.scss';
 import { useCustomText } from '../../../hooks/useText';
 
 export default function Department() {
+	const path = useRef(process.env.PUBLIC_URL);
+
+	const [HistoryTit, setHistoryTit] = useState('');
+	const [HistoryData, setHistoryData] = useState([]);
+
+	const fetchHistory = () => {
+		fetch(`${path.current}/DB/history.json`)
+			.then((data) => data.json())
+			.then((json) => {
+				//setHistoryData(json.history);
+				setHistoryData(Object.values(json)[0]);
+				setHistoryTit(Object.keys(json)[0]);
+			});
+	};
+
 	const [MemberData, setMemberData] = useState([]);
 	const [MemberTit, setMemberTit] = useState('');
-	const path = useRef(process.env.PUBLIC_URL);
 
 	const combinedTxt = useCustomText('combined');
 
@@ -15,7 +29,7 @@ export default function Department() {
 			.then((data) => data.json())
 			.catch((err) => console.log(err))
 			.then((json) => {
-				//setMemberData(Object.values(json)[0]); //객체 반복돌면서 value값만 배열로 반환
+				//setMemberData(json.members); //객체 반복돌면서 value값만 배열로 반환
 				setMemberData(Object.values(json)[0]);
 				setMemberTit(Object.keys(json)[0]); //객체 반복돌면서 key값만 배열로 반환
 			});
@@ -23,10 +37,32 @@ export default function Department() {
 
 	useEffect(() => {
 		fetchDepartment();
+		fetchHistory();
 	}, []);
 
 	return (
 		<Layout title={'Department'}>
+			<section className='historyBox'>
+				<h2>{HistoryTit}</h2>
+				<div className='con'>
+					{/* HistoryData가 반복도는 각각의 데이터 {년도: 배열} */}
+					{HistoryData.map((data, idx) => {
+						return (
+							<article key={data + idx}>
+								{/* 현재 반복돌고 있는 객체의 key값을 뽑아서 h3로 출력 :2016 */}
+								<h3>{Object.keys(data)[0]}</h3>
+								<ul>
+									{/* 현재 반복돌고 있는 객체의 value을 뽑아서 li로 반복출력 [문자열, 문자열] */}
+									{Object.values(data)[0].map((list, idx) => {
+										return <li key={list + idx}>{list}</li>;
+									})}
+								</ul>
+							</article>
+						);
+					})}
+				</div>
+			</section>
+
 			<section className='memberBox'>
 				<h2>{combinedTxt(MemberTit)}</h2>
 				<div className='con'>
