@@ -43,7 +43,7 @@ export default function Department() {
 	return (
 		<Layout title={'Department'}>
 			<section className='historyBox'>
-				<h2>{HistoryTit}</h2>
+				<h2>{combinedTxt(HistoryTit)}</h2>
 				<div className='con'>
 					{/* HistoryData가 반복도는 각각의 데이터 {년도: 배열} */}
 					{HistoryData.map((data, idx) => {
