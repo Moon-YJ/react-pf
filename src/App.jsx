@@ -11,12 +11,13 @@ import { Route } from 'react-router-dom';
 import './globalStyles/Variables.scss';
 import './globalStyles/Reset.scss';
 import { useState } from 'react';
+import { useMedia } from './hooks/useMedia';
 
 export default function App() {
 	const [Dark, setDark] = useState(false);
 
 	return (
-		<div className={Dark ? 'wrap dark' : 'wrap'}>
+		<div className={`wrap ${Dark ? 'dark' : ''} ${useMedia({ laptop: 1200 })}`}>
 			<Header setDark={setDark} Dark={Dark} />
 			<Route exact path='/' component={MainWrap} />
 			<Route path='/department' component={Department} />
