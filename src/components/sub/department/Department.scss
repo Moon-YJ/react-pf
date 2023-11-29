@@ -1,8 +1,7 @@
-@import '../../../globalStyles/Variables.scss';
-
 .Department {
 	.historyBox {
 		display: flex;
+		flex-wrap: wrap;
 		justify-content: space-between;
 		width: 100%;
 		margin-bottom: 200px;
@@ -35,6 +34,7 @@
 
 	.memberBox {
 		display: flex;
+		flex-wrap: wrap;
 		justify-content: space-between;
 		width: 100%;
 		h2 {
@@ -75,11 +75,59 @@
 	}
 }
 
-//tablet
-@media screen and (max-width: $tablet) {
+// media-query
+/*
+	// laptop
+	.laptop {
+		.Department {
+			.memberBox {
+				article {
+					width: 46%;
+				}
+			}
+		}
+	}
+*/
+
+// tablet
+.tablet,
+.mobile {
 	.Department {
 		.historyBox {
-			display: none;
+			margin-bottom: 80px;
+			h2 {
+				width: 100%;
+				margin-bottom: 60px;
+			}
+			.con {
+				width: 100%;
+				padding-left: 0;
+				border-left: none;
+			}
+		}
+		.memberBox {
+			h2 {
+				width: 100%;
+				margin-bottom: 60px;
+			}
+			.con {
+				width: 100%;
+				padding-left: 0;
+				border-left: none;
+			}
+		}
+	}
+}
+
+// mobile
+.mobile {
+	.Department {
+		.memberBox {
+			.con {
+				article {
+					width: 100%;
+				}
+			}
 		}
 	}
 }
