@@ -12,13 +12,15 @@ import './globalStyles/Variables.scss';
 import './globalStyles/Reset.scss';
 import { useState } from 'react';
 import { useMedia } from './hooks/useMedia';
+import Menu from './components/common/menu/Menu';
 
 export default function App() {
 	const [Dark, setDark] = useState(false);
+	const [MenuToggle, SetMenuToggle] = useState(false);
 
 	return (
 		<div className={`wrap ${Dark ? 'dark' : ''} ${useMedia()}`}>
-			<Header setDark={setDark} Dark={Dark} />
+			<Header setDark={setDark} Dark={Dark} MenuToggle={MenuToggle} SetMenuToggle={SetMenuToggle} />
 			<Route exact path='/' component={MainWrap} />
 			<Route path='/department' component={Department} />
 			<Route path='/youtube' component={Youtube} />
@@ -27,6 +29,7 @@ export default function App() {
 			<Route path='/members' component={Members} />
 			<Route path='/contact' component={Contact} />
 			<Footer />
+			{MenuToggle && <Menu />}
 		</div>
 	);
 }
