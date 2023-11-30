@@ -2,6 +2,7 @@ import Layout from '../../common/layout/Layout';
 import './Youtube.scss';
 import { useState, useEffect } from 'react';
 import { useCustomText } from '../../../hooks/useText';
+import { Link } from 'react-router-dom';
 
 export default function Youtube() {
 	const [Vids, setVids] = useState([]);
@@ -18,7 +19,6 @@ export default function Youtube() {
 			const data = await fetch(baseURL);
 			const json = await data.json();
 			setVids(json.items);
-			console.log(Vids);
 		} catch (err) {
 			console.log(err);
 		}
@@ -56,10 +56,12 @@ export default function Youtube() {
 						</div>
 
 						<div className='pic'>
-							<img
-								src={data.snippet.thumbnails.standard ? data.snippet.thumbnails.standard.url : '/img/member1.jpg'}
-								alt={data.snippet.title}
-							/>
+							<Link to={`/detail/${data.id}`}>
+								<img
+									src={data.snippet.thumbnails.standard ? data.snippet.thumbnails.standard.url : '/img/member1.jpg'}
+									alt={data.snippet.title}
+								/>
+							</Link>
 						</div>
 					</article>
 				);
