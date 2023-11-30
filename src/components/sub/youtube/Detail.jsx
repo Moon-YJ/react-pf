@@ -26,14 +26,19 @@ export default function Detail() {
         - Optional Chaining: 객체명?.property 
           : 해당 객체에 값이 없을때는 무시하고 값이 있을때만 property에 접근
       */}
-			<div className='videoBox'>
-				<iframe
-					title={YoutubeData?.title}
-					src={`https://www.youtube.com/embed/${YoutubeData?.resourceId.videoId}`}
-				></iframe>
-			</div>
-			<h3>{YoutubeData?.title}</h3>
-			<p>{YoutubeData?.description}</p>
+			{YoutubeData && (
+				<article>
+					<div className='videoBox'>
+						<iframe
+							title={YoutubeData.title}
+							src={`https://www.youtube.com/embed/${YoutubeData?.resourceId.videoId}`}
+						></iframe>
+					</div>
+					<h3>{YoutubeData.title}</h3>
+					{/* <h3>{YoutubeData?.title}</h3> */}
+					<p>{YoutubeData.description}</p>
+				</article>
+			)}
 		</Layout>
 	);
 }
