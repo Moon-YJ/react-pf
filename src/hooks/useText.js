@@ -40,11 +40,11 @@ export function useCustomText(type) {
 	if (type === 'combined') {
 		// regEx (regular expression: 정규표현식) - 문자열에서 특정 문자 조합을 찾기 위한 패턴
 		// /정규표현식/
-		return (txt) => {
+		return (txt, spc = ' ') => {
 			const resultText = txt
 				.split(/-|_|\+/) //인수로 들어가는 특수문자가 -,_,+일때는 해당 구분자로 문자를 분리함 (예약어 문자열은 앞에 \붙여서 처리)
 				.map((data) => toUpperText(data))
-				.join(' ');
+				.join(spc);
 			return resultText;
 		};
 	}
