@@ -4,12 +4,12 @@
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: space-between;
-		border-bottom: 1px solid #ccc;
+		border-bottom: 1px solid rgba(var(--baseColor-code), 0.2);
 		padding: 50px 0px;
 
-		// &:nth-of-type(odd) {
-		// 	flex-direction: row;
-		// }
+		&:nth-of-type(odd) {
+			flex-direction: row;
+		}
 		&:nth-of-type(even) {
 			flex-direction: row-reverse;
 
@@ -35,6 +35,10 @@
 			p {
 				font: 0.8rem/1.5 'arial';
 				opacity: 0.5;
+				word-break: break-all;
+				text-align: justify; //글자의 각 사이간격을 조절해서 양옆으로 정렬
+				//word-break:줄바꿈시 글자 짜르는 기준
+				//normal(각 단어기준:한글, 영어 글자로 잘림) / break-all(글자기준) / keep-all (영어,한글모두 단어기준으로 잘림)
 			}
 
 			.infoBox {
@@ -42,7 +46,7 @@
 				display: flex;
 				justify-content: space-between;
 				font: 0.8rem/1 'arial';
-				color: orangered;
+				color: var(--pointColor);
 				margin-bottom: 20px;
 
 				span,
