@@ -1,15 +1,14 @@
-$gap: 50px;
-$colNum: 4;
-
 .Gallery {
+	--gap: 50px;
+	--num: 4;
 	.container {
 		width: 100%;
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: space-between;
-		gap: $gap;
+		justify-content: flex-start;
+		gap: var(--gap);
 		article {
-			width: calc(100% - $gap * ($colNum - 1)) / $colNum;
+			width: calc(100% - var(--gap) * (var(--num) - 1)) / var(--num);
 			margin-bottom: 70px;
 			border-bottom: 1px solid rgba(var(--baseColor-code), 0.5);
 			.pic {
@@ -46,26 +45,20 @@ $colNum: 4;
 // laptop
 .laptop {
 	.Gallery {
-		article {
-			width: 32%;
-		}
+		--num: 3;
 	}
 }
 
 // tablet
 .tablet {
 	.Gallery {
-		article {
-			width: 48%;
-		}
+		--num: 2;
 	}
 }
 
 // mobile
 .mobile {
 	.Gallery {
-		article {
-			width: 100%;
-		}
+		--num: 1;
 	}
 }
