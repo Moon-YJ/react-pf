@@ -33,13 +33,14 @@ export default function Gallery() {
 								/>
 							</div>
 							<h2>{pic.title}</h2>
-							<div className='info'>
+							<div className='profile'>
 								<img
 									src={`http://farm${pic.farm}.staticflickr.com/${pic.server}/buddyicons/${pic.owner}.jpg`}
 									alt={pic.owner}
+									onError={(e) => e.target.setAttribute('src', 'https://www.flickr.com/images/buddyicon.gif')}
 								/>
+								<span>{pic.owner}</span>
 							</div>
-							<p>{pic.owner}</p>
 						</article>
 					);
 				})}
