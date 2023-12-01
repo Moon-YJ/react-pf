@@ -1,6 +1,6 @@
 .Gallery {
 	--gap: 50px;
-	--num: 4;
+	--num: 3;
 	.container {
 		width: 100%;
 		display: flex;
@@ -8,7 +8,7 @@
 		justify-content: flex-start;
 		gap: var(--gap);
 		article {
-			width: calc((100% - (var(--gap) * (var(--num) - 1))) / var(--num));
+			width: calc((100% - var(--gap) * (var(--num) - 1)) / var(--num));
 			margin-bottom: 70px;
 			border-bottom: 1px solid rgba(var(--baseColor-code), 0.5);
 			.pic {

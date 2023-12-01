@@ -23,7 +23,7 @@ export default function Gallery() {
 
 	return (
 		<Layout title={'Gallery'}>
-			<section>
+			<section className='container'>
 				{Pics.map((pic, idx) => {
 					return (
 						<article key={pic.id}>
