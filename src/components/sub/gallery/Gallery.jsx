@@ -11,10 +11,25 @@ export default function Gallery() {
 
 	const activateBtn = (e) => {
 		const btns = refNav.current.querySelectorAll('button');
-		btns.forEach((btn) => {
-			btn.classList.remove('on');
-			e.target.classList.add('on');
-		});
+		btns.forEach((btn) => btn.classList.remove('on'));
+		e && e.target.classList.add('on');
+	};
+
+	const handleInterest = (e) => {
+		if (e.target.classList.contains('on')) return;
+		activateBtn(e);
+		fetchFlickr({ type: 'interest' });
+	};
+
+	const handleUser = (e) => {
+		if (e.target.classList.contains('on')) return;
+		activateBtn(e);
+		fetchFlickr({ type: 'user', id: id.current });
+	};
+
+	const handleOwner = (e) => {
+		activateBtn(e);
+		fetchFlickr({ type: 'user', id: e.target.innerText });
 	};
 
 	const fetchFlickr = async (opt) => {
@@ -34,6 +49,7 @@ export default function Gallery() {
 		const json = await data.json();
 		setPics(json.photos.photo);
 	};
+
 	useEffect(() => {
 		fetchFlickr({ type: 'user', id: id.current });
 	}, []);
@@ -42,23 +58,8 @@ export default function Gallery() {
 		<Layout title={'Gallery'}>
 			<article className='controls'>
 				<nav ref={refNav} className='btn-set'>
-					<button
-						onClick={(e) => {
-							if (e.target.classList.contains('on')) return;
-							activateBtn(e);
-							fetchFlickr({ type: 'interest' });
-						}}
-					>
-						Interest Gallery
-					</button>
-					<button
-						className='on'
-						onClick={(e) => {
-							if (e.target.classList.contains('on')) return;
-							activateBtn(e);
-							fetchFlickr({ type: 'user', id: id.current });
-						}}
-					>
+					<button onClick={handleInterest}>Interest Gallery</button>
+					<button className='on' onClick={handleUser}>
 						My Gallery
 					</button>
 				</nav>
@@ -82,13 +83,7 @@ export default function Gallery() {
 										alt={pic.owner}
 										onError={(e) => e.target.setAttribute('src', 'https://www.flickr.com/images/buddyicon.gif')}
 									/>
-									<span
-										onClick={(e) => {
-											fetchFlickr({ type: 'user', id: pic.owner });
-										}}
-									>
-										{pic.owner}
-									</span>
+									<span onClick={handleOwner}>{pic.owner}</span>
 								</div>
 							</article>
 						);
