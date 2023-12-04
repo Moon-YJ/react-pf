@@ -1,29 +1,43 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Gallery.scss';
 import Masonry from 'react-masonry-component';
 
 export default function Gallery() {
+	const id = useRef('195294341@N02');
 	const [Pics, setPics] = useState([]);
 
-	const fetchFlickr = async () => {
+	const fetchFlickr = async (opt) => {
 		const num = 20;
 		const flickr_api = process.env.REACT_APP_FLICKR_API;
+		const baseURL = `https://www.flickr.com/services/rest/?&api_key=${flickr_api}&per_page=${num}&format=json&nojsoncallback=1&method=`;
 		const method_interest = 'flickr.interestingness.getList';
-		const baseURL = 'https://www.flickr.com/services/rest/?method=';
-		const resultURL = `${baseURL}${method_interest}&api_key=${flickr_api}&per_page=${num}&format=json&nojsoncallback=1`;
+		const method_user = 'flickr.people.getPhotos';
+		const interestURL = `${baseURL}${method_interest}`;
+		const userURL = `${baseURL}${method_user}&user_id=${opt.id}`;
 
-		const data = await fetch(resultURL);
+		let url = '';
+		opt.type === 'user' && (url = userURL);
+		opt.type === 'interest' && (url = interestURL);
+
+		const data = await fetch(url);
 		const json = await data.json();
 		setPics(json.photos.photo);
 	};
 	useEffect(() => {
-		fetchFlickr();
+		fetchFlickr({ type: 'user', id: id.current });
 	}, []);
 
 	return (
 		<Layout title={'Gallery'}>
-			<section className='container'>
+			<article className='controls'>
+				<nav className='btn-set'>
+					<button onClick={() => fetchFlickr({ type: 'interest' })}>Interest Gallery</button>
+					<button onClick={() => fetchFlickr({ type: 'user', id: id.current })}>My Gallery</button>
+				</nav>
+			</article>
+
+			<section>
 				<Masonry className={'container'} options={{ transitionDuration: '0.5s', gutter: 20 }}>
 					{Pics.map((pic, idx) => {
 						return (
