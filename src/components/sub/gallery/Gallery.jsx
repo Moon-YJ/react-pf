@@ -55,7 +55,13 @@ export default function Gallery() {
 										alt={pic.owner}
 										onError={(e) => e.target.setAttribute('src', 'https://www.flickr.com/images/buddyicon.gif')}
 									/>
-									<span>{pic.owner}</span>
+									<span
+										onClick={(e) => {
+											fetchFlickr({ type: 'user', id: pic.owner });
+										}}
+									>
+										{pic.owner}
+									</span>
 								</div>
 							</article>
 						);
