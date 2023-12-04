@@ -4,8 +4,10 @@ import './Gallery.scss';
 import Masonry from 'react-masonry-component';
 
 export default function Gallery() {
-	console.log('rerender');
+	console.log('re-render');
 	const id = useRef('195294341@N02');
+	// isUser의 초기값으로 id값 등록
+	const isUser = useRef(id.current);
 	const refNav = useRef(null);
 	const [Pics, setPics] = useState([]);
 
@@ -17,17 +19,24 @@ export default function Gallery() {
 
 	const handleInterest = (e) => {
 		if (e.target.classList.contains('on')) return;
+		// handleInterest함수 호출시 isUser값을 빈문자열로 초기화(false로 인식되는 값)
+		isUser.current = '';
 		activateBtn(e);
 		fetchFlickr({ type: 'interest' });
 	};
 
 	const handleUser = (e) => {
-		if (e.target.classList.contains('on')) return;
+		// isUser의 값과 id값이 동일할때만 함수 중지
+		if (e.target.classList.contains('on') || isUser.current === id.current) return;
+		isUser.current = id.current;
 		activateBtn(e);
 		fetchFlickr({ type: 'user', id: id.current });
 	};
 
 	const handleOwner = (e) => {
+		// isUser값이 비어있기만하면 함수 중지
+		if (isUser.current) return;
+		isUser.current = e.target.innerText;
 		activateBtn(e);
 		fetchFlickr({ type: 'user', id: e.target.innerText });
 	};
