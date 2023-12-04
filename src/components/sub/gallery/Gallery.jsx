@@ -4,8 +4,18 @@ import './Gallery.scss';
 import Masonry from 'react-masonry-component';
 
 export default function Gallery() {
+	console.log('rerender');
 	const id = useRef('195294341@N02');
+	const refNav = useRef(null);
 	const [Pics, setPics] = useState([]);
+
+	const activateBtn = (e) => {
+		const btns = refNav.current.querySelectorAll('button');
+		btns.forEach((btn) => {
+			btn.classList.remove('on');
+			e.target.classList.add('on');
+		});
+	};
 
 	const fetchFlickr = async (opt) => {
 		const num = 20;
@@ -31,9 +41,26 @@ export default function Gallery() {
 	return (
 		<Layout title={'Gallery'}>
 			<article className='controls'>
-				<nav className='btn-set'>
-					<button onClick={() => fetchFlickr({ type: 'interest' })}>Interest Gallery</button>
-					<button onClick={() => fetchFlickr({ type: 'user', id: id.current })}>My Gallery</button>
+				<nav ref={refNav} className='btn-set'>
+					<button
+						onClick={(e) => {
+							if (e.target.classList.contains('on')) return;
+							activateBtn(e);
+							fetchFlickr({ type: 'interest' });
+						}}
+					>
+						Interest Gallery
+					</button>
+					<button
+						className='on'
+						onClick={(e) => {
+							if (e.target.classList.contains('on')) return;
+							activateBtn(e);
+							fetchFlickr({ type: 'user', id: id.current });
+						}}
+					>
+						My Gallery
+					</button>
 				</nav>
 			</article>
 

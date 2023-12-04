@@ -1,6 +1,41 @@
 .Gallery {
 	--gap: 50px;
 	--num: 3;
+	.controls {
+		margin-bottom: 30px;
+		.btn-set {
+			display: flex;
+			gap: 20px;
+			button {
+				position: relative;
+				background: transparent;
+				border: none;
+				cursor: pointer;
+				padding: 7px 0;
+				//border-bottom: 1px solid rgba(var(--baseColor-code), 0.3);
+				font-size: 1rem;
+				color: rgba(var(--baseColor-code), 0.4);
+				transition: 0.5s;
+				&::after {
+					content: '';
+					display: block;
+					position: absolute;
+					bottom: 0;
+					left: 0;
+					width: 0%;
+					height: 1px;
+					background: var(--baseColor);
+					transition: 0.5s;
+				}
+				&.on {
+					color: rgba(var(--baseColor-code), 1);
+					&::after {
+						width: 100%;
+					}
+				}
+			}
+		}
+	}
 	.container {
 		width: 100%;
 		display: flex;
