@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Gallery.scss';
-//import Masonry from 'react-masonry-component';
+import Masonry from 'react-masonry-component';
 
 export default function Gallery() {
 	const [Pics, setPics] = useState([]);
@@ -24,28 +24,7 @@ export default function Gallery() {
 	return (
 		<Layout title={'Gallery'}>
 			<section className='container'>
-				{Pics.map((pic, idx) => {
-					return (
-						<article key={pic.id}>
-							<div className='pic'>
-								<img
-									src={`https://live.staticflickr.com/${pic.server}/${pic.id}_${pic.secret}_m.jpg`}
-									alt={`https://live.staticflickr.com/${pic.server}/${pic.id}_${pic.secret}_b.jpg`}
-								/>
-							</div>
-							<h2>{pic.title}</h2>
-							<div className='profile'>
-								<img
-									src={`http://farm${pic.farm}.staticflickr.com/${pic.server}/buddyicons/${pic.owner}.jpg`}
-									alt={pic.owner}
-									onError={(e) => e.target.setAttribute('src', 'https://www.flickr.com/images/buddyicon.gif')}
-								/>
-								<span>{pic.owner}</span>
-							</div>
-						</article>
-					);
-				})}
-				{/* <Masonry className={'container'} options={{ transitionDuration: 0.5 }}>
+				<Masonry className={'container'} options={{ transitionDuration: '0.5s', gutter: 20 }}>
 					{Pics.map((pic, idx) => {
 						return (
 							<article key={pic.id}>
@@ -67,7 +46,7 @@ export default function Gallery() {
 							</article>
 						);
 					})}
-				</Masonry> */}
+				</Masonry>
 			</section>
 		</Layout>
 	);
