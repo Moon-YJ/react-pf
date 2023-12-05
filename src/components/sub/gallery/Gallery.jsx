@@ -5,12 +5,12 @@ import Masonry from 'react-masonry-component';
 import { RiSearchLine } from 'react-icons/ri';
 
 export default function Gallery() {
-	console.log('re-render');
 	const id = useRef('195294341@N02');
 	// isUser의 초기값으로 id값 등록
 	const isUser = useRef(id.current);
 	const refNav = useRef(null);
 	const [Pics, setPics] = useState([]);
+	console.log(isUser.current, '!!!');
 
 	const activateBtn = (e) => {
 		const btns = refNav.current.querySelectorAll('button');
@@ -35,10 +35,12 @@ export default function Gallery() {
 	};
 
 	const handleOwner = (e) => {
-		// isUser값이 비어있기만하면 함수 중지
+		// isUser값이 비어있을때만 함수 실행
+		// 값이 있으면 함수 중지
+		//if (isUser.current !== '') return;
 		if (isUser.current) return;
 		isUser.current = e.target.innerText;
-		activateBtn(e);
+		activateBtn();
 		fetchFlickr({ type: 'user', id: e.target.innerText });
 	};
 
