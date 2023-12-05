@@ -3,6 +3,7 @@ import Layout from '../../common/layout/Layout';
 import './Gallery.scss';
 import Masonry from 'react-masonry-component';
 import { RiSearchLine } from 'react-icons/ri';
+import Modal from '../../common/modal/Modal';
 
 export default function Gallery() {
 	const id = useRef('195294341@N02');
@@ -10,7 +11,8 @@ export default function Gallery() {
 	const isUser = useRef(id.current);
 	const refNav = useRef(null);
 	const [Pics, setPics] = useState([]);
-	console.log(isUser.current, '!!!');
+	const [Open, setOpen] = useState(false);
+	const [Index, setIndex] = useState(0);
 
 	const activateBtn = (e) => {
 		const btns = refNav.current.querySelectorAll('button');
@@ -86,52 +88,68 @@ export default function Gallery() {
 	}, []);
 
 	return (
-		<Layout title={'Gallery'}>
-			<article className='controls'>
-				<nav ref={refNav} className='btn-set'>
-					<button onClick={handleInterest}>Interest Gallery</button>
-					<button className='on' onClick={handleUser}>
-						My Gallery
-					</button>
-				</nav>
+		<>
+			<Layout title={'Gallery'}>
+				<article className='controls'>
+					<nav ref={refNav} className='btn-set'>
+						<button onClick={handleInterest}>Interest Gallery</button>
+						<button className='on' onClick={handleUser}>
+							My Gallery
+						</button>
+					</nav>
 
-				<form onSubmit={handleSearch}>
-					<input type='text' placeholder='Search' />
-					<button className='btn-search'>
-						<RiSearchLine />
-					</button>
-				</form>
-			</article>
+					<form onSubmit={handleSearch}>
+						<input type='text' placeholder='Search' />
+						<button className='btn-search'>
+							<RiSearchLine />
+						</button>
+					</form>
+				</article>
 
-			<section>
-				<Masonry className={'container'} options={{ transitionDuration: '0.5s', gutter: 20 }}>
-					{Pics.length === 0 ? (
-						<h2>해당 검색어의 결과값이 없습니다.</h2>
-					) : (
-						Pics.map((pic, idx) => {
-							return (
-								<article key={pic.id}>
-									<div className='pic'>
-										<img
-											src={`https://live.staticflickr.com/${pic.server}/${pic.id}_${pic.secret}_m.jpg`}
-											alt={`https://live.staticflickr.com/${pic.server}/${pic.id}_${pic.secret}_b.jpg`}
-										/>
-									</div>
-									<h2>{pic.title}</h2>
-									<div className='profile'>
-										<img
-											src={`http://farm${pic.farm}.staticflickr.com/${pic.server}/buddyicons/${pic.owner}.jpg`}
-											alt={pic.owner}
-											onError={(e) => e.target.setAttribute('src', 'https://www.flickr.com/images/buddyicon.gif')}
-										/>
-										<span onClick={handleOwner}>{pic.owner}</span>
-									</div>
-								</article>
-							);
-						})
-					)}
-				</Masonry>
-			</section>
-		</Layout>
+				<section>
+					<Masonry className={'container'} options={{ transitionDuration: '0.5s', gutter: 20 }}>
+						{Pics.length === 0 ? (
+							<h2>해당 검색어의 결과값이 없습니다.</h2>
+						) : (
+							Pics.map((pic, idx) => {
+								return (
+									<article key={pic.id}>
+										<div
+											className='pic'
+											onClick={(e) => {
+												setOpen(true);
+												setIndex(idx);
+											}}
+										>
+											<img
+												src={`https://live.staticflickr.com/${pic.server}/${pic.id}_${pic.secret}_b.jpg`}
+												alt={pic.title}
+											/>
+										</div>
+										<h2>{pic.title}</h2>
+										<div className='profile'>
+											<img
+												src={`http://farm${pic.farm}.staticflickr.com/${pic.server}/buddyicons/${pic.owner}.jpg`}
+												alt={pic.owner}
+												onError={(e) => e.target.setAttribute('src', 'https://www.flickr.com/images/buddyicon.gif')}
+											/>
+											<span onClick={handleOwner}>{pic.owner}</span>
+										</div>
+									</article>
+								);
+							})
+						)}
+					</Masonry>
+				</section>
+			</Layout>
+			{Open && (
+				<Modal setOpen={setOpen}>
+					<img
+						src={`https://live.staticflickr.com/${Pics[Index].server}/${Pics[Index].id}_${Pics[Index].secret}_b.jpg`}
+						alt={Pics[Index].title}
+					/>
+				</Modal>
+			)}
+		</>
 	);
 }
