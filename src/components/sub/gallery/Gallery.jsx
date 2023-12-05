@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Gallery.scss';
 import Masonry from 'react-masonry-component';
+import { RiSearchLine } from 'react-icons/ri';
 
 export default function Gallery() {
 	console.log('re-render');
@@ -41,18 +42,33 @@ export default function Gallery() {
 		fetchFlickr({ type: 'user', id: e.target.innerText });
 	};
 
+	const handleSearch = (e) => {
+		// 기본적으로 submit 이벤트는 전송기능이기 때문에 무조건 화면이 새로고침됨
+		// 전송을 하는것이 아니라 리액트로 추가 로직구현을 해야하므로 기본 전송기능 막음
+		e.preventDefault();
+		isUser.current = '';
+		activateBtn();
+		const searchTxt = e.target.children[0].value;
+		if (!searchTxt.trim()) return;
+		e.target.children[0].value = '';
+		fetchFlickr({ type: 'search', keyword: searchTxt });
+	};
+
 	const fetchFlickr = async (opt) => {
 		const num = 20;
 		const flickr_api = process.env.REACT_APP_FLICKR_API;
 		const baseURL = `https://www.flickr.com/services/rest/?&api_key=${flickr_api}&per_page=${num}&format=json&nojsoncallback=1&method=`;
 		const method_interest = 'flickr.interestingness.getList';
 		const method_user = 'flickr.people.getPhotos';
+		const method_search = 'flickr.photos.search';
 		const interestURL = `${baseURL}${method_interest}`;
 		const userURL = `${baseURL}${method_user}&user_id=${opt.id}`;
+		const searchURL = `${baseURL}${method_search}&tags=${opt.keyword}`;
 
 		let url = '';
 		opt.type === 'user' && (url = userURL);
 		opt.type === 'interest' && (url = interestURL);
+		opt.type === 'search' && (url = searchURL);
 
 		const data = await fetch(url);
 		const json = await data.json();
@@ -61,6 +77,7 @@ export default function Gallery() {
 
 	useEffect(() => {
 		fetchFlickr({ type: 'user', id: id.current });
+		// fetchFlickr({ type: 'search', keyword: 'ocean' });
 	}, []);
 
 	return (
@@ -72,6 +89,13 @@ export default function Gallery() {
 						My Gallery
 					</button>
 				</nav>
+
+				<form onSubmit={handleSearch}>
+					<input type='text' placeholder='Search' />
+					<button className='btn-search'>
+						<RiSearchLine />
+					</button>
+				</form>
 			</article>
 
 			<section>

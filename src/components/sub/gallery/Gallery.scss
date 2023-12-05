@@ -2,7 +2,11 @@
 	--gap: 50px;
 	--num: 3;
 	.controls {
-		margin-bottom: 30px;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		width: 100%;
+		padding: 20px 5px;
 		.btn-set {
 			display: flex;
 			gap: 20px;
@@ -33,6 +37,26 @@
 						width: 100%;
 					}
 				}
+			}
+		}
+		form {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			input {
+				width: 120px;
+				border: none;
+				background-color: transparent;
+				border-bottom: 1px solid rgba(var(--baseColor-code), 0.5);
+				padding: 6px 10px;
+				outline: 0;
+			}
+			.btn-search {
+				background-color: transparent;
+				border: none;
+				font-size: 1.2rem;
+				color: var(--baseColor);
+				cursor: pointer;
 			}
 		}
 	}
