@@ -2,10 +2,17 @@ import Layout from '../../common/layout/Layout';
 import './Community.scss';
 import { IoCloseSharp } from 'react-icons/io5';
 import { FaPenToSquare } from 'react-icons/fa6';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Community() {
-	const [Post, setPost] = useState([]);
+	const getLocalData = () => {
+		const data = localStorage.getItem('post');
+		// 로컬저장소에 post 키값에 값이 있으면 parsing해서 객체로 리턴
+		if (data) return JSON.parse(data);
+		// 값이 없으면 빈 배열 리턴 (해당 컴포넌트가 맨 처음 호출될때 한번)
+		else return [];
+	};
+	const [Post, setPost] = useState(getLocalData);
 	const refTit = useRef(null);
 	const refCon = useRef(null);
 
@@ -25,6 +32,10 @@ export default function Community() {
 		}
 		setPost([{ title: refTit.current.value, content: refCon.current.value }, ...Post]);
 	};
+
+	useEffect(() => {
+		localStorage.setItem('post', JSON.stringify(Post));
+	}, [Post]);
 
 	return (
 		<div className='Community'>
@@ -85,6 +96,6 @@ export default function Community() {
 	- 로컬저장소의 값을 JS로 가져올때는 문자값을 반대로 객체화시켜서 호출
 	
 	LocalStorage객체에 활용가능한 메서드
-	- setItem('key', '문자화된 데이터'); //해당 키값에 데이터를 담아서 저장
-	- getItem('key'); //해당 키값에 매칭되는 데이터를 가져옴
+	- localStorage.setItem('key', '문자화된 데이터'); //해당 키값에 데이터를 담아서 저장
+	- localStorage.getItem('key'); //해당 키값에 매칭되는 데이터를 가져옴
 */
