@@ -10,6 +10,9 @@ export default function Gallery() {
 	// isUser의 초기값으로 id값 등록
 	const isUser = useRef(id.current);
 	const refNav = useRef(null);
+	const refWrap = useRef(null);
+	const gap = useRef(20);
+
 	const [Pics, setPics] = useState([]);
 	const [Open, setOpen] = useState(false);
 	const [Index, setIndex] = useState(0);
@@ -83,8 +86,8 @@ export default function Gallery() {
 	};
 
 	useEffect(() => {
+		refWrap.current.style.setProperty('--gap', gap.current + 'px');
 		fetchFlickr({ type: 'user', id: id.current });
-		// fetchFlickr({ type: 'search', keyword: 'ocean' });
 	}, []);
 
 	return (
@@ -106,8 +109,8 @@ export default function Gallery() {
 					</form>
 				</article>
 
-				<section>
-					<Masonry className={'container'} options={{ transitionDuration: '0.5s', gutter: 20 }}>
+				<section className='wrap-con' ref={refWrap}>
+					<Masonry className={'container'} options={{ transitionDuration: '0.5s', gutter: gap.current }}>
 						{Pics.length === 0 ? (
 							<h2>해당 검색어의 결과값이 없습니다.</h2>
 						) : (
