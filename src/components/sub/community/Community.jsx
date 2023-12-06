@@ -2,27 +2,55 @@ import Layout from '../../common/layout/Layout';
 import './Community.scss';
 import { IoCloseSharp } from 'react-icons/io5';
 import { FaPenToSquare } from 'react-icons/fa6';
+import { useRef, useState } from 'react';
 
 export default function Community() {
+	const [Post, setPost] = useState([]);
+	const refTit = useRef(null);
+	const refCon = useRef(null);
+	console.log(Post);
+
+	const resetPost = (e) => {
+		refTit.current.value = '';
+		refCon.current.value = '';
+	};
+
+	const createPost = (e) => {
+		setPost([{ title: refTit.current.value, content: refCon.current.value }, ...Post]);
+	};
+
 	return (
 		<div className='Community'>
 			<Layout title={'Community'}>
 				<div className='wrap-box'>
 					<div className='input-box'>
-						<form>
-							<input type='text' placeholder='title' name='tit' />
-							<textarea cols='30' rows='3' name='con' placeholder='content'></textarea>
-							<nav>
-								<button>
-									<IoCloseSharp />
-								</button>
-								<button>
-									<FaPenToSquare />
-								</button>
-							</nav>
-						</form>
+						<input type='text' placeholder='title' name='tit' ref={refTit} />
+						<textarea cols='30' rows='3' name='con' placeholder='content' ref={refCon}></textarea>
+						<nav>
+							<button onClick={resetPost}>
+								<IoCloseSharp />
+							</button>
+							<button onClick={createPost}>
+								<FaPenToSquare />
+							</button>
+						</nav>
 					</div>
-					<div className='show-box'></div>
+					<div className='show-box'>
+						{Post.map((el, idx) => {
+							return (
+								<article key={el + idx}>
+									<div className='txt'>
+										<h2>{el.title}</h2>
+										<p>{el.content}</p>
+									</div>
+									<nav>
+										<button>Edit</button>
+										<button>Delete</button>
+									</nav>
+								</article>
+							);
+						})}
+					</div>
 				</div>
 			</Layout>
 		</div>
