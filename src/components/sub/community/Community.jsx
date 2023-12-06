@@ -16,6 +16,18 @@ export default function Community() {
 	};
 
 	const createPost = (e) => {
+		if (
+			!refTit.current.value.trim() ||
+			!refCon.current.value.trim() ||
+			refCon.current.value.length > 10 ||
+			refCon.current.value.length > 300
+		) {
+			resetPost();
+			return alert('제목과 본문을 모두 작성해 주세요');
+		}
+		if (refCon.current.value.length > 10 || refCon.current.value.length > 300) {
+			return alert('제목은 10글자, 본문은 300글자 미만으로 작성해 주세요');
+		}
 		setPost([{ title: refTit.current.value, content: refCon.current.value }, ...Post]);
 	};
 
