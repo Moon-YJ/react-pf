@@ -3,8 +3,10 @@ import './Community.scss';
 import { IoCloseSharp } from 'react-icons/io5';
 import { FaPenToSquare } from 'react-icons/fa6';
 import { useEffect, useRef, useState } from 'react';
+import { useCustomText } from '../../../hooks/useText';
 
 export default function Community() {
+	const customDate = useCustomText('combined');
 	const getLocalData = () => {
 		const data = localStorage.getItem('post');
 		// 로컬저장소에 post 키값에 값이 있으면 parsing해서 객체로 리턴
@@ -23,20 +25,26 @@ export default function Community() {
 
 	const createPost = (e) => {
 		if (!refTit.current.value.trim() || !refCon.current.value.trim()) {
-			resetPost();
 			return alert('제목과 본문을 모두 작성해 주세요');
 		}
-		console.log(refTit.current.value.length);
 		if (refTit.current.value.length > 5 || refCon.current.value.length > 300) {
 			return alert('제목은 5글자, 본문은 300글자 미만으로 작성해 주세요');
 		}
-		setPost([{ title: refTit.current.value, content: refCon.current.value }, ...Post]);
+		// new Date().toLocalString() - 해당 지역의 표준시로 변환해서 반환, but 단점은 원하지 않는 형태로 가공됨
+		const korTime = new Date().getTime() + 1000 * 60 * 60 * 9;
+		setPost([{ title: refTit.current.value, content: refCon.current.value, date: new Date(korTime) }, ...Post]);
+		resetPost();
 	};
 
 	const deletePost = (delIdx) => {
 		// map과 마찬가지로 기존 배열값을 deep copy해서 새로운 배열 반환
 		// 이때 안쪽에 조건문을 처리해서 특정 조건에 부합되는 값만 필터링해서 반환
 		setPost(Post.filter((_, idx) => delIdx !== idx));
+	};
+
+	const getFiltered = (txt) => {
+		const abc = Post.filter((el) => el.title.indexOf(txt) >= 0 || el.content.indexOf(txt) >= 0);
+		console.log(abc);
 	};
 
 	useEffect(() => {
@@ -61,14 +69,18 @@ export default function Community() {
 					</div>
 					<div className='show-box'>
 						{Post.map((el, idx) => {
+							const date = JSON.stringify(el.date);
+							console.log(date);
+							const strDate = customDate(date.split('T')[0].slice(1), '.');
 							return (
 								<article key={el + idx}>
 									<div className='txt'>
 										<h2>{el.title}</h2>
 										<p>{el.content}</p>
+										<span>{strDate}</span>
 									</div>
 									<nav>
-										<button>Edit</button>
+										<button onClick={() => getFiltered('a')}>Edit</button>
 										<button
 											onClick={() => {
 												deletePost(idx);
