@@ -37,9 +37,30 @@ export default function Community() {
 	};
 
 	const deletePost = (delIdx) => {
+		if (!window.confirm('해당 게시글을 삭제하시겠습니까?')) return;
 		// map과 마찬가지로 기존 배열값을 deep copy해서 새로운 배열 반환
 		// 이때 안쪽에 조건문을 처리해서 특정 조건에 부합되는 값만 필터링해서 반환
 		setPost(Post.filter((_, idx) => delIdx !== idx));
+	};
+
+	const enableUpdate = (editIdx) => {
+		// 기존의 Post배열을 반복 돌면서 파라미터로 전달된 editIdx 순번의 Post에만 enableUpdate = true 라는 구분자를 추가해서 다시 state 변경처리
+		// 다음번 랜더링때 해당 구분자가 있는 Post 객체만 수정모드로 분기처리하기 위함
+		setPost(
+			Post.map((el, idx) => {
+				if (editIdx === idx) el.enableUpdate = true;
+				return el;
+			})
+		);
+	};
+
+	const disableUpdate = (editIdx) => {
+		setPost(
+			Post.map((el, idx) => {
+				if (editIdx === idx) el.enableUpdate = false;
+				return el;
+			})
+		);
 	};
 
 	const getFiltered = (txt) => {
@@ -52,26 +73,43 @@ export default function Community() {
 	}, [Post]);
 
 	return (
-		<div className='Community'>
-			<Layout title={'Community'}>
-				<div className='wrap-box'>
-					<div className='input-box'>
-						<input type='text' placeholder='title' name='tit' ref={refTit} />
-						<textarea cols='30' rows='3' name='con' placeholder='content' ref={refCon}></textarea>
-						<nav>
-							<button onClick={resetPost}>
-								<IoCloseSharp />
-							</button>
-							<button onClick={createPost}>
-								<FaPenToSquare />
-							</button>
-						</nav>
-					</div>
-					<div className='show-box'>
-						{Post.map((el, idx) => {
-							const date = JSON.stringify(el.date);
-							console.log(date);
-							const strDate = customDate(date.split('T')[0].slice(1), '.');
+		<Layout title={'Community'}>
+			<div className='wrap-box'>
+				<div className='input-box'>
+					<input type='text' placeholder='title' name='tit' ref={refTit} />
+					<textarea cols='30' rows='3' name='con' placeholder='content' ref={refCon}></textarea>
+					<nav>
+						<button onClick={resetPost}>
+							<IoCloseSharp />
+						</button>
+						<button onClick={createPost}>
+							<FaPenToSquare />
+						</button>
+					</nav>
+				</div>
+				<div className='show-box'>
+					{Post.map((el, idx) => {
+						const date = JSON.stringify(el.date);
+						console.log(date);
+						const strDate = customDate(date.split('T')[0].slice(1), '.');
+
+						if (el.enableUpdate) {
+							// 수정 모드
+							return (
+								<article key={el + idx}>
+									<div className='txt'>
+										<input type='text' defaultValue={el.title} />
+										<textarea cols='30' rows='3' defaultValue={el.content}></textarea>
+										<span>{strDate}</span>
+									</div>
+									<nav>
+										<button onClick={() => disableUpdate(idx)}>Cancel</button>
+										<button>Update</button>
+									</nav>
+								</article>
+							);
+						} else {
+							// 출력 모드
 							return (
 								<article key={el + idx}>
 									<div className='txt'>
@@ -80,7 +118,7 @@ export default function Community() {
 										<span>{strDate}</span>
 									</div>
 									<nav>
-										<button onClick={() => getFiltered('a')}>Edit</button>
+										<button onClick={() => enableUpdate(idx)}>Edit</button>
 										<button
 											onClick={() => {
 												deletePost(idx);
@@ -91,11 +129,11 @@ export default function Community() {
 									</nav>
 								</article>
 							);
-						})}
-					</div>
+						}
+					})}
 				</div>
-			</Layout>
-		</div>
+			</div>
+		</Layout>
 	);
 }
 
@@ -122,4 +160,13 @@ export default function Community() {
 	LocalStorage객체에 활용가능한 메서드
 	- localStorage.setItem('key', '문자화된 데이터'); //해당 키값에 데이터를 담아서 저장
 	- localStorage.getItem('key'); //해당 키값에 매칭되는 데이터를 가져옴
+*/
+
+/*
+	글 수정(Update)로직 단계
+		1. 각 포스트에서 수정버튼 클릭시 해당 객체에 enableUpdate=true라는 프로퍼티를 동적으로 추가 후 state 저장
+		2. 다음번 랜더링 사이클에서 포스트를 반복돌며 객체에 enableUpdate값이 true이면 제목 본문을 input 요소에 담아서 출력하도록 분기처리(출력시 수정모드로 분기처리해서 출력)
+		3. 수정모드일때는 수정취소, 수정완료 버튼 생성
+		4. 수정모드에서 수정취소버튼 클릭시 해당 포스트 객체에 enableUpdate=false로 변경해서 다시 출력모드로 변경
+		5. 수정모드에서 수정완료 버튼 클릭시 해당 폼요소에 수정된 value값을 가져와서 저장한 뒤 다시 출력모드로 변경
 */
