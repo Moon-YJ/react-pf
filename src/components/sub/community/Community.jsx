@@ -33,6 +33,12 @@ export default function Community() {
 		setPost([{ title: refTit.current.value, content: refCon.current.value }, ...Post]);
 	};
 
+	const deletePost = (delIdx) => {
+		// map과 마찬가지로 기존 배열값을 deep copy해서 새로운 배열 반환
+		// 이때 안쪽에 조건문을 처리해서 특정 조건에 부합되는 값만 필터링해서 반환
+		setPost(Post.filter((_, idx) => delIdx !== idx));
+	};
+
 	useEffect(() => {
 		localStorage.setItem('post', JSON.stringify(Post));
 	}, [Post]);
@@ -63,7 +69,13 @@ export default function Community() {
 									</div>
 									<nav>
 										<button>Edit</button>
-										<button>Delete</button>
+										<button
+											onClick={() => {
+												deletePost(idx);
+											}}
+										>
+											Delete
+										</button>
 									</nav>
 								</article>
 							);
