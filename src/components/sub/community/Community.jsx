@@ -7,6 +7,7 @@ import { useCustomText } from '../../../hooks/useText';
 
 export default function Community() {
 	const customDate = useCustomText('combined');
+	const korTime = useRef(new Date().getTime() + 1000 * 60 * 60 * 9);
 	const getLocalData = () => {
 		const data = localStorage.getItem('post');
 		// 로컬저장소에 post 키값에 값이 있으면 parsing해서 객체로 리턴
@@ -17,6 +18,9 @@ export default function Community() {
 	const [Post, setPost] = useState(getLocalData);
 	const refTit = useRef(null);
 	const refCon = useRef(null);
+	const refEditTit = useRef(null);
+	const refEditCon = useRef(null);
+	const editMode = useRef(false);
 
 	const resetPost = (e) => {
 		refTit.current.value = '';
@@ -31,8 +35,7 @@ export default function Community() {
 			return alert('제목은 5글자, 본문은 300글자 미만으로 작성해 주세요');
 		}
 		// new Date().toLocalString() - 해당 지역의 표준시로 변환해서 반환, but 단점은 원하지 않는 형태로 가공됨
-		const korTime = new Date().getTime() + 1000 * 60 * 60 * 9;
-		setPost([{ title: refTit.current.value, content: refCon.current.value, date: new Date(korTime) }, ...Post]);
+		setPost([{ title: refTit.current.value, content: refCon.current.value, date: new Date(korTime.current) }, ...Post]);
 		resetPost();
 	};
 
@@ -44,6 +47,8 @@ export default function Community() {
 	};
 
 	const enableUpdate = (editIdx) => {
+		if (editMode.current) return;
+		editMode.current = true;
 		// 기존의 Post배열을 반복 돌면서 파라미터로 전달된 editIdx 순번의 Post에만 enableUpdate = true 라는 구분자를 추가해서 다시 state 변경처리
 		// 다음번 랜더링때 해당 구분자가 있는 Post 객체만 수정모드로 분기처리하기 위함
 		setPost(
@@ -54,10 +59,28 @@ export default function Community() {
 		);
 	};
 
-	const disableUpdate = (editIdx) => {
+	const disableUpdate = (disableIdx) => {
+		editMode.current = false;
 		setPost(
 			Post.map((el, idx) => {
-				if (editIdx === idx) el.enableUpdate = false;
+				if (disableIdx === idx) el.enableUpdate = false;
+				return el;
+			})
+		);
+	};
+
+	const updatePost = (updateIdx) => {
+		if (!refEditTit.current.value.trim() || !refEditCon.current.value.trim()) {
+			return alert('제목과 본문을 모두 작성해 주세요');
+		}
+		editMode.current = false;
+		setPost(
+			Post.map((el, idx) => {
+				if (updateIdx === idx) {
+					el.title = refEditTit.current.value;
+					el.content = refEditCon.current.value;
+					el.enableUpdate = false;
+				}
 				return el;
 			})
 		);
@@ -69,6 +92,7 @@ export default function Community() {
 	};
 
 	useEffect(() => {
+		Post.map((el) => (el.enableUpdate = false));
 		localStorage.setItem('post', JSON.stringify(Post));
 	}, [Post]);
 
@@ -90,21 +114,20 @@ export default function Community() {
 				<div className='show-box'>
 					{Post.map((el, idx) => {
 						const date = JSON.stringify(el.date);
-						console.log(date);
-						const strDate = customDate(date.split('T')[0].slice(1), '.');
+						const strDate = customDate(date.split('T')[0].slice(1), '.') + date.split('T')[1].split('Z')[0];
 
 						if (el.enableUpdate) {
 							// 수정 모드
 							return (
 								<article key={el + idx}>
 									<div className='txt'>
-										<input type='text' defaultValue={el.title} />
-										<textarea cols='30' rows='3' defaultValue={el.content}></textarea>
+										<input ref={refEditTit} type='text' defaultValue={el.title} />
+										<textarea ref={refEditCon} cols='30' rows='3' defaultValue={el.content}></textarea>
 										<span>{strDate}</span>
 									</div>
 									<nav>
 										<button onClick={() => disableUpdate(idx)}>Cancel</button>
-										<button>Update</button>
+										<button onClick={() => updatePost(idx)}>Update</button>
 									</nav>
 								</article>
 							);

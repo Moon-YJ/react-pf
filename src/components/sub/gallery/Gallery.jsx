@@ -12,6 +12,8 @@ export default function Gallery() {
 	const refNav = useRef(null);
 	const refWrap = useRef(null);
 	const gap = useRef(20);
+	// search 함수가 실행됐는지 확인하기 위한 참조객체
+	const searched = useRef(false);
 
 	const [Pics, setPics] = useState([]);
 	const [Open, setOpen] = useState(false);
@@ -59,6 +61,8 @@ export default function Gallery() {
 		if (!searchTxt.trim()) return;
 		e.target.children[0].value = '';
 		fetchFlickr({ type: 'search', keyword: searchTxt });
+		// 검색함수가 한번이라도 실행되면 true로 변경
+		searched.current = true;
 	};
 
 	const fetchFlickr = async (opt) => {
@@ -111,7 +115,8 @@ export default function Gallery() {
 
 				<section className='wrap-con' ref={refWrap}>
 					<Masonry className={'container'} options={{ transitionDuration: '0.5s', gutter: gap.current }}>
-						{Pics.length === 0 ? (
+						{/* 처음 마운트 됐을때는 실행 안되고 검색했을때만 실행되게 처리 */}
+						{Pics.length === 0 && searched.current ? (
 							<h2>해당 검색어의 결과값이 없습니다.</h2>
 						) : (
 							Pics.map((pic, idx) => {
