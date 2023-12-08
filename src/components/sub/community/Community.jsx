@@ -18,6 +18,7 @@ export default function Community() {
 
 	const [Post, setPost] = useState(getLocalData);
 	const [CurNum, setCurNum] = useState(0); //페이징 버튼 클릭시 현재 보일 페이지 번호가 담길 state
+	const [PageNum, setPageNum] = useState(0); //전체 PageNum이 담길 state
 
 	const refTit = useRef(null);
 	const refCon = useRef(null);
@@ -111,16 +112,22 @@ export default function Community() {
 		// 만약 나머지가 있으면 나눈 몫에 1을 더한 값
 		pageNum.current =
 			len.current % perNum.current === 0 ? len.current / perNum.current : parseInt(len.current / perNum.current) + 1;
+
+		// 새로고침했을때 페이징 버튼이 안뜨는 문제
+		// 원인 : 현재 로직이 Post값자체게 변경되면 pageNum.current값이 변경되게 하고 있는데..
+		// pageNum.current가 변경되고 state가 아니기 때문에 화면을 자동 재랜더링하지 않는 문제 발생
+		// 해결방법 : 만들어진 참조객체값을 state PageNum에 옮겨담음
+		setPageNum(pageNum.current);
 	}, [Post]);
 
 	return (
 		<Layout title={'Community'}>
 			<nav className='pagination'>
-				{Array(pageNum.current)
+				{Array(PageNum)
 					.fill()
 					.map((_, idx) => {
 						return (
-							<button key={idx} onClick={() => setCurNum(idx)}>
+							<button key={idx} onClick={() => idx !== CurNum && setCurNum(idx)} className={idx === CurNum ? 'on' : ''}>
 								{idx + 1}
 							</button>
 						);
