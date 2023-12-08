@@ -15,6 +15,7 @@ export default function Community() {
 		// 값이 없으면 빈 배열 리턴 (해당 컴포넌트가 맨 처음 호출될때 한번)
 		else return [];
 	};
+
 	const [Post, setPost] = useState(getLocalData);
 	const refTit = useRef(null);
 	const refCon = useRef(null);
@@ -79,6 +80,7 @@ export default function Community() {
 				if (updateIdx === idx) {
 					el.title = refEditTit.current.value;
 					el.content = refEditCon.current.value;
+					el.date = new Date(korTime.current);
 					el.enableUpdate = false;
 				}
 				return el;
@@ -114,7 +116,8 @@ export default function Community() {
 				<div className='show-box'>
 					{Post.map((el, idx) => {
 						const date = JSON.stringify(el.date);
-						const strDate = customDate(date.split('T')[0].slice(1), '.') + date.split('T')[1].split('Z')[0];
+						const strDate =
+							customDate(date.split('T')[0].slice(1), '.') + ' ' + date.split('T')[1].split('Z')[0].split('.')[0];
 
 						if (el.enableUpdate) {
 							// 수정 모드
