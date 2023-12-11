@@ -54,7 +54,16 @@ export default function Contact() {
 		),
 	});
 
-	const setCenter = () => mapInstance.current.setCenter(mapInfo.current[Index].latlng);
+	const roadview = () => {
+		new kakao.current.maps.RoadviewClient().getNearestPanoId(mapInfo.current[Index].latlng, 50, (panoId) => {
+			new kakao.current.maps.Roadview(viewFrame.current).setPanoId(panoId, mapInfo.current[Index].latlng);
+		});
+	};
+
+	const setCenter = () => {
+		roadview();
+		mapInstance.current.setCenter(mapInfo.current[Index].latlng);
+	};
 
 	// 컴포넌트 마운시 참조객체에 담아놓은 DOM 프레임에 지도 인스턴스 출력 및 마커 세팅
 	useEffect(() => {
@@ -67,12 +76,11 @@ export default function Contact() {
 		markerInstance.current.setMap(mapInstance.current);
 		// Index state가 바뀌어서 지도 재랜더링 되면 Traffic값도 false로 변경
 		setTraffic(false);
+		setRoadView(false);
 
 		// 로드뷰 출력
 		// 50은 반경 50m이내의 로드뷰를 출력한다는 의미 (ex. 만약 규모가 큰 장소라면 해당 숫자를 늘려야 함)
-		new kakao.current.maps.RoadviewClient().getNearestPanoId(mapInfo.current[Index].latlng, 50, (panoId) => {
-			new kakao.current.maps.Roadview(viewFrame.current).setPanoId(panoId, mapInfo.current[Index].latlng);
-		});
+		roadview();
 		// 지도 타입 컨트롤러 추가
 		mapInstance.current.addControl(
 			new kakao.current.maps.MapTypeControl(),
@@ -107,6 +115,7 @@ export default function Contact() {
 				<nav className='info'>
 					<button onClick={() => setTraffic(!Traffic)}>{Traffic ? 'Traffic OFF' : 'Traffic ON'}</button>
 					<button onClick={() => setRoadView(!RoadView)}>{RoadView ? '일반 지도 보기' : '로드뷰 보기'}</button>
+					<button onClick={setCenter}>위치 초기화</button>
 				</nav>
 			</div>
 
