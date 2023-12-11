@@ -3,9 +3,9 @@ import Layout from '../../common/layout/Layout';
 import './Contact.scss';
 
 export default function Contact() {
-	const [Index, setIndex] = useState(0);
-
 	const { kakao } = window;
+
+	const [Index, setIndex] = useState(0);
 	const mapFrame = useRef(null);
 	const markerInstance = useRef(null);
 
@@ -56,7 +56,7 @@ export default function Contact() {
 			level: 3,
 		});
 		markerInstance.current.setMap(mapInstance);
-	}, []);
+	}, [Index, kakao]);
 
 	return (
 		<Layout title={'Contact'}>
