@@ -8,6 +8,7 @@ export default function Contact() {
 	const [Index, setIndex] = useState(0);
 	const mapFrame = useRef(null);
 	const markerInstance = useRef(null);
+	const mapInstance = useRef(null);
 
 	// 지점마다 출력할 정보를 개별적인 객체로 묶어서 배열로 그룹화
 	const mapInfo = useRef([
@@ -49,13 +50,20 @@ export default function Contact() {
 		),
 	});
 
+	const setCenter = () => mapInstance.current.setCenter(mapInfo.current[Index].latlng);
+
 	// 컴포넌트 마운시 참조객체에 담아놓은 DOM 프레임에 지도 인스턴스 출력 및 마커 세팅
 	useEffect(() => {
-		const mapInstance = new kakao.current.maps.Map(mapFrame.current, {
+		mapInstance.current = new kakao.current.maps.Map(mapFrame.current, {
 			center: mapInfo.current[Index].latlng,
 			level: 3,
 		});
-		markerInstance.current.setMap(mapInstance);
+		markerInstance.current.setMap(mapInstance.current);
+
+		// 지도 중심 이동
+		window.addEventListener('resize', setCenter);
+
+		return () => window.removeEventListener('resize', setCenter);
 	}, [Index]);
 
 	return (
