@@ -63,8 +63,18 @@ export default function Contact() {
 			level: 3,
 		});
 		markerInstance.current.setMap(mapInstance.current);
+		mapInstance.current.setZoomable(false);
 		// Index state가 바뀌어서 지도 재랜더링 되면 Traffic값도 false로 변경
 		setTraffic(false);
+
+		// 지도 타입 컨트롤러 추가
+		mapInstance.current.addControl(
+			new kakao.current.maps.MapTypeControl(),
+			kakao.current.maps.ControlPosition.TOPRIGHT
+		);
+
+		// 지도 줌 컨트롤러 추가
+		mapInstance.current.addControl(new kakao.current.maps.ZoomControl(), kakao.current.maps.ControlPosition.RIGHT);
 
 		// 지도 중심 이동
 		window.addEventListener('resize', setCenter);
@@ -98,7 +108,7 @@ export default function Contact() {
 }
 
 /*
-	1. cdn window에서 불러온 외부 객체값을 가져와서 인스턴스 생성
+	1. cdn을 통해 window에서 불러온 외부 객체값을 가져와서 인스턴스 생성
 	2. 인스턴스값을 참조객체 담는 이유 (의존성배열에 불필요하게 등록하지 않기 위해서)
 	3. 화면에 변경점이 발생해야 될때 state값에 따라서 변경되게 로직화한 다음 이벤트 발생시 state를 변경해서 화면 재랜더링 유도
 */
