@@ -6,6 +6,8 @@ export default function Contact() {
 	const kakao = useRef(window.kakao);
 
 	const [Index, setIndex] = useState(0);
+	const [Traffic, setTraffic] = useState(false);
+
 	const mapFrame = useRef(null);
 	const markerInstance = useRef(null);
 	const mapInstance = useRef(null);
@@ -54,11 +56,15 @@ export default function Contact() {
 
 	// 컴포넌트 마운시 참조객체에 담아놓은 DOM 프레임에 지도 인스턴스 출력 및 마커 세팅
 	useEffect(() => {
+		// 버튼 클릭시 지도 중첩되는 오류 해결
+		mapFrame.current.innerHTML = '';
 		mapInstance.current = new kakao.current.maps.Map(mapFrame.current, {
 			center: mapInfo.current[Index].latlng,
 			level: 3,
 		});
 		markerInstance.current.setMap(mapInstance.current);
+		// Index state가 바뀌어서 지도 재랜더링 되면 Traffic값도 false로 변경
+		setTraffic(false);
 
 		// 지도 중심 이동
 		window.addEventListener('resize', setCenter);
@@ -66,15 +72,26 @@ export default function Contact() {
 		return () => window.removeEventListener('resize', setCenter);
 	}, [Index]);
 
+	useEffect(() => {
+		Traffic
+			? mapInstance.current.addOverlayMapTypeId(kakao.current.maps.MapTypeId.TRAFFIC)
+			: mapInstance.current.removeOverlayMapTypeId(kakao.current.maps.MapTypeId.TRAFFIC);
+	}, [Traffic]);
+
 	return (
 		<Layout title={'Contact'}>
-			<ul className='branch'>
-				{mapInfo.current.map((el, idx) => (
-					<button key={idx} onClick={() => setIndex(idx)} className={idx === Index ? 'on' : ''}>
-						{el.title}
-					</button>
-				))}
-			</ul>
+			<div className='control-box'>
+				<nav className='branch'>
+					{mapInfo.current.map((el, idx) => (
+						<button key={idx} onClick={() => setIndex(idx)} className={idx === Index ? 'on' : ''}>
+							{el.title}
+						</button>
+					))}
+				</nav>
+				<nav className='info'>
+					<button onClick={() => setTraffic(!Traffic)}>{Traffic ? 'Traffic OFF' : 'Traffic ON'}</button>
+				</nav>
+			</div>
 			<article id='map' ref={mapFrame}></article>
 		</Layout>
 	);
