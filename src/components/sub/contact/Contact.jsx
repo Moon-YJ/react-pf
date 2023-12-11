@@ -9,6 +9,7 @@ export default function Contact() {
 	const [Traffic, setTraffic] = useState(false);
 
 	const mapFrame = useRef(null);
+	const viewFrame = useRef(null);
 	const markerInstance = useRef(null);
 	const mapInstance = useRef(null);
 
@@ -63,19 +64,22 @@ export default function Contact() {
 			level: 3,
 		});
 		markerInstance.current.setMap(mapInstance.current);
-		mapInstance.current.setZoomable(false);
 		// Index state가 바뀌어서 지도 재랜더링 되면 Traffic값도 false로 변경
 		setTraffic(false);
 
+		// 로드뷰 출력
+		new kakao.current.maps.RoadviewClient().getNearestPanoId(mapInfo.current[Index].latlng, 50, (panoId) => {
+			new kakao.current.maps.Roadview(viewFrame.current).setPanoId(panoId, mapInfo.current[Index].latlng);
+		});
 		// 지도 타입 컨트롤러 추가
 		mapInstance.current.addControl(
 			new kakao.current.maps.MapTypeControl(),
 			kakao.current.maps.ControlPosition.TOPRIGHT
 		);
-
 		// 지도 줌 컨트롤러 추가
 		mapInstance.current.addControl(new kakao.current.maps.ZoomControl(), kakao.current.maps.ControlPosition.RIGHT);
-
+		// 마우스 휠 줌 기능 비활성화
+		mapInstance.current.setZoomable(false);
 		// 지도 중심 이동
 		window.addEventListener('resize', setCenter);
 
@@ -103,6 +107,7 @@ export default function Contact() {
 				</nav>
 			</div>
 			<article id='map' ref={mapFrame}></article>
+			<article className='view-box' ref={viewFrame}></article>
 		</Layout>
 	);
 }
