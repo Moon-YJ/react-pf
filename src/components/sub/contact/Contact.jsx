@@ -7,6 +7,7 @@ export default function Contact() {
 
 	const [Index, setIndex] = useState(0);
 	const [Traffic, setTraffic] = useState(false);
+	const [RoadView, setRoadView] = useState(false);
 
 	const mapFrame = useRef(null);
 	const viewFrame = useRef(null);
@@ -68,6 +69,7 @@ export default function Contact() {
 		setTraffic(false);
 
 		// 로드뷰 출력
+		// 50은 반경 50m이내의 로드뷰를 출력한다는 의미 (ex. 만약 규모가 큰 장소라면 해당 숫자를 늘려야 함)
 		new kakao.current.maps.RoadviewClient().getNearestPanoId(mapInfo.current[Index].latlng, 50, (panoId) => {
 			new kakao.current.maps.Roadview(viewFrame.current).setPanoId(panoId, mapInfo.current[Index].latlng);
 		});
@@ -104,10 +106,14 @@ export default function Contact() {
 				</nav>
 				<nav className='info'>
 					<button onClick={() => setTraffic(!Traffic)}>{Traffic ? 'Traffic OFF' : 'Traffic ON'}</button>
+					<button onClick={() => setRoadView(!RoadView)}>{RoadView ? '일반 지도 보기' : '로드뷰 보기'}</button>
 				</nav>
 			</div>
-			<article id='map' ref={mapFrame}></article>
-			<article className='view-box' ref={viewFrame}></article>
+
+			<section className='tab'>
+				<article id='map' className={!RoadView ? 'on' : ''} ref={mapFrame}></article>
+				<article className={`view-box ${RoadView ? 'on' : ''}`} ref={viewFrame}></article>
+			</section>
 		</Layout>
 	);
 }
