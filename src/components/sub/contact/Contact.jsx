@@ -27,6 +27,12 @@ export default function Contact() {
 	const sendEmail = e => {
 		e.preventDefault();
 
+		/*
+			const [user, email] = form.current.querySelectorAll('input');
+			const txt = form.current.querySelector('textarea');
+			if (!user.value.trim() || !email.value.trim() || !txt.value.trim()) return alert('모든 항목을 입력해 주세요');
+		*/
+
 		if (!inp_name.current.value.trim() || !inp_name.current.value.trim() || !inp_email.current.value.trim() || !inp_msg.current.value.trim())
 			return alert('모든 항목을 입력해 주세요');
 
