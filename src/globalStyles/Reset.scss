@@ -39,6 +39,41 @@ a {
 	font-family: var(--baseFont);
 	background-color: var(--bgColor);
 	transition: color 1s, background-color 1s;
+	// 테이블 관련 css
+	.h {
+		position: absolute;
+		top: -9999999px;
+		opacity: 0;
+	}
+	table,
+	th,
+	td {
+		border-collapse: collpase;
+	}
+	textarea {
+		resize: none;
+	}
+	input,
+	button {
+		outline: 0;
+	}
+	fieldset {
+		border: none;
+	}
+	input,
+	textarea {
+		&::placeholder {
+			background-color: transparent;
+			font-size: 1rem;
+			color: rgba(var(--baseColor-code), 0.5);
+			font-family: var(--baseFont);
+		}
+	}
+	select {
+		font-size: 1rem;
+		color: rgba(var(--baseColor-code), 0.5);
+	}
+
 	// scrollbar디자인 변경
 	// 리액트에서 테마변경(다크모드 적용) 이벤트가 발생했을때 scrollbar변경 이벤트도 발생해야하기 때문에 리액트에서 관리하지 못하는 html요소의 scrollbar가 아닌 wrap요소에 스크롤바 생성
 	&::-webkit-scrollbar {
