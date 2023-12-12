@@ -4,6 +4,7 @@ import { IoCloseSharp } from 'react-icons/io5';
 import { FaPenToSquare } from 'react-icons/fa6';
 import { useEffect, useRef, useState } from 'react';
 import { useCustomText } from '../../../hooks/useText';
+import postData from './dummyPosts.json';
 
 export default function Community() {
 	const customDate = useCustomText('combined');
@@ -13,7 +14,7 @@ export default function Community() {
 		// 로컬저장소에 post 키값에 값이 있으면 parsing해서 객체로 리턴
 		if (data) return JSON.parse(data);
 		// 값이 없으면 빈 배열 리턴 (해당 컴포넌트가 맨 처음 호출될때 한번)
-		else return [];
+		else return postData.dummyPosts;
 	};
 
 	const [Post, setPost] = useState(getLocalData);
@@ -29,12 +30,12 @@ export default function Community() {
 	const pageNum = useRef(0); //전체 페이지 개수를 추후에 연산해서 담을 참조객체
 	const perNum = useRef(3); //한 페이지당 보일 포스트 개수
 
-	const resetPost = (e) => {
+	const resetPost = e => {
 		refTit.current.value = '';
 		refCon.current.value = '';
 	};
 
-	const createPost = (e) => {
+	const createPost = e => {
 		if (!refTit.current.value.trim() || !refCon.current.value.trim()) {
 			return alert('제목과 본문을 모두 작성해 주세요');
 		}
@@ -46,14 +47,14 @@ export default function Community() {
 		resetPost();
 	};
 
-	const deletePost = (delIdx) => {
+	const deletePost = delIdx => {
 		if (!window.confirm('해당 게시글을 삭제하시겠습니까?')) return;
 		// map과 마찬가지로 기존 배열값을 deep copy해서 새로운 배열 반환
 		// 이때 안쪽에 조건문을 처리해서 특정 조건에 부합되는 값만 필터링해서 반환
 		setPost(Post.filter((_, idx) => delIdx !== idx));
 	};
 
-	const enableUpdate = (editIdx) => {
+	const enableUpdate = editIdx => {
 		if (editMode.current) return;
 		editMode.current = true;
 		// 기존의 Post배열을 반복 돌면서 파라미터로 전달된 editIdx 순번의 Post에만 enableUpdate = true 라는 구분자를 추가해서 다시 state 변경처리
@@ -66,7 +67,7 @@ export default function Community() {
 		);
 	};
 
-	const disableUpdate = (disableIdx) => {
+	const disableUpdate = disableIdx => {
 		editMode.current = false;
 		setPost(
 			Post.map((el, idx) => {
@@ -76,7 +77,7 @@ export default function Community() {
 		);
 	};
 
-	const updatePost = (updateIdx) => {
+	const updatePost = updateIdx => {
 		if (!refEditTit.current.value.trim() || !refEditCon.current.value.trim()) {
 			return alert('제목과 본문을 모두 작성해 주세요');
 		}
@@ -94,13 +95,13 @@ export default function Community() {
 		);
 	};
 
-	const getFiltered = (txt) => {
-		const abc = Post.filter((el) => el.title.indexOf(txt) >= 0 || el.content.indexOf(txt) >= 0);
+	const getFiltered = txt => {
+		const abc = Post.filter(el => el.title.indexOf(txt) >= 0 || el.content.indexOf(txt) >= 0);
 		console.log(abc);
 	};
 
 	useEffect(() => {
-		Post.map((el) => (el.enableUpdate = false));
+		Post.map(el => (el.enableUpdate = false));
 		localStorage.setItem('post', JSON.stringify(Post));
 
 		// 전체 Post 개수 구함
@@ -110,8 +111,7 @@ export default function Community() {
 		// 전체 데이터 개수 / 한 페이지당 보일 포스트 개수
 		// 만약 딱 나누어 떨어지면 나눈 몫을 바로 담음
 		// 만약 나머지가 있으면 나눈 몫에 1을 더한 값
-		pageNum.current =
-			len.current % perNum.current === 0 ? len.current / perNum.current : parseInt(len.current / perNum.current) + 1;
+		pageNum.current = len.current % perNum.current === 0 ? len.current / perNum.current : parseInt(len.current / perNum.current) + 1;
 
 		// 새로고침했을때 페이징 버튼이 안뜨는 문제
 		// 원인 : 현재 로직이 Post값자체게 변경되면 pageNum.current값이 변경되게 하고 있는데..
@@ -127,7 +127,10 @@ export default function Community() {
 					.fill()
 					.map((_, idx) => {
 						return (
-							<button key={idx} onClick={() => idx !== CurNum && setCurNum(idx)} className={idx === CurNum ? 'on' : ''}>
+							<button
+								key={idx}
+								onClick={() => idx !== CurNum && setCurNum(idx)}
+								className={idx === CurNum ? 'on' : ''}>
 								{idx + 1}
 							</button>
 						);
@@ -135,8 +138,18 @@ export default function Community() {
 			</nav>
 			<div className='wrap-box'>
 				<div className='input-box'>
-					<input type='text' placeholder='title' name='tit' ref={refTit} />
-					<textarea cols='30' rows='3' name='con' placeholder='content' ref={refCon}></textarea>
+					<input
+						type='text'
+						placeholder='title'
+						name='tit'
+						ref={refTit}
+					/>
+					<textarea
+						cols='30'
+						rows='3'
+						name='con'
+						placeholder='content'
+						ref={refCon}></textarea>
 					<nav>
 						<button onClick={resetPost}>
 							<IoCloseSharp />
@@ -149,8 +162,7 @@ export default function Community() {
 				<div className='show-box'>
 					{Post.map((el, idx) => {
 						const date = JSON.stringify(el.date);
-						const strDate =
-							customDate(date.split('T')[0].slice(1), '.') + ' ' + date.split('T')[1].split('Z')[0].split('.')[0];
+						const strDate = customDate(date.split('T')[0].slice(1), '.') + ' ' + date.split('T')[1].split('Z')[0].split('.')[0];
 
 						//c>=0 (3*curNum)  && c < 3 (3* (curNum+1)) --> 0,1,2번째 보여야됨
 						//c>=3 (3*curNum) && c < 6 (3* (curNum+1)) --> 3,4,5번째 보여야됨
@@ -161,8 +173,16 @@ export default function Community() {
 										// 수정 모드
 										<>
 											<div className='txt'>
-												<input ref={refEditTit} type='text' defaultValue={el.title} />
-												<textarea ref={refEditCon} cols='30' rows='3' defaultValue={el.content}></textarea>
+												<input
+													ref={refEditTit}
+													type='text'
+													defaultValue={el.title}
+												/>
+												<textarea
+													ref={refEditCon}
+													cols='30'
+													rows='3'
+													defaultValue={el.content}></textarea>
 												<span>{strDate}</span>
 											</div>
 											<nav>
@@ -183,8 +203,7 @@ export default function Community() {
 												<button
 													onClick={() => {
 														deletePost(idx);
-													}}
-												>
+													}}>
 													Delete
 												</button>
 											</nav>
