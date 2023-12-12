@@ -26,36 +26,32 @@ export default function Contact() {
 			// 마커 이미지 크기 지정
 			imgSize: new kakao.current.maps.Size(232, 99),
 			// 마커 이미지의 꼭지점 이동 (이미지 넓이의 절반만큼, 높이만큼)
-			imgPos: { offset: new kakao.current.maps.Point(116, 99) },
+			imgPos: { offset: new kakao.current.maps.Point(116, 99) }
 		},
 		{
 			title: '넥슨 본사',
 			latlng: new kakao.current.maps.LatLng(37.40211707077346, 127.10344953763003),
 			imgSrc: `${process.env.PUBLIC_URL}/img/marker2.png`,
 			imgSize: new kakao.current.maps.Size(232, 99),
-			imgPos: { offset: new kakao.current.maps.Point(116, 99) },
+			imgPos: { offset: new kakao.current.maps.Point(116, 99) }
 		},
 		{
 			title: '서울 시청',
 			latlng: new kakao.current.maps.LatLng(37.5662952, 126.9779451),
 			imgSrc: `${process.env.PUBLIC_URL}/img/marker3.png`,
 			imgSize: new kakao.current.maps.Size(232, 99),
-			imgPos: { offset: new kakao.current.maps.Point(116, 99) },
-		},
+			imgPos: { offset: new kakao.current.maps.Point(116, 99) }
+		}
 	]);
 
 	// 마커 인스턴스 생성 (브라우저 DOM의 기능이 필요없으므로 useEfeect 바깥에서 만들어도 됨)
 	markerInstance.current = new kakao.current.maps.Marker({
 		position: mapInfo.current[Index].latlng,
-		image: new kakao.current.maps.MarkerImage(
-			mapInfo.current[Index].imgSrc,
-			mapInfo.current[Index].imgSize,
-			mapInfo.current[Index].imgPos
-		),
+		image: new kakao.current.maps.MarkerImage(mapInfo.current[Index].imgSrc, mapInfo.current[Index].imgSize, mapInfo.current[Index].imgPos)
 	});
 
 	const roadview = () => {
-		new kakao.current.maps.RoadviewClient().getNearestPanoId(mapInfo.current[Index].latlng, 50, (panoId) => {
+		new kakao.current.maps.RoadviewClient().getNearestPanoId(mapInfo.current[Index].latlng, 50, panoId => {
 			new kakao.current.maps.Roadview(viewFrame.current).setPanoId(panoId, mapInfo.current[Index].latlng);
 		});
 	};
@@ -71,7 +67,7 @@ export default function Contact() {
 		mapFrame.current.innerHTML = '';
 		mapInstance.current = new kakao.current.maps.Map(mapFrame.current, {
 			center: mapInfo.current[Index].latlng,
-			level: 3,
+			level: 3
 		});
 		markerInstance.current.setMap(mapInstance.current);
 		// Index state가 바뀌어서 지도 재랜더링 되면 Traffic값도 false로 변경
@@ -82,10 +78,7 @@ export default function Contact() {
 		// 50은 반경 50m이내의 로드뷰를 출력한다는 의미 (ex. 만약 규모가 큰 장소라면 해당 숫자를 늘려야 함)
 		roadview();
 		// 지도 타입 컨트롤러 추가
-		mapInstance.current.addControl(
-			new kakao.current.maps.MapTypeControl(),
-			kakao.current.maps.ControlPosition.TOPRIGHT
-		);
+		mapInstance.current.addControl(new kakao.current.maps.MapTypeControl(), kakao.current.maps.ControlPosition.TOPRIGHT);
 		// 지도 줌 컨트롤러 추가
 		mapInstance.current.addControl(new kakao.current.maps.ZoomControl(), kakao.current.maps.ControlPosition.RIGHT);
 		// 마우스 휠 줌 기능 비활성화
@@ -106,11 +99,12 @@ export default function Contact() {
 		<Layout title={'Contact'}>
 			<div className='control-box'>
 				<nav className='branch'>
-					{mapInfo.current.map((el, idx) => (
+					{mapInfo.current.map((el, idx) =>
+						//prettier-ignore
 						<button key={idx} onClick={() => setIndex(idx)} className={idx === Index ? 'on' : ''}>
 							{el.title}
 						</button>
-					))}
+					)}
 				</nav>
 				<nav className='info'>
 					<button onClick={() => setTraffic(!Traffic)}>{Traffic ? 'Traffic OFF' : 'Traffic ON'}</button>
@@ -120,8 +114,13 @@ export default function Contact() {
 			</div>
 
 			<section className='tab'>
-				<article id='map' className={!RoadView ? 'on' : ''} ref={mapFrame}></article>
-				<article className={`view-box ${RoadView ? 'on' : ''}`} ref={viewFrame}></article>
+				<article
+					id='map'
+					className={!RoadView ? 'on' : ''}
+					ref={mapFrame}></article>
+				<article
+					className={`view-box ${RoadView ? 'on' : ''}`}
+					ref={viewFrame}></article>
 			</section>
 		</Layout>
 	);
