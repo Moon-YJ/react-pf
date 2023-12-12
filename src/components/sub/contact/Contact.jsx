@@ -10,10 +10,18 @@ export default function Contact() {
 	const inp_msg = useRef(null);
 
 	const resetForm = () => {
-		const inputs = form.current.children;
-		Array.from(inputs).forEach(input => {
-			if (input.name === 'user_name' || 'user_email' || 'message') input.value = '';
-		});
+		//그룹형식의 DOM을 탐색할때 반환되는 두가지 형태의 유사배열
+		//parentDOM.children : HTMLCollection (유사배열: forEach, map 모두 반복불가, Live DOM:상태변경이 실시간)
+		//parentDOM.querySelectorAll : NodeList (유사배열: forEach로는 반복 가능. Static DOM:탐색된 시점의 정적 DOM)
+		/*
+			const inputs = form.current.children;
+			Array.from(inputs).forEach(input => {
+				if (input.name === 'user_name' || 'user_email' || 'message') input.value = '';
+			});
+		*/
+		inp_name.current.value = '';
+		inp_email.current.value = '';
+		inp_msg.current.value = '';
 	};
 
 	const sendEmail = e => {
