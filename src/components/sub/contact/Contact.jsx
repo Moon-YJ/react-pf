@@ -1,10 +1,39 @@
 import { useEffect, useRef, useState } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Contact.scss';
+import emailjs from '@emailjs/browser';
 
 export default function Contact() {
-	const kakao = useRef(window.kakao);
+	const form = useRef();
+	const inp_name = useRef(null);
+	const inp_email = useRef(null);
+	const inp_msg = useRef(null);
 
+	const resetForm = () => {
+		const inputs = form.current.children;
+		Array.from(inputs).forEach(input => {
+			if (input.name === 'user_name' || 'user_email' || 'message') input.value = '';
+		});
+	};
+
+	const sendEmail = e => {
+		e.preventDefault();
+
+		if (!inp_name.current.value.trim() || !inp_name.current.value.trim() || !inp_email.current.value.trim() || !inp_msg.current.value.trim())
+			return alert('모든 항목을 입력해 주세요');
+
+		emailjs.sendForm('service_5tlzo4v', 'template_f5admma', form.current, '93d00hlz3pqQunJrz').then(
+			result => {
+				alert('문의 내용이 성공적으로 전달되었습니다');
+				resetForm();
+			},
+			error => {
+				alert('일시적인 장애로 문의 전송에 실패했습니다. 다음의 메일주소로 보내주세요. aa@aa.com');
+			}
+		);
+	};
+
+	const kakao = useRef(window.kakao);
 	const [Index, setIndex] = useState(0);
 	const [Traffic, setTraffic] = useState(false);
 	const [RoadView, setRoadView] = useState(false);
@@ -97,30 +126,58 @@ export default function Contact() {
 
 	return (
 		<Layout title={'Contact'}>
-			<div className='control-box'>
-				<nav className='branch'>
-					{mapInfo.current.map((el, idx) =>
-						//prettier-ignore
-						<button key={idx} onClick={() => setIndex(idx)} className={idx === Index ? 'on' : ''}>
-							{el.title}
-						</button>
-					)}
-				</nav>
-				<nav className='info'>
-					<button onClick={() => setTraffic(!Traffic)}>{Traffic ? 'Traffic OFF' : 'Traffic ON'}</button>
-					<button onClick={() => setRoadView(!RoadView)}>{RoadView ? '일반 지도 보기' : '로드뷰 보기'}</button>
-					<button onClick={setCenter}>위치 초기화</button>
-				</nav>
-			</div>
+			<section className='mail'>
+				<form
+					ref={form}
+					onSubmit={sendEmail}>
+					<label>Name</label>
+					<input
+						type='text'
+						name='user_name'
+						ref={inp_name}
+					/>
+					<label>Email</label>
+					<input
+						type='email'
+						name='user_email'
+						ref={inp_email}
+					/>
+					<label>Message</label>
+					<textarea name='message' />
+					<input
+						type='submit'
+						value='Send'
+						ref={inp_msg}
+					/>
+				</form>
+			</section>
 
-			<section className='tab'>
-				<article
-					id='map'
-					className={!RoadView ? 'on' : ''}
-					ref={mapFrame}></article>
-				<article
-					className={`view-box ${RoadView ? 'on' : ''}`}
-					ref={viewFrame}></article>
+			<section className='map-area'>
+				<div className='control-box'>
+					<nav className='branch'>
+						{mapInfo.current.map((el, idx) =>
+							//prettier-ignore
+							<button key={idx} onClick={() => setIndex(idx)} className={idx === Index ? 'on' : ''}>
+								{el.title}
+							</button>
+						)}
+					</nav>
+					<nav className='info'>
+						<button onClick={() => setTraffic(!Traffic)}>{Traffic ? 'Traffic OFF' : 'Traffic ON'}</button>
+						<button onClick={() => setRoadView(!RoadView)}>{RoadView ? '일반 지도 보기' : '로드뷰 보기'}</button>
+						<button onClick={setCenter}>위치 초기화</button>
+					</nav>
+				</div>
+
+				<section className='tab'>
+					<article
+						id='map'
+						className={!RoadView ? 'on' : ''}
+						ref={mapFrame}></article>
+					<article
+						className={`view-box ${RoadView ? 'on' : ''}`}
+						ref={viewFrame}></article>
+				</section>
 			</section>
 		</Layout>
 	);
