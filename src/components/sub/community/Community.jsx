@@ -4,7 +4,6 @@ import { IoCloseSharp } from 'react-icons/io5';
 import { FaPenToSquare } from 'react-icons/fa6';
 import { useEffect, useRef, useState } from 'react';
 import { useCustomText } from '../../../hooks/useText';
-import postData from './dummyPosts.json';
 
 export default function Community() {
 	const customDate = useCustomText('combined');
@@ -12,9 +11,7 @@ export default function Community() {
 	const getLocalData = () => {
 		const data = localStorage.getItem('post');
 		// 로컬저장소에 post 키값에 값이 있으면 parsing해서 객체로 리턴
-		if (data) return JSON.parse(data);
-		// 값이 없으면 빈 배열 리턴 (해당 컴포넌트가 맨 처음 호출될때 한번)
-		else return postData.dummyPosts;
+		return JSON.parse(data);
 	};
 
 	const [Post, setPost] = useState(getLocalData);
