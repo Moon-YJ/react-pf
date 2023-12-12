@@ -1,7 +1,35 @@
+import { useEffect, useRef, useState } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Members.scss';
 
 export default function Members() {
+	const initVal = useRef({
+		userid: '',
+		email: '',
+		comments: '',
+		pwd1: '',
+		edu: '',
+		gender: ''
+	});
+
+	const [Val, setVal] = useState(initVal.current);
+
+	const handleChange = e => {
+		/*
+			const key = e.target.name; //userid
+			const value = e.target.value; //현재 입력하고있는 인풋값
+		*/
+
+		// 객체의 key값 대괄호로(변수에 담긴 문자열을 key로 활용하기 위함)
+		// 변수에 저장된 값을 key로 사용
+		const { name, value } = e.target;
+		setVal({ ...Val, [name]: value });
+	};
+
+	useEffect(() => {
+		console.log(Val);
+	}, [Val]);
+
 	return (
 		<Layout title={'Members'}>
 			<div className='wrap'>
@@ -21,6 +49,8 @@ export default function Members() {
 												type='text'
 												name='userid'
 												placeholder='User ID'
+												value={Val.userid}
+												onChange={handleChange}
 											/>
 										</td>
 										<td>
@@ -28,6 +58,8 @@ export default function Members() {
 												type='text'
 												name='email'
 												placeholder='Email'
+												value={Val.email}
+												onChange={handleChange}
 											/>
 										</td>
 									</tr>
@@ -39,6 +71,8 @@ export default function Members() {
 												type='password'
 												name='pwd1'
 												placeholder='Password'
+												value={Val.pwd1}
+												onChange={handleChange}
 											/>
 										</td>
 										<td>
@@ -53,7 +87,9 @@ export default function Members() {
 									{/* edu */}
 									<tr>
 										<td colSpan='2'>
-											<select name='edu'>
+											<select
+												name='edu'
+												onChange={handleChange}>
 												<option value=''>Education</option>
 												<option value='elementary-school'>초등학교 졸업</option>
 												<option value='middle-school'>중학교 졸업</option>
@@ -71,6 +107,7 @@ export default function Members() {
 												defaultValue='female'
 												id='female'
 												name='gender'
+												onChange={handleChange}
 											/>
 											<label htmlFor='female'>Female</label>
 
@@ -79,6 +116,7 @@ export default function Members() {
 												defaultValue='male'
 												id='male'
 												name='gender'
+												onChange={handleChange}
 											/>
 											<label htmlFor='male'>Male</label>
 										</td>
@@ -128,7 +166,9 @@ export default function Members() {
 												name='comments'
 												cols='30'
 												rows='5'
-												placeholder='Leave a comment'></textarea>
+												placeholder='Leave a comment'
+												value={Val.comments}
+												onChange={handleChange}></textarea>
 										</td>
 									</tr>
 									<tr>
