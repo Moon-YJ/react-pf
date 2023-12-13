@@ -1,4 +1,15 @@
 .Contact {
+	.control-box {
+		.branch-set {
+			width: 100%;
+			.branch {
+				display: inline-block;
+				width: calc((100% - 30px) / 3);
+				height: 150px;
+				background-color: rgba(var(--baseColor-code), 0.7);
+			}
+		}
+	}
 	.tab {
 		position: relative;
 		width: 100%;

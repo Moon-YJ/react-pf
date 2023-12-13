@@ -168,12 +168,12 @@ export default function Contact() {
 
 			<section className='map-area'>
 				<div className='control-box'>
-					<nav className='branch'>
+					<nav className='branch-set'>
 						{mapInfo.current.map((el, idx) =>
 							//prettier-ignore
-							<button key={idx} onClick={() => setIndex(idx)} className={idx === Index ? 'on' : ''}>
+							<div key={idx} onClick={() => setIndex(idx)} className={`branch  ${idx === Index ? 'on' : ''}`}>
 								{el.title}
-							</button>
+							</div>
 						)}
 					</nav>
 					<nav className='info'>

@@ -8,6 +8,7 @@ export default function Members() {
 		email: '',
 		comments: '',
 		pwd1: '',
+		pwd2: '',
 		edu: '',
 		gender: '',
 		interests: []
@@ -40,13 +41,38 @@ export default function Members() {
 
 	const check = value => {
 		const errs = {};
-		if (value.userid.length < 5) errs.userid = '아이디는 최소 5글자 이상 입력해 주세요';
-
-		if (value.comments.length < 30) errs.comments = '남기는 말은 최소 30글자 이상 입력해 주세요';
-
+		const num = /[0-9]/;
+		const txt = /[a-zA-Z]/;
+		const spc = /[!@#$%^&*[\]_+]/;
+		// userid
+		if (value.userid.trim().length < 5) errs.userid = '아이디는 최소 5글자 이상 입력해 주세요';
+		// comments
+		if (value.comments.trim().length < 30) errs.comments = '남기는 말은 최소 30글자 이상 입력해 주세요';
+		// gender
 		if (!value.gender) errs.gender = '성별은 한개 이상 선택해 주세요';
+		// interests
 		if (value.interests.length === 0) errs.interests = '취미는 한개 이상 선택해 주세요';
+		// edu
 		if (!value.edu) errs.edu = '최종학력을 선택해 주세요';
+		// pwd
+		if (!num.test(value.pwd1) || !txt.test(value.pwd1) || !spc.test(value.pwd1) || value.pwd1.trim().length < 5)
+			errs.pwd1 = '비밀번호는 특수문자, 문자, 숫자를 모두 포함해서 5글자 이상 입력해 주세요';
+		if (value.pwd1 !== value.pwd2 || !value.pwd2) errs.pwd2 = '비밀번호가 일치하지 않습니다';
+		// email
+		if (!/@/.test(value.email)) {
+			errs.email = '이메일주소에는 @를 포함해야 합니다.';
+		} else {
+			const [forward, backward] = value.email.split('@');
+			if (!forward || !backward) {
+				errs.email = '@앞뒤로 문자가 모두 포함되야 합니다.';
+			} else {
+				const [forward, backward] = value.email.split('.');
+				if (!forward || !backward) {
+					errs.email = '.앞뒤로 문자가 모두 포함되야 합니다.';
+				}
+			}
+		}
+
 		console.log(errs);
 		return errs;
 	};
@@ -87,6 +113,7 @@ export default function Members() {
 												value={Val.email}
 												onChange={handleChange}
 											/>
+											{Errors.email && <p>{Errors.email}</p>}
 										</td>
 									</tr>
 
@@ -100,13 +127,16 @@ export default function Members() {
 												value={Val.pwd1}
 												onChange={handleChange}
 											/>
+											{Errors.pwd1 && <p>{Errors.pwd1}</p>}
 										</td>
 										<td>
 											<input
 												type='password'
 												name='pwd2'
 												placeholder='Re-Password'
+												onChange={handleChange}
 											/>
+											{Errors.pwd2 && <p>{Errors.pwd2}</p>}
 										</td>
 									</tr>
 
