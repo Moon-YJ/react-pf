@@ -9,10 +9,12 @@ export default function Members() {
 		comments: '',
 		pwd1: '',
 		edu: '',
-		gender: ''
+		gender: '',
+		interests: []
 	});
 
 	const [Val, setVal] = useState(initVal.current);
+	const chks = useRef(null);
 
 	const handleChange = e => {
 		/*
@@ -24,6 +26,19 @@ export default function Members() {
 		// 변수에 저장된 값을 key로 사용
 		const { name, value } = e.target;
 		setVal({ ...Val, [name]: value });
+	};
+
+	const handleChk = e => {
+		//const inputs = chks.current.querySelectorAll('input');
+		// inputs.forEach((input, idx)=>{
+		// 	const {name, defaultVal} = e.target;
+		// 	setVal({...Val, [name]: defaultVal});
+		// })
+		const { name } = e.target;
+		const inputs = e.target.parentElement.querySelectorAll('input');
+		const chkArr = [];
+		inputs.forEach(input => input.checked && chkArr.push(input.defaultValue));
+		setVal({ ...Val, [name]: chkArr });
 	};
 
 	useEffect(() => {
@@ -124,12 +139,15 @@ export default function Members() {
 
 									{/* interests */}
 									<tr>
-										<td colSpan='2'>
+										<td
+											colSpan='2'
+											ref={chks}>
 											<input
 												type='checkbox'
 												name='interest'
 												id='sports'
 												defaultValue='sports'
+												onChange={handleChk}
 											/>
 											<label htmlFor='sports'>Sports</label>
 
@@ -138,6 +156,7 @@ export default function Members() {
 												name='interest'
 												id='reading'
 												defaultValue='reading'
+												onChange={handleChk}
 											/>
 											<label htmlFor='reading'>Reading</label>
 
@@ -146,6 +165,7 @@ export default function Members() {
 												name='interest'
 												id='music'
 												defaultValue='music'
+												onChange={handleChk}
 											/>
 											<label htmlFor='music'>Music</label>
 
@@ -154,6 +174,7 @@ export default function Members() {
 												name='interest'
 												id='game'
 												defaultValue='game'
+												onChange={handleChk}
 											/>
 											<label htmlFor='game'>Game</label>
 										</td>
