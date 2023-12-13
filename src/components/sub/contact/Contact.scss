@@ -6,14 +6,28 @@
 			width: 100%;
 			.branch {
 				width: calc((100% - 30px) / 3);
-				height: 150px;
-				padding: 20px 15px;
+				height: 200px;
+				padding: 25px 20px;
 				color: var(--invertColor);
 				background-color: rgba(var(--baseColor-code), 0.7);
 				h3 {
 					display: inline-block;
 					padding-bottom: 10px;
 					border-bottom: 1px solid #fff;
+				}
+				.info {
+					margin-top: 30px;
+					> span {
+						display: flex;
+						align-items: center;
+						&.mail {
+							margin-top: 5px;
+						}
+						span {
+							margin-left: 10px;
+							line-height: 1;
+						}
+					}
 				}
 			}
 		}

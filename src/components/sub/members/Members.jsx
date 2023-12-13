@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Members.scss';
 import { useHistory } from 'react-router-dom';
+import { useDebounce } from '../../../hooks/useDebounce';
 
 export default function Members() {
 	const history = useHistory();
@@ -18,6 +19,8 @@ export default function Members() {
 
 	const [Val, setVal] = useState(initVal.current);
 	const [Errors, setErrors] = useState({});
+	// useDebounce 훅의 인수로 특정 state를 전달해서 debouncing이 적용된 새로운 state값 반환받음
+	const DebouncedVal = useDebounce(Val);
 
 	const chks = useRef(null);
 
@@ -56,6 +59,8 @@ export default function Members() {
 	};
 
 	const check = value => {
+		// 만약 debouce 적용하지 않으면 input에 값을 입력할때마다 check 함수가 호출됨
+		console.log('check');
 		const errs = {};
 		const num = /[0-9]/;
 		const txt = /[a-zA-Z]/;
@@ -97,9 +102,11 @@ export default function Members() {
 		return errs;
 	};
 
+	// debouncing이 적용된 state를 의존성배열에 등록해서
+	// 해당 값으로 check 함수 호출
 	useEffect(() => {
-		setErrors(check(Val));
-	}, [Val]);
+		setErrors(check(DebouncedVal));
+	}, [DebouncedVal]);
 
 	return (
 		<Layout title={'Members'}>

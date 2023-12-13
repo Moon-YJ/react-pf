@@ -175,8 +175,16 @@ export default function Contact() {
 							//prettier-ignore
 							<div key={idx} onClick={() => setIndex(idx)} className={`branch  ${idx === Index ? 'on' : ''}`}>
 								<h3>{el.title}</h3>
-								<p><BsTelephone />02-22-222</p>
-								<p><GoMail />dfd@dafd.com</p>
+								<div className='info'>
+									<span className="tel">
+										<BsTelephone />
+										<span>02-222-222</span>
+									</span>
+									<span className="mail">
+										<GoMail />
+										<span>dfd@dafd.com</span>
+									</span>
+								</div>
 							</div>
 						)}
 					</nav>
