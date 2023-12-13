@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Contact.scss';
 import emailjs from '@emailjs/browser';
+import { GoMail } from 'react-icons/go';
+import { BsTelephone } from 'react-icons/bs';
 
 export default function Contact() {
 	const form = useRef();
@@ -172,7 +174,9 @@ export default function Contact() {
 						{mapInfo.current.map((el, idx) =>
 							//prettier-ignore
 							<div key={idx} onClick={() => setIndex(idx)} className={`branch  ${idx === Index ? 'on' : ''}`}>
-								{el.title}
+								<h3>{el.title}</h3>
+								<p><BsTelephone />02-22-222</p>
+								<p><GoMail />dfd@dafd.com</p>
 							</div>
 						)}
 					</nav>

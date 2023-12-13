@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Members.scss';
+import { useHistory } from 'react-router-dom';
 
 export default function Members() {
+	const history = useHistory();
 	const initVal = useRef({
 		userid: '',
 		email: '',
@@ -18,6 +20,20 @@ export default function Members() {
 	const [Errors, setErrors] = useState({});
 
 	const chks = useRef(null);
+
+	const handleReset = () => {
+		setVal(initVal.current);
+	};
+
+	const handleSumbit = e => {
+		e.preventDefault();
+		if (Object.keys(check(Val)).length === 0) {
+			alert('회원가입이 완료되었습니다');
+			history.push('/');
+		} else {
+			alert('모든 항목을 정확히 입력해 주세요');
+		}
+	};
 
 	const handleChange = e => {
 		/*
@@ -92,7 +108,7 @@ export default function Members() {
 					<h2>Join Members</h2>
 				</div>
 				<div className='formBox'>
-					<form>
+					<form onSubmit={handleSumbit}>
 						<fieldset>
 							<legend className='h'>회원가입 폼</legend>
 							<table>
@@ -246,6 +262,7 @@ export default function Members() {
 											<input
 												type='reset'
 												value='Cancel'
+												onClick={handleReset}
 											/>
 											<input
 												type='submit'
