@@ -44,6 +44,8 @@ export default function Members() {
 		const num = /[0-9]/;
 		const txt = /[a-zA-Z]/;
 		const spc = /[!@#$%^&*[\]_+]/;
+		const [m1, m2] = value.email.split('@');
+		const m3 = m2 && m2.split('.');
 		// userid
 		if (value.userid.trim().length < 5) errs.userid = '아이디는 최소 5글자 이상 입력해 주세요';
 		// comments
@@ -59,20 +61,22 @@ export default function Members() {
 			errs.pwd1 = '비밀번호는 특수문자, 문자, 숫자를 모두 포함해서 5글자 이상 입력해 주세요';
 		if (value.pwd1 !== value.pwd2 || !value.pwd2) errs.pwd2 = '비밀번호가 일치하지 않습니다';
 		// email
-		if (!/@/.test(value.email)) {
-			errs.email = '이메일주소에는 @를 포함해야 합니다.';
-		} else {
-			const [forward, backward] = value.email.split('@');
-			if (!forward || !backward) {
-				errs.email = '@앞뒤로 문자가 모두 포함되야 합니다.';
-			} else {
-				const [forward, backward] = value.email.split('.');
+		/*
+			if (!/@/.test(value.email)) {
+			errs.email = '@를 포함한 이메일 주소를 입력해 주세요';
+			} else { 
+				const [forward, backward] = value.email.split('@');
 				if (!forward || !backward) {
-					errs.email = '.앞뒤로 문자가 모두 포함되야 합니다.';
+					errs.email = '@앞뒤로 문자를 포함하여 정확한 주소를 입력해 주세요';
+				} else {
+					const [forward, backward] = value.email.split('.');
+					if (!forward || !backward) {
+						errs.email = '.앞뒤로 문자를 포함하여 정확한 주소를 입력해 주세요';
+					}
 				}
 			}
-		}
-
+		*/
+		if (!m1 || !m2 || !m3[0] || !m3[1]) errs.email = '올바른 이메일 형식으로 입력해 주세요';
 		console.log(errs);
 		return errs;
 	};
