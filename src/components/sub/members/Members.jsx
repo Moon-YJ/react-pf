@@ -14,6 +14,8 @@ export default function Members() {
 	});
 
 	const [Val, setVal] = useState(initVal.current);
+	const [Errors, setErrors] = useState({});
+
 	const chks = useRef(null);
 
 	const handleChange = e => {
@@ -29,20 +31,28 @@ export default function Members() {
 	};
 
 	const handleChk = e => {
-		//const inputs = chks.current.querySelectorAll('input');
-		// inputs.forEach((input, idx)=>{
-		// 	const {name, defaultVal} = e.target;
-		// 	setVal({...Val, [name]: defaultVal});
-		// })
 		const { name } = e.target;
 		const inputs = e.target.parentElement.querySelectorAll('input');
 		const chkArr = [];
-		inputs.forEach(input => input.checked && chkArr.push(input.defaultValue));
+		inputs.forEach(input => input.checked && chkArr.push(input.value));
 		setVal({ ...Val, [name]: chkArr });
 	};
 
+	const check = value => {
+		const errs = {};
+		if (value.userid.length < 5) errs.userid = '아이디는 최소 5글자 이상 입력해 주세요';
+
+		if (value.comments.length < 30) errs.comments = '남기는 말은 최소 30글자 이상 입력해 주세요';
+
+		if (!value.gender) errs.gender = '성별은 한개 이상 선택해 주세요';
+		if (value.interests.length === 0) errs.interests = '취미는 한개 이상 선택해 주세요';
+		if (!value.edu) errs.edu = '최종학력을 선택해 주세요';
+		console.log(errs);
+		return errs;
+	};
+
 	useEffect(() => {
-		console.log(Val);
+		setErrors(check(Val));
 	}, [Val]);
 
 	return (
@@ -67,6 +77,7 @@ export default function Members() {
 												value={Val.userid}
 												onChange={handleChange}
 											/>
+											{Errors.userid && <p>{Errors.userid}</p>}
 										</td>
 										<td>
 											<input
@@ -111,6 +122,7 @@ export default function Members() {
 												<option value='high-school'>고등학교 졸업</option>
 												<option value='college'>대학교 졸업</option>
 											</select>
+											{Errors.edu && <p>{Errors.edu}</p>}
 										</td>
 									</tr>
 
@@ -134,6 +146,7 @@ export default function Members() {
 												onChange={handleChange}
 											/>
 											<label htmlFor='male'>Male</label>
+											{Errors.gender && <p>{Errors.gender}</p>}
 										</td>
 									</tr>
 
@@ -144,7 +157,7 @@ export default function Members() {
 											ref={chks}>
 											<input
 												type='checkbox'
-												name='interest'
+												name='interests'
 												id='sports'
 												defaultValue='sports'
 												onChange={handleChk}
@@ -153,7 +166,7 @@ export default function Members() {
 
 											<input
 												type='checkbox'
-												name='interest'
+												name='interests'
 												id='reading'
 												defaultValue='reading'
 												onChange={handleChk}
@@ -162,7 +175,7 @@ export default function Members() {
 
 											<input
 												type='checkbox'
-												name='interest'
+												name='interests'
 												id='music'
 												defaultValue='music'
 												onChange={handleChk}
@@ -171,12 +184,13 @@ export default function Members() {
 
 											<input
 												type='checkbox'
-												name='interest'
+												name='interests'
 												id='game'
 												defaultValue='game'
 												onChange={handleChk}
 											/>
 											<label htmlFor='game'>Game</label>
+											{Errors.interests && <p>{Errors.interests}</p>}
 										</td>
 									</tr>
 
@@ -190,6 +204,7 @@ export default function Members() {
 												placeholder='Leave a comment'
 												value={Val.comments}
 												onChange={handleChange}></textarea>
+											{Errors.comments && <p>{Errors.comments}</p>}
 										</td>
 									</tr>
 									<tr>
