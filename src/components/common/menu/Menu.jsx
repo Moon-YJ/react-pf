@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import './Menu.scss';
 
 export default function Menu({ SetMenuToggle }) {
-	const closeMenu = () => {
+	const closeMenu = useCallback(() => {
 		window.innerWidth >= 1000 && SetMenuToggle(false);
-	};
+	}, [SetMenuToggle]);
 
 	useEffect(() => {
 		closeMenu();
@@ -13,7 +13,7 @@ export default function Menu({ SetMenuToggle }) {
 		return () => {
 			window.removeEventListener('resize', closeMenu);
 		};
-	}, []);
+	}, [closeMenu]);
 
 	return (
 		<aside className='Menu'>

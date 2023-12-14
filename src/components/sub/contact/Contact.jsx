@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Contact.scss';
 import emailjs from '@emailjs/browser';
@@ -95,16 +95,25 @@ export default function Contact() {
 		image: new kakao.current.maps.MarkerImage(mapInfo.current[Index].imgSrc, mapInfo.current[Index].imgSize, mapInfo.current[Index].imgPos)
 	});
 
-	const roadview = () => {
+	const roadview = useRef(() => {
 		new kakao.current.maps.RoadviewClient().getNearestPanoId(mapInfo.current[Index].latlng, 50, panoId => {
 			new kakao.current.maps.Roadview(viewFrame.current).setPanoId(panoId, mapInfo.current[Index].latlng);
 		});
-	};
+	});
+	/*
+		const roadview = () => {
+			new kakao.current.maps.RoadviewClient().getNearestPanoId(mapInfo.current[Index].latlng, 50, panoId => {
+				new kakao.current.maps.Roadview(viewFrame.current).setPanoId(panoId, mapInfo.current[Index].latlng);
+			});
+		};
+	*/
 
-	const setCenter = () => {
-		roadview();
+	// 윈도우에 등록된 함수(언마운트시 호출되는 클린업함수)는 참조객체에 담으면 안되고 useCallback으로 처리해야함
+	// 내부에 변경될만한 state값이 있으면 배열에 등록해서 해당 값이 바뀔때는 memoization 풀어줌
+	const setCenter = useCallback(() => {
+		roadview.current();
 		mapInstance.current.setCenter(mapInfo.current[Index].latlng);
-	};
+	}, [Index]);
 
 	// 컴포넌트 마운시 참조객체에 담아놓은 DOM 프레임에 지도 인스턴스 출력 및 마커 세팅
 	useEffect(() => {
@@ -121,7 +130,7 @@ export default function Contact() {
 
 		// 로드뷰 출력
 		// 50은 반경 50m이내의 로드뷰를 출력한다는 의미 (ex. 만약 규모가 큰 장소라면 해당 숫자를 늘려야 함)
-		roadview();
+		roadview.current();
 		// 지도 타입 컨트롤러 추가
 		mapInstance.current.addControl(new kakao.current.maps.MapTypeControl(), kakao.current.maps.ControlPosition.TOPRIGHT);
 		// 지도 줌 컨트롤러 추가
@@ -132,7 +141,7 @@ export default function Contact() {
 		window.addEventListener('resize', setCenter);
 
 		return () => window.removeEventListener('resize', setCenter);
-	}, [Index]);
+	}, [Index, setCenter]);
 
 	useEffect(() => {
 		Traffic
