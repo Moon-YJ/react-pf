@@ -46,6 +46,8 @@ const initMember = {
 
 // 초기 데이터 값을 state로 지정하고 추후 action 객체가 넘어오면 action의 타입에 따라 해당 데이터를 변경해주는 변형자 함수
 // {type: 'SET_MEMBERS, payload: [변경할 데이터 배열]}
+
+// 순서 1 - reducer함수 호출되면서 빈배열로 멤버 데이터가 저장될 state값 초기화
 const memberReducer = (state = [], action) => {
 	switch (action.type) {
 		case 'SET_MEMBERS':

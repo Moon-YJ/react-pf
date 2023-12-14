@@ -10,26 +10,33 @@ import Youtube from './components/sub/youtube/Youtube';
 import { Route } from 'react-router-dom';
 import './globalStyles/Variables.scss';
 import './globalStyles/Reset.scss';
-import { useState, useEffect, useRef, useDispatch } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import { useMedia } from './hooks/useMedia';
 import Menu from './components/common/menu/Menu';
 import Detail from './components/sub/youtube/Detail';
 
 export default function App() {
+	// 순서 2 - dispatch 함수 활성화(추후 fetching된 데이터를 액션에 담아서 reducer에게 전달하기 위함)
 	const dispatch = useDispatch();
 	const path = useRef(process.env.PUBLIC_URL);
 	const [Dark, setDark] = useState(false);
 	const [MenuToggle, SetMenuToggle] = useState(false);
 
+	// fetching된 데이터값을 받아서 action객체에 담은 뒤 dispatch로 reducer에 전달하는 함수를 정의
 	const fetchDepartment = () => {
 		fetch(`${path.current}/DB/department.json`)
 			.then(data => data.json())
 			.catch(err => console.log(err))
 			.then(json => {
 				console.log(json.members);
+				dispatch({ type: 'SET_MEMBERS', payload: json.members });
 			});
 	};
 
+	// 순서 4 - 컴포넌트가 처음 마운트 되었을때 함수를 호출해서 비동기 데이터를 reducer에 전달
+	// 그러면 첫번째 랜더링에서는 전역 store의 값은 빈배열
+	// 두번째 랜더링 타이밍에 비로소 각 컴포넌트에서 useSelector로 해당 비동기 데이터에 접근 가능
 	useEffect(() => fetchDepartment(), []);
 
 	return (
