@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Department.scss';
 import { useCustomText } from '../../../hooks/useText';
+import { useSelector } from 'react-redux';
 
 export default function Department() {
+	const MemberData = useSelector(store => store.memberReducer.members);
 	const path = useRef(process.env.PUBLIC_URL);
 
 	const [HistoryTit, setHistoryTit] = useState('');
@@ -11,32 +13,32 @@ export default function Department() {
 
 	const fetchHistory = () => {
 		fetch(`${path.current}/DB/history.json`)
-			.then((data) => data.json())
-			.then((json) => {
+			.then(data => data.json())
+			.then(json => {
 				//setHistoryData(json.history);
 				setHistoryData(Object.values(json)[0]);
 				setHistoryTit(Object.keys(json)[0]);
 			});
 	};
 
-	const [MemberData, setMemberData] = useState([]);
-	const [MemberTit, setMemberTit] = useState('');
+	//const [MemberData, setMemberData] = useState([]);
+	//const [MemberTit, setMemberTit] = useState('');
 
 	const combinedTxt = useCustomText('combined');
 
-	const fetchDepartment = () => {
-		fetch(`${path.current}/DB/department.json`)
-			.then((data) => data.json())
-			.catch((err) => console.log(err))
-			.then((json) => {
-				//setMemberData(json.members); //객체 반복돌면서 value값만 배열로 반환
-				setMemberData(Object.values(json)[0]);
-				setMemberTit(Object.keys(json)[0]); //객체 반복돌면서 key값만 배열로 반환
-			});
-	};
+	// const fetchDepartment = () => {
+	// 	fetch(`${path.current}/DB/department.json`)
+	// 		.then((data) => data.json())
+	// 		.catch((err) => console.log(err))
+	// 		.then((json) => {
+	// 			//setMemberData(json.members); //객체 반복돌면서 value값만 배열로 반환
+	// 			setMemberData(Object.values(json)[0]);
+	// 			setMemberTit(Object.keys(json)[0]); //객체 반복돌면서 key값만 배열로 반환
+	// 		});
+	// };
 
 	useEffect(() => {
-		fetchDepartment();
+		//fetchDepartment();
 		fetchHistory();
 	}, []);
 
@@ -64,13 +66,16 @@ export default function Department() {
 			</section>
 
 			<section className='memberBox'>
-				<h2>{combinedTxt(MemberTit)}</h2>
+				<h2>{combinedTxt('members')}</h2>
 				<div className='con'>
 					{MemberData.map((member, idx) => {
 						return (
 							<article key={member + idx}>
 								<div className='pic'>
-									<img src={`${path.current}/img/${member.pic}`} alt={member.name} />
+									<img
+										src={`${path.current}/img/${member.pic}`}
+										alt={member.name}
+									/>
 								</div>
 								<h3>{member.name}</h3>
 								<p>{member.position}</p>
