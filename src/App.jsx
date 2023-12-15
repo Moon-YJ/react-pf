@@ -106,3 +106,12 @@ export default function App() {
 		</div>
 	);
 }
+
+/*
+	*** 필수 이해 필요
+	- reducer, store, app으로의 데이터 전달 흐름 이해
+	- reducer가 하는 역할
+	- action 객체가 필요한 이유
+	- 컴포넌트에서 데이터 호출 및 데이터 변경 요청을 위한 useSelector, useDispatch
+	- App에서 fetching후 action 객체를 통해 dispatch로 reducer에 데이터 변경 요청 흐름
+*/
