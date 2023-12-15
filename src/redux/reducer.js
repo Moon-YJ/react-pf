@@ -66,6 +66,25 @@ const memberReducer = (state = [], action) => {
   }
 */
 
+const historyReducer = (state = [], action) => {
+	console.log(action.payload);
+	switch (action.type) {
+		case 'SET_HISTORY':
+			return { ...state, history: action.payload };
+		default:
+			return state;
+	}
+};
+
+const youtubeReducer = (state = [], action) => {
+	switch (action.type) {
+		case 'SET_YOUTUBE':
+			return { ...state, videos: action.payload };
+		default:
+			return state;
+	}
+};
+
 // 해당 파일에서 내보내는 여러개의 reducer 객체를 합쳐서 외부로 export
-const reducers = combineReducers({ memberReducer });
+const reducers = combineReducers({ memberReducer, youtubeReducer, historyReducer });
 export default reducers;

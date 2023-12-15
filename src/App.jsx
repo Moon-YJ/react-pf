@@ -10,7 +10,7 @@ import Youtube from './components/sub/youtube/Youtube';
 import { Route } from 'react-router-dom';
 import './globalStyles/Variables.scss';
 import './globalStyles/Reset.scss';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useMedia } from './hooks/useMedia';
 import Menu from './components/common/menu/Menu';
@@ -24,20 +24,36 @@ export default function App() {
 	const [MenuToggle, SetMenuToggle] = useState(false);
 
 	// fetching된 데이터값을 받아서 action객체에 담은 뒤 dispatch로 reducer에 전달하는 함수를 정의
-	const fetchDepartment = () => {
-		fetch(`${path.current}/DB/department.json`)
-			.then(data => data.json())
-			.catch(err => console.log(err))
-			.then(json => {
-				console.log(json.members);
-				dispatch({ type: 'SET_MEMBERS', payload: json.members });
-			});
-	};
+	const fetchDepartment = useCallback(async () => {
+		const data = await fetch(`${path.current}/DB/department.json`);
+		const json = await data.json();
+		dispatch({ type: 'SET_MEMBERS', payload: json.members });
+	}, [dispatch]);
+
+	const fetchHistory = useCallback(async () => {
+		const data = await fetch(`${path.current}/DB/history.json`);
+		const json = await data.json();
+		dispatch({ type: 'SET_HISTORY', payload: json.history });
+	}, [dispatch]);
+
+	const fetchYoutube = useCallback(async () => {
+		const api_key = process.env.REACT_APP_YOUTUBE_API;
+		const pid = process.env.REACT_APP_YOUTUBE_LIST;
+		const num = 7;
+		const baseURL = `https://www.googleapis.com/youtube/v3/playlistItems?key=${api_key}&part=snippet&playlistId=${pid}&maxResults=${num}`;
+		const data = await fetch(baseURL);
+		const json = await data.json();
+		dispatch({ type: 'SET_YOUTUBE', payload: json.items });
+	}, [dispatch]);
 
 	// 순서 4 - 컴포넌트가 처음 마운트 되었을때 함수를 호출해서 비동기 데이터를 reducer에 전달
 	// 그러면 첫번째 랜더링에서는 전역 store의 값은 빈배열
 	// 두번째 랜더링 타이밍에 비로소 각 컴포넌트에서 useSelector로 해당 비동기 데이터에 접근 가능
-	useEffect(() => fetchDepartment(), []);
+	useEffect(() => {
+		fetchDepartment();
+		fetchHistory();
+		fetchYoutube();
+	}, [fetchDepartment, fetchHistory, fetchYoutube]);
 
 	return (
 		<div className={`wrap ${Dark ? 'dark' : ''} ${useMedia()}`}>

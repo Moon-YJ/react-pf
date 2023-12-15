@@ -6,20 +6,21 @@ import { useSelector } from 'react-redux';
 
 export default function Department() {
 	const MemberData = useSelector(store => store.memberReducer.members);
+	const HistoryData = useSelector(store => store.historyReducer.history);
 	const path = useRef(process.env.PUBLIC_URL);
 
-	const [HistoryTit, setHistoryTit] = useState('');
-	const [HistoryData, setHistoryData] = useState([]);
+	//const [HistoryTit, setHistoryTit] = useState('');
+	//const [HistoryData, setHistoryData] = useState([]);
 
-	const fetchHistory = () => {
-		fetch(`${path.current}/DB/history.json`)
-			.then(data => data.json())
-			.then(json => {
-				//setHistoryData(json.history);
-				setHistoryData(Object.values(json)[0]);
-				setHistoryTit(Object.keys(json)[0]);
-			});
-	};
+	// const fetchHistory = () => {
+	// 	fetch(`${path.current}/DB/history.json`)
+	// 		.then(data => data.json())
+	// 		.then(json => {
+	// 			//setHistoryData(json.history);
+	// 			setHistoryData(Object.values(json)[0]);
+	// 			setHistoryTit(Object.keys(json)[0]);
+	// 		});
+	// };
 
 	//const [MemberData, setMemberData] = useState([]);
 	//const [MemberTit, setMemberTit] = useState('');
@@ -37,15 +38,15 @@ export default function Department() {
 	// 		});
 	// };
 
-	useEffect(() => {
-		//fetchDepartment();
-		fetchHistory();
-	}, []);
+	// useEffect(() => {
+	// 	fetchDepartment();
+	// 	fetchHistory();
+	// }, []);
 
 	return (
 		<Layout title={'Department'}>
 			<section className='historyBox'>
-				<h2>{combinedTxt(HistoryTit)}</h2>
+				<h2>{combinedTxt('history')}</h2>
 				<div className='con'>
 					{/* HistoryData가 반복도는 각각의 데이터 {년도: 배열} */}
 					{HistoryData.map((data, idx) => {
