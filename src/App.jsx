@@ -15,6 +15,7 @@ import { useDispatch } from 'react-redux';
 import { useMedia } from './hooks/useMedia';
 import Menu from './components/common/menu/Menu';
 import Detail from './components/sub/youtube/Detail';
+import * as types from './redux/action';
 
 export default function App() {
 	// 순서 2 - dispatch 함수 활성화(추후 fetching된 데이터를 액션에 담아서 reducer에게 전달하기 위함)
@@ -27,26 +28,26 @@ export default function App() {
 	const fetchDepartment = useCallback(async () => {
 		const data = await fetch(`${path.current}/DB/department.json`);
 		const json = await data.json();
-		dispatch({ type: 'SET_MEMBERS', payload: json.members });
+		dispatch({ type: types.MEMBER.success, payload: json.members });
 	}, [dispatch]);
 
 	const fetchHistory = useCallback(async () => {
 		const data = await fetch(`${path.current}/DB/history.json`);
 		const json = await data.json();
-		dispatch({ type: 'SET_HISTORY', payload: json.history });
+		dispatch({ type: types.HISTORY.success, payload: json.history });
 	}, [dispatch]);
 
 	const fetchYoutube = useCallback(async () => {
 		const api_key = process.env.REACT_APP_YOUTUBE_API;
 		const pid = process.env.REACT_APP_YOUTUBE_LIST;
 		const num = 7;
-		const baseURL = `https://www.ggleapis.com/youtube/v3/playlistItems?key=${api_key}&part=snippet&playlistId=${pid}&maxResults=${num}`;
+		const baseURL = `https://www.googleapis.com/youtube/v3/playlistItems?key=${api_key}&part=snippet&playlistId=${pid}&maxResults=${num}`;
 		try {
 			const data = await fetch(baseURL);
 			const json = await data.json();
-			dispatch({ type: 'SET_YOUTUBE', payload: json.items });
+			dispatch({ type: types.YOUTUBE.success, payload: json.items });
 		} catch (err) {
-			dispatch({ type: 'SET_YOUTUBE_ERROR', payload: err });
+			dispatch({ type: types.YOUTUBE.fail, payload: err });
 		}
 	}, [dispatch]);
 

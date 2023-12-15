@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import * as types from './action';
 
 // dispatch가 필요한 이유
 // 원래 데이터는 자체 DB이든 외부 API데이터이든 fetching을 통해서 외부데이터를 가져와야함
@@ -50,7 +51,7 @@ const initMember = {
 // 순서 1 - reducer함수 호출되면서 빈배열로 멤버 데이터가 저장될 state값 초기화
 const memberReducer = (state = [], action) => {
 	switch (action.type) {
-		case 'SET_MEMBERS':
+		case types.MEMBER.success:
 			return { ...state, members: action.payload };
 		default:
 			return state;
@@ -68,7 +69,7 @@ const memberReducer = (state = [], action) => {
 
 const historyReducer = (state = [], action) => {
 	switch (action.type) {
-		case 'SET_HISTORY':
+		case types.HISTORY.success:
 			return { ...state, history: action.payload };
 		default:
 			return state;
@@ -77,9 +78,9 @@ const historyReducer = (state = [], action) => {
 
 const youtubeReducer = (state = [], action) => {
 	switch (action.type) {
-		case 'SET_YOUTUBE':
+		case types.YOUTUBE.success:
 			return { ...state, videos: action.payload };
-		case 'SET_YOUTUBE_ERROR':
+		case types.YOUTUBE.fail:
 			return { ...state, videos: action.payload };
 		default:
 			return state;
