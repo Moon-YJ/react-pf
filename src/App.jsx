@@ -114,4 +114,16 @@ export default function App() {
 	- action 객체가 필요한 이유
 	- 컴포넌트에서 데이터 호출 및 데이터 변경 요청을 위한 useSelector, useDispatch
 	- App에서 fetching후 action 객체를 통해 dispatch로 reducer에 데이터 변경 요청 흐름
+
+	- reducer(변경자) : dispatch 요청에 따른 state 정보값 변경
+	- store: reducer로부터 전달받은 state 정보값을 저장
+	- dispatch : state 정보값 변경을 요청
+	- action : dispatch로 요청을 보내기 위한 변경사항이 담겨있는 객체 {type, payload}
+
+	*** redux 작업 흐름
+	1. 컴포넌트에서 axios데이터 요청을 해서 반환된 결과값을 action객체로 담아서 dispatch로 reducer에 전달
+	2. reducer는 해당 action객체의 타입에 따라 데이터를 변형한뒤 store에 전달
+	3. 스토어는 reducer로부터 전달받은 state정보값을 저장하고 index.js 에서 Provider에 의해서 App컴포넌트에 전달됨
+	4. 각 컴포넌트에서는 useSelector를 통해서 자유롭게 전역 스테이트값 호출 가능
+	5. 자식 컴포넌트에서 리듀어에 전역 스테이트값 변경요청을 할때는 변경사항을 action객체에 담아서 dispatch로 배송
 */
