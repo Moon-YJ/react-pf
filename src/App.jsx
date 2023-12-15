@@ -40,10 +40,14 @@ export default function App() {
 		const api_key = process.env.REACT_APP_YOUTUBE_API;
 		const pid = process.env.REACT_APP_YOUTUBE_LIST;
 		const num = 7;
-		const baseURL = `https://www.googleapis.com/youtube/v3/playlistItems?key=${api_key}&part=snippet&playlistId=${pid}&maxResults=${num}`;
-		const data = await fetch(baseURL);
-		const json = await data.json();
-		dispatch({ type: 'SET_YOUTUBE', payload: json.items });
+		const baseURL = `https://www.ggleapis.com/youtube/v3/playlistItems?key=${api_key}&part=snippet&playlistId=${pid}&maxResults=${num}`;
+		try {
+			const data = await fetch(baseURL);
+			const json = await data.json();
+			dispatch({ type: 'SET_YOUTUBE', payload: json.items });
+		} catch (err) {
+			dispatch({ type: 'SET_YOUTUBE_ERROR', payload: err });
+		}
 	}, [dispatch]);
 
 	// 순서 4 - 컴포넌트가 처음 마운트 되었을때 함수를 호출해서 비동기 데이터를 reducer에 전달

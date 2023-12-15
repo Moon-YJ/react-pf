@@ -79,6 +79,8 @@ const youtubeReducer = (state = [], action) => {
 	switch (action.type) {
 		case 'SET_YOUTUBE':
 			return { ...state, videos: action.payload };
+		case 'SET_YOUTUBE_ERROR':
+			return { ...state, videos: action.payload };
 		default:
 			return state;
 	}
