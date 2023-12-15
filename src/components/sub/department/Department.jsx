@@ -49,7 +49,7 @@ export default function Department() {
 				<h2>{combinedTxt('history')}</h2>
 				<div className='con'>
 					{/* HistoryData가 반복도는 각각의 데이터 {년도: 배열} */}
-					{HistoryData.map((data, idx) => {
+					{HistoryData?.map((data, idx) => {
 						return (
 							<article key={data + idx}>
 								{/* 현재 반복돌고 있는 객체의 key값을 뽑아서 h3로 출력 :2016 */}
@@ -69,7 +69,7 @@ export default function Department() {
 			<section className='memberBox'>
 				<h2>{combinedTxt('members')}</h2>
 				<div className='con'>
-					{MemberData.map((member, idx) => {
+					{MemberData?.map((member, idx) => {
 						return (
 							<article key={member + idx}>
 								<div className='pic'>

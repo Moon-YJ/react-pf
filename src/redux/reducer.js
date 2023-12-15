@@ -67,7 +67,6 @@ const memberReducer = (state = [], action) => {
 */
 
 const historyReducer = (state = [], action) => {
-	console.log(action.payload);
 	switch (action.type) {
 		case 'SET_HISTORY':
 			return { ...state, history: action.payload };
