@@ -121,7 +121,7 @@ export default function App() {
 	- action : dispatch로 요청을 보내기 위한 변경사항이 담겨있는 객체 {type, payload}
 
 	*** redux 작업 흐름
-	1. 컴포넌트에서 axios데이터 요청을 해서 반환된 결과값을 action객체로 담아서 dispatch로 reducer에 전달
+	1. 컴포넌트에서 fetch 데이터 요청을 해서 반환된 결과값을 action객체로 담아서 dispatch로 reducer에 전달
 	2. reducer는 해당 action객체의 타입에 따라 데이터를 변형한뒤 store에 전달
 	3. 스토어는 reducer로부터 전달받은 state정보값을 저장하고 index.js 에서 Provider에 의해서 App컴포넌트에 전달됨
 	4. 각 컴포넌트에서는 useSelector를 통해서 자유롭게 전역 스테이트값 호출 가능
