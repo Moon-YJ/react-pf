@@ -84,6 +84,15 @@ const youtubeReducer = (state = [], action) => {
 	}
 };
 
+const detailReducer = (state = [], action) => {
+	switch (action.type) {
+		case 'SET_DETAIL':
+			return { ...state, detail: action.payload };
+		default:
+			return state;
+	}
+};
+
 // 해당 파일에서 내보내는 여러개의 reducer 객체를 합쳐서 외부로 export
-const reducers = combineReducers({ memberReducer, youtubeReducer, historyReducer });
+const reducers = combineReducers({ memberReducer, youtubeReducer, historyReducer, detailReducer });
 export default reducers;
