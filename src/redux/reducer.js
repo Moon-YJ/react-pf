@@ -49,7 +49,7 @@ const initMember = {
 // {type: 'SET_MEMBERS, payload: [변경할 데이터 배열]}
 
 // 순서 1 - reducer함수 호출되면서 빈배열로 멤버 데이터가 저장될 state값 초기화
-const memberReducer = (state = [], action) => {
+const memberReducer = (state = { members: [] }, action) => {
 	switch (action.type) {
 		case types.MEMBER.success:
 			return { ...state, members: action.payload };
@@ -67,7 +67,7 @@ const memberReducer = (state = [], action) => {
   }
 */
 
-const historyReducer = (state = [], action) => {
+const historyReducer = (state = { history: [] }, action) => {
 	switch (action.type) {
 		case types.HISTORY.success:
 			return { ...state, history: action.payload };
@@ -76,7 +76,7 @@ const historyReducer = (state = [], action) => {
 	}
 };
 
-const youtubeReducer = (state = [], action) => {
+const youtubeReducer = (state = { videos: [] }, action) => {
 	switch (action.type) {
 		case types.YOUTUBE.success:
 			return { ...state, videos: action.payload };

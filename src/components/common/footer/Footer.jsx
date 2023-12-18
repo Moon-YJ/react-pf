@@ -12,7 +12,10 @@ export default function Footer() {
 			{/* 아래 코드에서 조건문을 쓰는 이유 */}
 			{/* 첫번째 랜더링시에는 store부터 빈 배열이 전달되므로 두번째 랜더링부터 해당 구문이 실행되도록 조건문 처리 */}
 			{/* App.js 기준으로 Department 컴포넌트는 메인에서 값이 이미 담긴후에 접속하게돼서 데이터가 있는데 Footer.jsx는 바로 불러와지므로 해당 조건문 필요 */}
-			<p>{MemberData && `${MemberData[0].position} : ${MemberData[0].name}`}</p>
+			<p>
+				{/* 기존 MemberData && --> 사용하면 빈배열인 경우에도 오류로 인지하지 않고 동작되기 때문에 optional chaining으로 수정 */}
+				{MemberData[0]?.position} : {MemberData[0]?.name}
+			</p>
 
 			<ul>
 				<li>
