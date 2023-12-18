@@ -12,6 +12,54 @@
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
+  <!-- 제너레이터 함수 -->
+  <script>
+    /*
+      - Gernerator: 해당 함수 안쪽의 자식 함수의 리턴값을 반복가능한 객체형태(Iterable Object)로 묶어서 반환
+      - Iterable Object: next라는 메서드를 호출해서 Generator 안쪽에 있는 함수들을 원하는 시점에 동기적으로 호출 가능
+      
+      - promise 방식(then, catch, async await)과 더불어서 ES7 이후에 나온 동기화처리 함수
+      - promise 대비 Generator의 장점
+        : promise와 다르게 특정 코드를 동기화시킬때 호출시점을 지정 가능
+        : 하나의 함수 안에서 리턴값을 여러개 반환 가능
+    */
+
+    /*
+      function test1() {
+      console.log('test1');
+      return 'test1';
+    }
+      function test2() {
+        console.log('test2');
+        return 'test2';
+      }
+      function test3() {
+        console.log('test3');
+        return 'test3';
+      }
+
+      function* generator() {
+        yield test1();
+        yield test2();
+        yield test3();
+      }
+
+      const result = generator();
+
+      const r1 = result.next(); // test1
+      console.log(r1, ':::r1');
+
+      console.log('중간 1');
+
+      const r2 = result.next(); // test2
+      console.log(r2, ':::r2');
+
+      result.next(); // test3
+
+      const last = result.next();
+      console.log(last); // done: true
+    */
+  </script>
 </body>
 
 </html>
