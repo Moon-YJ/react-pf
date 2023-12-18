@@ -22,5 +22,7 @@ ReactDOM.render(
 	redux vs redux-saga 작업 순서 비교
 
 	- redux: component(api 호출 및 비동기 데이터 반환) -> reducer(비동기 데이터 받아서 전역 객체 생성) -> store(전역 객체 저장)
-	- redux-saga: component(데이터 요청 action 초기 타입만 전달) -> reducer(초기 요청을 받은 뒤 saga에게 작업 전달) -> saga(saga 자체적으로 api 호출 및 비동기 데이터 반환 후 새로운 action 객체 생성후 reducer에 전달) -> reducer(saga로부터 받은 actino 객체를 통해서 전역 객체 생성) -> store(전역 객체 저장)
+	- redux-saga: component(데이터 요청 action 초기 타입만 전달) -> reducer(초기 요청을 받은 뒤 saga에게 작업 전달) -> saga(saga 자체적으로 api 호출 및 비동기 데이터 반환 후 새로운 action 객체 생성후 reducer에 전달) -> reducer(saga로부터 받은 action 객체를 통해서 전역 객체 생성) -> store(전역 객체 저장)
+
+	- 요약: redux는 c->r->s / redux-saga는 c->r**->sa->r**->s
 */
