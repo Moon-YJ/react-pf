@@ -22,7 +22,6 @@ export default function App() {
 	const dispatch = useDispatch();
 	const path = useRef(process.env.PUBLIC_URL);
 	const [Dark, setDark] = useState(false);
-	const [MenuToggle, SetMenuToggle] = useState(false);
 
 	// fetching된 데이터값을 받아서 action객체에 담은 뒤 dispatch로 reducer에 전달하는 함수를 정의
 	const fetchDepartment = useCallback(async () => {
@@ -65,8 +64,6 @@ export default function App() {
 			<Header
 				setDark={setDark}
 				Dark={Dark}
-				MenuToggle={MenuToggle}
-				SetMenuToggle={SetMenuToggle}
 			/>
 			<Route
 				exact
@@ -102,7 +99,7 @@ export default function App() {
 				component={Detail}
 			/>
 			<Footer />
-			{MenuToggle && <Menu SetMenuToggle={SetMenuToggle} />}
+			<Menu />
 		</div>
 	);
 }

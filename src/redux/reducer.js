@@ -105,6 +105,15 @@ const modalReducer = (state = { modal: false }, action) => {
 	}
 };
 
+const menuReducer = (state = { menu: false }, action) => {
+	switch (action.type) {
+		case types.MENU.start:
+			return { ...state, menu: action.payload };
+		default:
+			return state;
+	}
+};
+
 // 해당 파일에서 내보내는 여러개의 reducer 객체를 합쳐서 외부로 export
-const reducers = combineReducers({ memberReducer, youtubeReducer, historyReducer, detailReducer, modalReducer });
+const reducers = combineReducers({ memberReducer, youtubeReducer, historyReducer, detailReducer, modalReducer, menuReducer });
 export default reducers;
