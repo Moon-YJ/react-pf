@@ -5,13 +5,17 @@ import postData from './dummyPosts.json';
 
 export default function Info() {
 	const customDate = useCustomText('combined');
-	const korTime = useRef(new Date().getTime() + 1000 * 60 * 60 * 9);
+	//const korTime = useRef(new Date().getTime() + 1000 * 60 * 60 * 9);
 	const getLocalData = () => {
 		const data = localStorage.getItem('post');
 		if (data) return JSON.parse(data);
 		else return postData.dummyPosts;
 	};
 	const [Post] = useState(getLocalData);
+
+	useEffect(() => {
+		localStorage.setItem('post', JSON.stringify(Post));
+	}, [Post]);
 
 	return (
 		<section className='Info'>
