@@ -33,7 +33,7 @@ export default function Modal({ children }) {
 						transition={{ duration: 0.5, delay: 1 }}>
 						{children}
 					</motion.div>
-					<span onClick={dispatch({ type: types.MODAL.start, action: false })}>close</span>
+					<span onClick={() => dispatch({ type: types.MODAL.start, payload: false })}>close</span>
 				</motion.aside>
 			)}
 		</AnimatePresence>

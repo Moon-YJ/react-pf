@@ -138,7 +138,7 @@ export default function Gallery() {
 										<div
 											className='pic'
 											onClick={() => {
-												dispatch({ type: types.MODAL.start, action: true });
+												dispatch({ type: types.MODAL.start, payload: true });
 												setIndex(idx);
 											}}>
 											<img
