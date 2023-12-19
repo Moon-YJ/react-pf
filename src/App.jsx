@@ -20,14 +20,13 @@ import { useDispatch } from 'react-redux';
 export default function App() {
 	const dispatch = useDispatch();
 	const [Dark, setDark] = useState(false);
-	const [MenuToggle, SetMenuToggle] = useState(false);
 
 	useEffect(() => {
 		dispatch({ type: types.MEMBERS.start });
 		dispatch({ type: types.HISTORY.start });
 		dispatch({ type: types.YOUTUBE.start });
 		dispatch({ type: types.FLICKR.start, opt: { type: 'user', id: '195294341@N02' } });
-		dispatch({ type: types.MODAL.start });
+		dispatch({ type: types.MENU.start, payload: false });
 	}, [dispatch]);
 
 	return (
@@ -35,8 +34,6 @@ export default function App() {
 			<Header
 				setDark={setDark}
 				Dark={Dark}
-				MenuToggle={MenuToggle}
-				SetMenuToggle={SetMenuToggle}
 			/>
 			<Route
 				exact
@@ -72,7 +69,7 @@ export default function App() {
 				component={Detail}
 			/>
 			<Footer />
-			{MenuToggle && <Menu SetMenuToggle={SetMenuToggle} />}
+			<Menu />
 		</div>
 	);
 }
