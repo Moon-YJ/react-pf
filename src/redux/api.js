@@ -25,6 +25,28 @@ export const fetchYoutube = async () => {
 	return json;
 };
 
+export const fetchFlickr = async opt => {
+	const num = 20;
+	const flickr_api = process.env.REACT_APP_FLICKR_API;
+	const baseURL = `https://www.flickr.com/services/rest/?&api_key=${flickr_api}&per_page=${num}&format=json&nojsoncallback=1&method=`;
+	const method_interest = 'flickr.interestingness.getList';
+	const method_user = 'flickr.people.getPhotos';
+	const method_search = 'flickr.photos.search';
+	const interestURL = `${baseURL}${method_interest}`;
+	const userURL = `${baseURL}${method_user}&user_id=${opt.id}`;
+	const searchURL = `${baseURL}${method_search}&tags=${opt.keyword}`;
+
+	let url = '';
+	opt.type === 'user' && (url = userURL);
+	opt.type === 'interest' && (url = interestURL);
+	opt.type === 'search' && (url = searchURL);
+
+	const data = await fetch(url);
+	const json = await data.json();
+
+	return json;
+};
+
 /*
   redux로 관리되는 파일들은 컴포넌트 외부에서 전역으로 동작하기 때문에 
   부수효과를 발생시키지 않는 순수함수 형태로 제작

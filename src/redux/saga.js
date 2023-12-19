@@ -7,14 +7,25 @@
     : all (iterable 객체를 비동기적으로 그룹호출 함수)
 */
 import { takeLatest, call, put, fork, all } from '@redux-saga/core/effects';
-import { fetchDepartment, fetchHistory, fetchYoutube } from './api';
+import { fetchDepartment, fetchFlickr, fetchHistory, fetchYoutube } from './api';
 import * as types from './actionType';
 
+// Department Server Data
 // 순서1 - 초기 action타입을 인지해서 fetching 관련 메서드를 대신 호출해주는 함수 정의
 function* callMembers() {
 	yield takeLatest(types.MEMBERS.start, returnMembers);
 }
+// 순서2 - 데이터 fetching후 비동기 데이터 상태에 따라 action객체를 만들어서 reducer로 전달하는 함수 정의
+function* returnMembers() {
+	try {
+		const response = yield call(fetchDepartment);
+		yield put({ type: types.MEMBERS.success, payload: response.members });
+	} catch (err) {
+		yield put({ type: types.MEMBERS.fail, payload: err });
+	}
+}
 
+// History Server Data
 function* callHistory() {
 	yield takeLatest(types.HISTORY.start, function* () {
 		try {
@@ -26,6 +37,7 @@ function* callHistory() {
 	});
 }
 
+// Youtube Server Data
 function* callYoutube() {
 	yield takeLatest(types.YOUTUBE.start, function* () {
 		try {
@@ -37,14 +49,16 @@ function* callYoutube() {
 	});
 }
 
-// 순서2 - 데이터 fetching후 비동기 데이터 상태에 따라 action객체를 만들어서 reducer로 전달하는 함수 정의
-function* returnMembers() {
-	try {
-		const response = yield call(fetchDepartment);
-		yield put({ type: types.MEMBERS.success, payload: response.members });
-	} catch (err) {
-		yield put({ type: types.MEMBERS.fail, payload: err });
-	}
+// Flickr Server Data
+function* callFlickr() {
+	yield takeLatest(types.FLICKR.start, function* (action) {
+		try {
+			const response = yield call(fetchFlickr, action.opt);
+			yield put({ type: types.FLICKR.success, payload: response.photos.photo });
+		} catch (err) {
+			yield put({ type: types.FLICKR.fail, payload: err });
+		}
+	});
 }
 
 // function* returnHistory() {
@@ -58,5 +72,5 @@ function* returnMembers() {
 
 // 순서3 - (순서1에 해당하는 데이터별)saga메서드를 비동기적으로 호출해주는 함수를 정의 후 rootSaga라는 이름으로 export(추후 미들웨어로 reducer에 적용됨)
 export default function* rootSaga() {
-	yield all([fork(callMembers), fork(callHistory), fork(callYoutube)]);
+	yield all([fork(callMembers), fork(callHistory), fork(callYoutube), fork(callFlickr)]);
 }
