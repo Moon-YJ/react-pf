@@ -7,7 +7,7 @@
     : all (iterable 객체를 비동기적으로 그룹호출 함수)
 */
 import { takeLatest, call, put, fork, all } from '@redux-saga/core/effects';
-import { fetchDepartment, fetchHistory } from './api';
+import { fetchDepartment, fetchHistory, fetchYoutube } from './api';
 import * as types from './actionType';
 
 // 순서1 - 초기 action타입을 인지해서 fetching 관련 메서드를 대신 호출해주는 함수 정의
@@ -22,6 +22,17 @@ function* callHistory() {
 			yield put({ type: types.HISTORY.success, payload: response.history });
 		} catch (err) {
 			yield put({ type: types.HISTORY.fail, payload: err });
+		}
+	});
+}
+
+function* callYoutube() {
+	yield takeLatest(types.YOUTUBE.start, function* () {
+		try {
+			const response = yield call(fetchYoutube);
+			yield put({ type: types.YOUTUBE.success, payload: response.items });
+		} catch (err) {
+			yield put({ type: types.YOUTUBE.fail, payload: err });
 		}
 	});
 }
@@ -47,5 +58,5 @@ function* returnMembers() {
 
 // 순서3 - (순서1에 해당하는 데이터별)saga메서드를 비동기적으로 호출해주는 함수를 정의 후 rootSaga라는 이름으로 export(추후 미들웨어로 reducer에 적용됨)
 export default function* rootSaga() {
-	yield all([fork(callMembers), fork(callHistory)]);
+	yield all([fork(callMembers), fork(callHistory), fork(callYoutube)]);
 }

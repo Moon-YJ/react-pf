@@ -15,6 +15,16 @@ export const fetchHistory = async () => {
 	return json;
 };
 
+export const fetchYoutube = async () => {
+	const api_key = process.env.REACT_APP_YOUTUBE_API;
+	const pid = process.env.REACT_APP_YOUTUBE_LIST;
+	const num = 7;
+	const baseURL = `https://www.googleapis.com/youtube/v3/playlistItems?key=${api_key}&part=snippet&playlistId=${pid}&maxResults=${num}`;
+	const data = await fetch(baseURL);
+	const json = await data.json();
+	return json;
+};
+
 /*
   redux로 관리되는 파일들은 컴포넌트 외부에서 전역으로 동작하기 때문에 
   부수효과를 발생시키지 않는 순수함수 형태로 제작
