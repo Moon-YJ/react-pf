@@ -19,8 +19,6 @@ export default function Gallery() {
 	// search 함수가 실행됐는지 확인하기 위한 참조객체
 	const searched = useRef(false);
 
-	//const [Pics, setPics] = useState([]);
-	const [Open, setOpen] = useState(false);
 	const [Index, setIndex] = useState(0);
 
 	const activateBtn = e => {
@@ -114,8 +112,8 @@ export default function Gallery() {
 									<article key={pic.id}>
 										<div
 											className='pic'
-											onClick={e => {
-												setOpen(true);
+											onClick={() => {
+												dispatch({ type: types.MODAL.start, payload: true });
 												setIndex(idx);
 											}}>
 											<img
@@ -140,9 +138,7 @@ export default function Gallery() {
 				</section>
 			</Layout>
 
-			<Modal
-				Open={Open}
-				setOpen={setOpen}>
+			<Modal>
 				{Pics.length !== 0 && (
 					<img
 						src={`https://live.staticflickr.com/${Pics[Index].server}/${Pics[Index].id}_${Pics[Index].secret}_b.jpg`}

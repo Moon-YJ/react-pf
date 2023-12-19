@@ -15,19 +15,19 @@ import { useMedia } from './hooks/useMedia';
 import Menu from './components/common/menu/Menu';
 import Detail from './components/sub/youtube/Detail';
 import * as types from '../src/redux/actionType';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 export default function App() {
 	const dispatch = useDispatch();
 	const [Dark, setDark] = useState(false);
 	const [MenuToggle, SetMenuToggle] = useState(false);
-	useSelector(store => console.log(store.flickrReducer.flickr));
 
 	useEffect(() => {
 		dispatch({ type: types.MEMBERS.start });
 		dispatch({ type: types.HISTORY.start });
 		dispatch({ type: types.YOUTUBE.start });
 		dispatch({ type: types.FLICKR.start, opt: { type: 'user', id: '195294341@N02' } });
+		dispatch({ type: types.MODAL.start });
 	}, [dispatch]);
 
 	return (

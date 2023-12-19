@@ -21,3 +21,7 @@ export const FLICKR = {
 	success: 'FLICKR_SUCCESS',
 	fail: 'FLICKR_FAIL'
 };
+
+export const MODAL = {
+	start: 'MODAL_START'
+};
