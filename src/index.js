@@ -11,7 +11,7 @@ import historyReducer from './redux/historySlice';
 const store = configureStore({
 	reducer: {
 		youtube: youtubeReducer,
-		members: membersReducer,
+		member: membersReducer,
 		history: historyReducer
 	}
 });
@@ -24,6 +24,7 @@ ReactDOM.render(
 	</BrowserRouter>,
 	document.getElementById('root')
 );
+
 //npm i @reduxjs/toolkit@1 react-redux
 /*
 	리덕스 비동기데이터의 효율적인 처리를 위한 대표적인 미들웨어 두가지

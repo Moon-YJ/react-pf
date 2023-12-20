@@ -38,5 +38,5 @@ const youtubeSlice = createSlice({
 	}
 });
 
-// youtubeSlice라는 reducer가 변경한 전역 데이터 객체를 내보냄
+//youtubeSlice라는 리듀서가 변경한 전역데이터 객체를 내보냄
 export default youtubeSlice.reducer;
