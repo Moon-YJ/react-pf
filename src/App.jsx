@@ -26,7 +26,7 @@ export default function App() {
 	useSelector(store => console.log(store));
 
 	useEffect(() => {
-		dispatch(fetchYoutube());
+		//dispatch(fetchYoutube());
 		dispatch(fetchDepartment());
 		dispatch(fetchHistory());
 	}, [dispatch]);
