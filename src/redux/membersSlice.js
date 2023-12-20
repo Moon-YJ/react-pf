@@ -4,11 +4,11 @@ const path = process.env.PUBLIC_URL;
 
 export const fetchDepartment = createAsyncThunk('members/requestMembers', async () => {
 	const data = await fetch(`${path}/DB/department.json`);
-	const json = data.json();
+	const json = await data.json();
 	return json.members;
 });
 
-const membersSlice = createSlice({
+const memberSlice = createSlice({
 	name: 'members',
 	initialState: {
 		data: [],
@@ -29,4 +29,4 @@ const membersSlice = createSlice({
 	}
 });
 
-export default membersSlice.reducer;
+export default memberSlice.reducer;
