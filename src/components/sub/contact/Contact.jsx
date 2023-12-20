@@ -95,13 +95,14 @@ export default function Contact() {
 		image: new kakao.current.maps.MarkerImage(mapInfo.current[Index].imgSrc, mapInfo.current[Index].imgSize, mapInfo.current[Index].imgPos)
 	});
 
-	// useRef를 useCallback으로 메모이제이션 처리해서 RoadView state 변경될때마다 풀리게
+	// 로드뷰 출력함수
+	// useRef를 useCallback으로 메모이제이션 처리해서 Index state 변경될때마다 풀리게
 	const roadview = useCallback(() => {
-		if (!RoadView) return;
 		new kakao.current.maps.RoadviewClient().getNearestPanoId(mapInfo.current[Index].latlng, 50, panoId => {
 			new kakao.current.maps.Roadview(viewFrame.current).setPanoId(panoId, mapInfo.current[Index].latlng);
 		});
-	}, [RoadView, Index]);
+	}, [Index]);
+
 	/*
 		const roadview = () => {
 			new kakao.current.maps.RoadviewClient().getNearestPanoId(mapInfo.current[Index].latlng, 50, panoId => {
@@ -110,6 +111,7 @@ export default function Contact() {
 		};
 	*/
 
+	// 지도 가운데로 위치하게 하는 함수
 	// 윈도우에 등록된 함수(언마운트시 호출되는 클린업함수)는 참조객체에 담으면 안되고 useCallback으로 처리해야함
 	// 내부에 변경될만한 state값이 있으면 배열에 등록해서 해당 값이 바뀔때는 memoization 풀어줌
 	const setCenter = useCallback(() => {
@@ -117,10 +119,14 @@ export default function Contact() {
 		mapInstance.current.setCenter(mapInfo.current[Index].latlng);
 	}, [Index]);
 
+	// Index값 변경될때마다 지도 정보 갱신해서 화면 재랜더링 useEffect
 	// 컴포넌트 마운시 참조객체에 담아놓은 DOM 프레임에 지도 인스턴스 출력 및 마커 세팅
 	useEffect(() => {
 		// 버튼 클릭시 지도 중첩되는 오류 해결
 		mapFrame.current.innerHTML = '';
+		// Index값이 변경된다는 것은 출력할 맵정보가 변경된다는 의미이므로 기존 프레임 안쪽의 정보를 지워서 초기화
+		// 지점정보 바뀔때마다 로드뷰 초기화
+		viewFrame.current.innerHTML = '';
 		mapInstance.current = new kakao.current.maps.Map(mapFrame.current, {
 			center: mapInfo.current[Index].latlng,
 			level: 3
@@ -144,13 +150,22 @@ export default function Contact() {
 		window.addEventListener('resize', setCenter);
 
 		return () => window.removeEventListener('resize', setCenter);
-	}, [Index, setCenter, RoadView]);
+	}, [Index, setCenter]);
 
+	// Traffic 토글시마다 화면 재랜더링 useEffect
 	useEffect(() => {
 		Traffic
 			? mapInstance.current.addOverlayMapTypeId(kakao.current.maps.MapTypeId.TRAFFIC)
 			: mapInstance.current.removeOverlayMapTypeId(kakao.current.maps.MapTypeId.TRAFFIC);
 	}, [Traffic]);
+
+	// RoadView 토글시마다 화면 재랜더링 useEffect
+	useEffect(() => {
+		// RoadView 토글시 무조건 로드뷰를 출력하는 것이 아닌 viewFrame안의 내용이 없을때만 호출하고
+		// 값이 있을때는 기존 데이터를 재활용해서 불필요한 로드뷰 중복 호출을 막음으로써 고용량 이미지 refetching 방지
+		// RoadView가 true이고 viewFrame 안쪽에 자식요소가 없을때만 roadview 실행(해당조건이 없으면 로드뷰버튼 클릭할때마다 이미지가 새로 계속 추가됨)
+		RoadView && viewFrame.current.children.length === 0 && roadview();
+	}, [RoadView, roadview]);
 
 	return (
 		<Layout title={'Contact'}>
