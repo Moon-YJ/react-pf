@@ -4,6 +4,7 @@ import './Contact.scss';
 import emailjs from '@emailjs/browser';
 import { GoMail } from 'react-icons/go';
 import { BsTelephone } from 'react-icons/bs';
+import { useThrottle } from '../../../hooks/useThrottle';
 
 export default function Contact() {
 	const form = useRef();
@@ -119,6 +120,10 @@ export default function Contact() {
 		mapInstance.current.setCenter(mapInfo.current[Index].latlng);
 	}, [Index]);
 
+	// useThrottle로 setCenter함수를 인수로 넣어서 throttling 적용된 새로운 함수로 반환
+	// 고차함수(hof)
+	const throttled = useThrottle(setCenter, 300);
+
 	// Index값 변경될때마다 지도 정보 갱신해서 화면 재랜더링 useEffect
 	// 컴포넌트 마운시 참조객체에 담아놓은 DOM 프레임에 지도 인스턴스 출력 및 마커 세팅
 	useEffect(() => {
@@ -147,10 +152,11 @@ export default function Contact() {
 		// 마우스 휠 줌 기능 비활성화
 		mapInstance.current.setZoomable(false);
 		// 지도 중심 이동
-		window.addEventListener('resize', setCenter);
+		// resize 이벤트에 throttle 적용된 함수를 등록(resize 시스템 이벤트 자체는 60번 발생하지만 핸들러 함수는 1초에 두번만 실행됨)
+		window.addEventListener('resize', throttled);
 
-		return () => window.removeEventListener('resize', setCenter);
-	}, [Index, setCenter]);
+		return () => window.removeEventListener('resize', throttled);
+	}, [Index, throttled]);
 
 	// Traffic 토글시마다 화면 재랜더링 useEffect
 	useEffect(() => {
