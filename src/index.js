@@ -2,14 +2,29 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import youtubeReducer from './redux/youtubeSlice';
+import membersReducer from './redux/membersSlice';
+import historyReducer from './redux/historySlice';
+
+const store = configureStore({
+	reducer: {
+		youtube: youtubeReducer,
+		members: membersReducer,
+		history: historyReducer
+	}
+});
 
 ReactDOM.render(
 	<BrowserRouter>
-		<App />
+		<Provider store={store}>
+			<App />
+		</Provider>
 	</BrowserRouter>,
 	document.getElementById('root')
 );
-
+//npm i @reduxjs/toolkit@1 react-redux
 /*
 	리덕스 비동기데이터의 효율적인 처리를 위한 대표적인 미들웨어 두가지
 	- redux-saga: action객체의 변화를 감시하면서 적절한 상태 변화 시점에 action객체를 생성해서 reducer에 전달하는 미들웨어(generator 사용)
