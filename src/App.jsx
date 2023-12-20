@@ -14,9 +14,9 @@ import { useEffect, useState } from 'react';
 import { useMedia } from './hooks/useMedia';
 import Menu from './components/common/menu/Menu';
 import Detail from './components/sub/youtube/Detail';
-import fetchYoutube from './redux/youtubeSlice';
-import fetchDepartment from './redux/membersSlice';
-import fetchHistory from './redux/historySlice';
+import { fetchYoutube } from './redux/youtubeSlice';
+import { fetchDepartment } from './redux/membersSlice';
+import { fetchHistory } from './redux/historySlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function App() {
@@ -26,8 +26,8 @@ export default function App() {
 	useSelector(store => console.log(store));
 
 	useEffect(() => {
-		//dispatch(fetchYoutube());
-		//dispatch(fetchDepartment());
+		dispatch(fetchYoutube());
+		dispatch(fetchDepartment());
 		dispatch(fetchHistory());
 	}, [dispatch]);
 
