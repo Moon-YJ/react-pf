@@ -10,7 +10,7 @@ import Youtube from './components/sub/youtube/Youtube';
 import { Route } from 'react-router-dom';
 import './globalStyles/Variables.scss';
 import './globalStyles/Reset.scss';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMedia } from './hooks/useMedia';
 import Menu from './components/common/menu/Menu';
 import Detail from './components/sub/youtube/Detail';
@@ -23,18 +23,10 @@ import { useDispatch, useSelector } from 'react-redux';
 export default function App() {
 	const [Dark, setDark] = useState(false);
 	const [MenuToggle, SetMenuToggle] = useState(false);
-	// const promiseArr = useRef([fetchYoutube(), fetchDepartment(), fetchHistory()]);
 	const dispatch = useDispatch();
 	useSelector(store => console.log(store));
 
 	useEffect(() => {
-		/*
-			// Promise.all([p1,p2,p3]).then(result=>프로미스 실행완료값 배열로 받음)
-			// Promise.all(promiseArr.current).then(arr => {
-				arr.forEach(action => dispatch(action));
-			});
-		*/
-
 		dispatch(fetchYoutube());
 		dispatch(fetchDepartment());
 		dispatch(fetchHistory());
