@@ -3,55 +3,26 @@ import Layout from '../../common/layout/Layout';
 import './Department.scss';
 import { useCustomText } from '../../../hooks/useText';
 import { fetchDepartment } from '../../../redux/membersSlice';
+import { fetchHistory } from '../../../redux/historySlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function Department() {
 	const path = useRef(process.env.PUBLIC_URL);
-
-	const [HistoryTit, setHistoryTit] = useState('');
-	const [HistoryData, setHistoryData] = useState([]);
-
 	const dispatch = useDispatch();
-
-	const fetchHistory = () => {
-		fetch(`${path.current}/DB/history.json`)
-			.then(data => data.json())
-			.then(json => {
-				//setHistoryData(json.history);
-				setHistoryData(Object.values(json)[0]);
-				setHistoryTit(Object.keys(json)[0]);
-			});
-	};
-
-	//const [MemberData, setMemberData] = useState([]);
-	//const [MemberTit, setMemberTit] = useState('');
-
 	const combinedTxt = useCustomText('combined');
 
-	const Members = useSelector(store => store.members.data);
-	const MemberData = Object.values(Members);
-	const MemberTit = Object.keys(Members);
-
-	// const fetchDepartment = () => {
-	// 	fetch(`${path.current}/DB/department.json`)
-	// 		.then((data) => data.json())
-	// 		.catch((err) => console.log(err))
-	// 		.then((json) => {
-	// 			//setMemberData(json.members); //객체 반복돌면서 value값만 배열로 반환
-	// 			setMemberData(Object.values(json)[0]);
-	// 			setMemberTit(Object.keys(json)[0]); //객체 반복돌면서 key값만 배열로 반환
-	// 		});
-	// };
+	const HistoryData = useSelector(store => store.history.data);
+	const MemberData = useSelector(store => store.members.data);
 
 	useEffect(() => {
 		dispatch(fetchDepartment());
-		fetchHistory();
+		dispatch(fetchHistory());
 	}, [dispatch]);
 
 	return (
 		<Layout title={'Department'}>
 			<section className='historyBox'>
-				<h2>{combinedTxt(HistoryTit)}</h2>
+				<h2>{combinedTxt('history')}</h2>
 				<div className='con'>
 					{/* HistoryData가 반복도는 각각의 데이터 {년도: 배열} */}
 					{HistoryData.map((data, idx) => {
@@ -72,7 +43,7 @@ export default function Department() {
 			</section>
 
 			<section className='memberBox'>
-				<h2>{MemberTit && combinedTxt(MemberTit)}</h2>
+				<h2>{combinedTxt('members')}</h2>
 				<div className='con'>
 					{MemberData?.map((member, idx) => {
 						return (

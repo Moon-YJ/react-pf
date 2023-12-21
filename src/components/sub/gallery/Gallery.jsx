@@ -18,8 +18,6 @@ export default function Gallery() {
 	const gap = useRef(20);
 	// search 함수가 실행됐는지 확인하기 위한 참조객체
 	const searched = useRef(false);
-
-	//const [Pics, setPics] = useState([]);
 	const [Index, setIndex] = useState(0);
 	const dispatch = useDispatch();
 	const Pics = useSelector(store => store.flickr.data);
@@ -69,30 +67,6 @@ export default function Gallery() {
 		// 검색함수가 한번이라도 실행되면 true로 변경
 		searched.current = true;
 	};
-
-	// const fetchFlickr = async opt => {
-	// 	const num = 20;
-	// 	const flickr_api = process.env.REACT_APP_FLICKR_API;
-	// 	const baseURL = `https://www.flickr.com/services/rest/?&api_key=${flickr_api}&per_page=${num}&format=json&nojsoncallback=1&method=`;
-	// 	const method_interest = 'flickr.interestingness.getList';
-	// 	const method_user = 'flickr.people.getPhotos';
-	// 	const method_search = 'flickr.photos.search';
-	// 	const interestURL = `${baseURL}${method_interest}`;
-	// 	const userURL = `${baseURL}${method_user}&user_id=${opt.id}`;
-	// 	const searchURL = `${baseURL}${method_search}&tags=${opt.keyword}`;
-
-	// 	let url = '';
-	// 	opt.type === 'user' && (url = userURL);
-	// 	opt.type === 'interest' && (url = interestURL);
-	// 	opt.type === 'search' && (url = searchURL);
-
-	// 	const data = await fetch(url);
-	// 	const json = await data.json();
-	// 	/*
-	// 		if (json.photos.photo.length === 0) return alert('해당 검색어의 결과값이 없습니다.');
-	// 	*/
-	// 	setPics(json.photos.photo);
-	// };
 
 	useEffect(() => {
 		refWrap.current.style.setProperty('--gap', gap.current + 'px');
