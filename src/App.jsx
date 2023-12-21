@@ -17,23 +17,28 @@ import Detail from './components/sub/youtube/Detail';
 import { fetchYoutube } from './redux/youtubeSlice';
 import { fetchDepartment } from './redux/membersSlice';
 import { fetchHistory } from './redux/historySlice';
+import { fetchFlickr } from './redux/flickrSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function App() {
 	const [Dark, setDark] = useState(false);
 	const [MenuToggle, SetMenuToggle] = useState(false);
-	const promiseArr = useRef([fetchYoutube(), fetchDepartment(), fetchHistory()]);
+	// const promiseArr = useRef([fetchYoutube(), fetchDepartment(), fetchHistory()]);
 	const dispatch = useDispatch();
 	useSelector(store => console.log(store));
 
 	useEffect(() => {
-		// Promise.all([p1,p2,p3]).then(result=>프로미스 실행완료값 배열로 받음)
-		Promise.all(promiseArr.current).then(arr => {
-			arr.forEach(action => dispatch(action));
-		});
-		//dispatch(fetchYoutube());
-		//dispatch(fetchDepartment());
-		//dispatch(fetchHistory());
+		/*
+			// Promise.all([p1,p2,p3]).then(result=>프로미스 실행완료값 배열로 받음)
+			// Promise.all(promiseArr.current).then(arr => {
+				arr.forEach(action => dispatch(action));
+			});
+		*/
+
+		dispatch(fetchYoutube());
+		dispatch(fetchDepartment());
+		dispatch(fetchHistory());
+		dispatch(fetchFlickr({ type: 'interest' }));
 	}, [dispatch]);
 
 	return (

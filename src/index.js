@@ -7,12 +7,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import youtubeReducer from './redux/youtubeSlice';
 import membersReducer from './redux/membersSlice';
 import historyReducer from './redux/historySlice';
+import flickrReducer from './redux/flickrSlice';
 
 const store = configureStore({
 	reducer: {
 		youtube: youtubeReducer,
 		members: membersReducer,
-		history: historyReducer
+		history: historyReducer,
+		flickr: flickrReducer
 	}
 });
 
