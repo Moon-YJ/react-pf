@@ -4,44 +4,26 @@ import './Department.scss';
 import { useCustomText } from '../../../hooks/useText';
 import { useSelector } from 'react-redux';
 
+// 비동기 데이터를 내부적으로 활용하는 컴포넌트에서 너무 빨리 다른 컴포넌트로 이동시
+// 특정 값이 없다고 뜨면서 memory leak이라는 에러문구 뜨는 현상
+
+// 이유: 특정 컴포넌트 마운트시 해당 컴포넌트가 비동기 데이터를 fetching하는 경우라면, fetching 완료하고 해당값을 state에 담기기까지 물리적인 시간 필요
+// 따라서 데이터 fetching 요청이 들어가고 fulfilled(데이터 반환) 이전에 해당 컴포넌트가 언마운트되면 담을 state는 사라졌는데 fetching요청은 계속 수행됨 (== 메모리 누수현상 발생)
+
+// 해결방법: 해당 컴포넌트에 특정 state 만들어서 초기값을 false로 지정하고
+// 해당 컴포넌트 언마운트시 state값을 true로 변경
+// 해당 state값이 true일때는 state에 값 담기는 것이 실행되지 않도록 조건문 처리
 export default function Department() {
+	const [Mounted, setMounted] = useState(true);
+
 	const MemberData = useSelector(store => store.memberReducer.members);
 	const HistoryData = useSelector(store => store.historyReducer.history);
 	const path = useRef(process.env.PUBLIC_URL);
-
-	//const [HistoryTit, setHistoryTit] = useState('');
-	//const [HistoryData, setHistoryData] = useState([]);
-
-	// const fetchHistory = () => {
-	// 	fetch(`${path.current}/DB/history.json`)
-	// 		.then(data => data.json())
-	// 		.then(json => {
-	// 			//setHistoryData(json.history);
-	// 			setHistoryData(Object.values(json)[0]);
-	// 			setHistoryTit(Object.keys(json)[0]);
-	// 		});
-	// };
-
-	//const [MemberData, setMemberData] = useState([]);
-	//const [MemberTit, setMemberTit] = useState('');
-
 	const combinedTxt = useCustomText('combined');
 
-	// const fetchDepartment = () => {
-	// 	fetch(`${path.current}/DB/department.json`)
-	// 		.then((data) => data.json())
-	// 		.catch((err) => console.log(err))
-	// 		.then((json) => {
-	// 			//setMemberData(json.members); //객체 반복돌면서 value값만 배열로 반환
-	// 			setMemberData(Object.values(json)[0]);
-	// 			setMemberTit(Object.keys(json)[0]); //객체 반복돌면서 key값만 배열로 반환
-	// 		});
-	// };
-
-	// useEffect(() => {
-	// 	fetchDepartment();
-	// 	fetchHistory();
-	// }, []);
+	useEffect(() => {
+		return () => setMounted(false);
+	}, [Mounted]);
 
 	return (
 		<Layout title={'Department'}>
@@ -49,40 +31,42 @@ export default function Department() {
 				<h2>{combinedTxt('history')}</h2>
 				<div className='con'>
 					{/* HistoryData가 반복도는 각각의 데이터 {년도: 배열} */}
-					{HistoryData?.map((data, idx) => {
-						return (
-							<article key={data + idx}>
-								{/* 현재 반복돌고 있는 객체의 key값을 뽑아서 h3로 출력 :2016 */}
-								<h3>{Object.keys(data)[0]}</h3>
-								<ul>
-									{/* 현재 반복돌고 있는 객체의 value을 뽑아서 li로 반복출력 [문자열, 문자열] */}
-									{Object.values(data)[0].map((list, idx) => {
-										return <li key={list + idx}>{list}</li>;
-									})}
-								</ul>
-							</article>
-						);
-					})}
+					{Mounted &&
+						HistoryData?.map((data, idx) => {
+							return (
+								<article key={data + idx}>
+									{/* 현재 반복돌고 있는 객체의 key값을 뽑아서 h3로 출력 :2016 */}
+									<h3>{Object.keys(data)[0]}</h3>
+									<ul>
+										{/* 현재 반복돌고 있는 객체의 value을 뽑아서 li로 반복출력 [문자열, 문자열] */}
+										{Object.values(data)[0].map((list, idx) => {
+											return <li key={list + idx}>{list}</li>;
+										})}
+									</ul>
+								</article>
+							);
+						})}
 				</div>
 			</section>
 
 			<section className='memberBox'>
 				<h2>{combinedTxt('members')}</h2>
 				<div className='con'>
-					{MemberData?.map((member, idx) => {
-						return (
-							<article key={member + idx}>
-								<div className='pic'>
-									<img
-										src={`${path.current}/img/${member.pic}`}
-										alt={member.name}
-									/>
-								</div>
-								<h3>{member.name}</h3>
-								<p>{member.position}</p>
-							</article>
-						);
-					})}
+					{Mounted &&
+						MemberData?.map((member, idx) => {
+							return (
+								<article key={member + idx}>
+									<div className='pic'>
+										<img
+											src={`${path.current}/img/${member.pic}`}
+											alt={member.name}
+										/>
+									</div>
+									<h3>{member.name}</h3>
+									<p>{member.position}</p>
+								</article>
+							);
+						})}
 				</div>
 			</section>
 		</Layout>
