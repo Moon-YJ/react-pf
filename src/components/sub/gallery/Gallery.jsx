@@ -4,6 +4,8 @@ import './Gallery.scss';
 import Masonry from 'react-masonry-component';
 import { RiSearchLine } from 'react-icons/ri';
 import Modal from '../../common/modal/Modal';
+import { useDispatch } from 'react-redux';
+import { modalOpen } from '../../../redux/modalSlice';
 
 export default function Gallery() {
 	const id = useRef('195294341@N02');
@@ -17,8 +19,8 @@ export default function Gallery() {
 	const searched = useRef(false);
 
 	const [Pics, setPics] = useState([]);
-	const [Open, setOpen] = useState(false);
 	const [Index, setIndex] = useState(0);
+	const dispatch = useDispatch();
 
 	const activateBtn = e => {
 		const btns = refNav.current.querySelectorAll('button');
@@ -139,7 +141,7 @@ export default function Gallery() {
 										<div
 											className='pic'
 											onClick={e => {
-												setOpen(true);
+												dispatch(modalOpen());
 												setIndex(idx);
 											}}>
 											<img
@@ -164,9 +166,7 @@ export default function Gallery() {
 				</section>
 			</Layout>
 
-			<Modal
-				Open={Open}
-				setOpen={setOpen}>
+			<Modal>
 				{Pics.length !== 0 && (
 					<img
 						src={`https://live.staticflickr.com/${Pics[Index].server}/${Pics[Index].id}_${Pics[Index].secret}_b.jpg`}

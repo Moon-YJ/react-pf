@@ -1,6 +1,8 @@
 import './Modal.scss';
 // npm i framer-motion@4
 import { AnimatePresence, motion } from 'framer-motion';
+import { useSelector, useDispatch } from 'react-redux';
+import { modalClose } from '../../../redux/modalSlice';
 
 /*
 	1. AnimatePresence: 모션을 적용할 컴포넌트의 wrapping 컴포넌트 지정
@@ -11,7 +13,9 @@ import { AnimatePresence, motion } from 'framer-motion';
   5. exit: 사라질때의 상태값
 */
 
-export default function Modal({ Open, setOpen, children }) {
+export default function Modal({ children }) {
+	const dispatch = useDispatch();
+	const Open = useSelector(store => store.modal.open);
 	return (
 		<AnimatePresence>
 			{Open && (
@@ -20,18 +24,16 @@ export default function Modal({ Open, setOpen, children }) {
 					initial={{ opacity: 0, x: '-100%', scale: 0, rotate: -45 }}
 					animate={{ opacity: 1, x: '0%', scale: 1, rotate: 0 }}
 					exit={{ opacity: 0, y: '100%', scale: 2, rotate: 45, transition: { delay: 0.5 } }}
-					transition={{ duration: 0.5 }}
-				>
+					transition={{ duration: 0.5 }}>
 					<motion.div
 						className='con'
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0, transition: { delay: 0 } }}
-						transition={{ duration: 0.5, delay: 1 }}
-					>
+						transition={{ duration: 0.5, delay: 1 }}>
 						{children}
 					</motion.div>
-					<span onClick={() => setOpen(false)}>close</span>
+					<span onClick={() => dispatch(modalClose())}>close</span>
 				</motion.aside>
 			)}
 		</AnimatePresence>
