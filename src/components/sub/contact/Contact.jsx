@@ -168,6 +168,8 @@ export default function Contact() {
 		RoadView && viewFrame.current.children.length === 0 && roadview();
 	}, [RoadView, roadview]);
 
+	// 윈도우 객체에 등록할 핸들러 함수를 따로 useEffect로 빼놓은 다음, 의존성 배열을 가급적 비워두는 것이 좋음
+	// 윈도우에 등록되는 핸드러함수에 만약 특정 state값을 의존한다면, 연결되는 함수 이름 자체를 의존성배열에 등록하되 useCallback처리
 	useEffect(() => {
 		// resize 이벤트에 throttle 적용된 함수를 등록(resize 시스템 이벤트 자체는 60번 발생하지만 핸들러 함수는 1초에 두번만 실행됨)
 		window.addEventListener('resize', throttled);
