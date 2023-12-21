@@ -4,7 +4,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 // createSlice: AsyncThunk함수가 내보내주는 action객체를 자동으로 받아서 해당 action타입[pending, fulfilled, rejected]에 따라서 자동으로 전역 데이터 변경해서 내보냄
 
 // 비동기 서버통신으로 데이터를 받아서 내부적으로 promise객체의 상태에 따라 자동으로 action객체 생성후 반환
-export const fetchYoutube = createAsyncThunk('youtube/requestYoutube', async () => {
+export const fetchYoutube = createAsyncThunk('youtube', async () => {
 	const api_key = process.env.REACT_APP_YOUTUBE_API;
 	const pid = process.env.REACT_APP_YOUTUBE_LIST;
 	const num = 7;

@@ -22,7 +22,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 export default function App() {
 	const [Dark, setDark] = useState(false);
-	const [MenuToggle, SetMenuToggle] = useState(false);
 	const dispatch = useDispatch();
 	useSelector(store => console.log(store));
 
@@ -30,7 +29,7 @@ export default function App() {
 		dispatch(fetchYoutube());
 		dispatch(fetchDepartment());
 		dispatch(fetchHistory());
-		dispatch(fetchFlickr({ type: 'interest' }));
+		dispatch(fetchFlickr({ type: 'user', id: '195294341@N02' }));
 	}, [dispatch]);
 
 	return (
@@ -38,8 +37,6 @@ export default function App() {
 			<Header
 				setDark={setDark}
 				Dark={Dark}
-				MenuToggle={MenuToggle}
-				SetMenuToggle={SetMenuToggle}
 			/>
 			<Route
 				exact
@@ -75,7 +72,7 @@ export default function App() {
 				component={Detail}
 			/>
 			<Footer />
-			{MenuToggle && <Menu SetMenuToggle={SetMenuToggle} />}
+			<Menu />
 		</div>
 	);
 }
