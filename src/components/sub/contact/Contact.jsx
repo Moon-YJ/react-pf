@@ -151,12 +151,7 @@ export default function Contact() {
 		mapInstance.current.addControl(new kakao.current.maps.ZoomControl(), kakao.current.maps.ControlPosition.RIGHT);
 		// 마우스 휠 줌 기능 비활성화
 		mapInstance.current.setZoomable(false);
-		// 지도 중심 이동
-		// resize 이벤트에 throttle 적용된 함수를 등록(resize 시스템 이벤트 자체는 60번 발생하지만 핸들러 함수는 1초에 두번만 실행됨)
-		window.addEventListener('resize', throttled);
-
-		return () => window.removeEventListener('resize', throttled);
-	}, [Index, throttled]);
+	}, [Index]);
 
 	// Traffic 토글시마다 화면 재랜더링 useEffect
 	useEffect(() => {
@@ -172,6 +167,13 @@ export default function Contact() {
 		// RoadView가 true이고 viewFrame 안쪽에 자식요소가 없을때만 roadview 실행(해당조건이 없으면 로드뷰버튼 클릭할때마다 이미지가 새로 계속 추가됨)
 		RoadView && viewFrame.current.children.length === 0 && roadview();
 	}, [RoadView, roadview]);
+
+	useEffect(() => {
+		// resize 이벤트에 throttle 적용된 함수를 등록(resize 시스템 이벤트 자체는 60번 발생하지만 핸들러 함수는 1초에 두번만 실행됨)
+		window.addEventListener('resize', throttled);
+
+		return () => window.removeEventListener('resize', throttled);
+	}, [throttled]);
 
 	return (
 		<Layout title={'Contact'}>
