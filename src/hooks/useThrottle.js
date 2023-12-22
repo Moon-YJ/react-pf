@@ -25,3 +25,5 @@ export const useThrottle = (func, gap = 500) => {
 		}, gap); //1초에 두번만 실행되게 하고싶으면 0.5초 적용
 	};
 };
+
+// useThrottole은 함수가 호출될때 실행되므로 useDebounce와 다르게 라우터 빠르게 이동해도 메모리 누수 일어나지않음
