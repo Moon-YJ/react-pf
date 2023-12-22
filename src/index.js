@@ -31,4 +31,5 @@ ReactDOM.render(
 	- client side data를 store를 통해 공유 (Modal, Menu, Dark)
 	- Layout에서 0.3초후에 on이 붙게 되는데 라우터 이동이 0.3초보다 빨리 일어날때 optional chaining으로 에러 핸들링
 	- Contact 컴포넌트에서 throttle이 적용된 throttledSetCenter resize 이벤트 연결문을 따로 useEffect로 분리
+	- store에서 전역 데이터로 관리하고 있지 않은 gallery 컴포넌트의 메모리 누수 해결
 */
