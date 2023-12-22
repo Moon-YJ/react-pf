@@ -10,7 +10,7 @@ export default function Layout({ children, title }) {
 	useEffect(() => {
 		splitTxt(refTitle.current, title, 0.7, 0.1);
 		setTimeout(() => {
-			refFrame.current.classList.add('on');
+			refFrame.current?.classList.add('on');
 		}, 300);
 	}, [splitTxt, title]);
 

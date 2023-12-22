@@ -5,9 +5,8 @@ import * as types from '../../../redux/actionType';
 
 export default function Header() {
 	const dispatch = useDispatch();
-	const { menuReducer, darkReducer } = useSelector(store => store);
-	const Open = menuReducer.menu;
-	const Dark = darkReducer.dark;
+	const Open = useSelector(store => store.menuReducer.menu);
+	const Dark = useSelector(store => store.darkReducer.dark);
 	return (
 		<header className='Header'>
 			<h1>

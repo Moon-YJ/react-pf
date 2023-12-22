@@ -30,3 +30,12 @@ ReactDOM.render(
 
 	- 요약: redux는 c->r->s / redux-saga는 c->r**->sa->r**->s
 */
+
+/*
+	Redux-saga버전에서 자가진단 항목
+	- 비동기 데이터의 fetching함수가 api.js에 등록되어있고 각 컴포넌트 마운트시 fetching호출이 있는지 확인 (Member, History, Youtube, Flickr)
+	- client side data가 saga없이 reducer만으로 전역 관리되고있는지 확인 (modal, menu, dark)
+	- Layout 컴포넌트 optional chaining 되어있는지 확인
+	- 특정 컴포넌트에서 store로부터 복수개의 reducer를 가져올때 store 전체를 가져온다음 비구조화할당 금지 (특정 컴포넌트에 모든 리듀서객체를 다 가져올 필요가 없기 때문)
+	- 초기 App에서 api.js로부터 fetching함수 호출시 인수로 전달되는 값이 있다면 (gallery컴포넌트의 opt인수전달) api.js단에서 내부 default option처리가 효율적임 (==> App에서 모든 dispatch문을 반복문 처리 가능하므로)
+*/

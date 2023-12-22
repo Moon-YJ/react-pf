@@ -22,10 +22,13 @@ export default function App() {
 	const Dark = useSelector(store => store.darkReducer.dark);
 
 	useEffect(() => {
-		dispatch({ type: types.MEMBERS.start });
-		dispatch({ type: types.HISTORY.start });
-		dispatch({ type: types.YOUTUBE.start });
-		dispatch({ type: types.FLICKR.start, opt: { type: 'user', id: '195294341@N02' } });
+		// dispatch({ type: types.MEMBERS.start });
+		// dispatch({ type: types.HISTORY.start });
+		// dispatch({ type: types.YOUTUBE.start });
+		// dispatch({ type: types.FLICKR.start, opt: { type: 'user', id: '195294341@N02' } });
+		['MEMBERS', 'HISTORY', 'YOUTUBE', 'FLICKR'].forEach(typeName => {
+			dispatch({ type: types[typeName].start });
+		});
 	}, [dispatch]);
 
 	return (

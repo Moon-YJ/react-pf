@@ -6,7 +6,9 @@ import { useSelector } from 'react-redux';
 
 export default function Department() {
 	const path = useRef(process.env.PUBLIC_URL);
-	const { historyReducer, membersReducer } = useSelector(store => store);
+	const historyReducer = useSelector(store => store.historyReducer);
+	const membersReducer = useSelector(store => store.membersReducer);
+	//const { historyReducer, membersReducer } = useSelector(store => store);
 	const HistoryTit = Object.keys(historyReducer)[0];
 	const HistoryData = Object.values(historyReducer)[0];
 	const MemberTit = Object.keys(membersReducer)[0];
