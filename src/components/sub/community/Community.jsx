@@ -11,7 +11,8 @@ export default function Community() {
 	const getLocalData = () => {
 		const data = localStorage.getItem('post');
 		// 로컬저장소에 post 키값에 값이 있으면 parsing해서 객체로 리턴
-		return JSON.parse(data);
+		if (data) JSON.parse(data);
+		else return [];
 	};
 
 	const [Post, setPost] = useState(getLocalData);
