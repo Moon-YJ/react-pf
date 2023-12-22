@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const useDebounce = (value, gap = 500) => {
 	const [DebouncedVal, setDebouncedVal] = useState(value);
@@ -12,5 +12,8 @@ export const useDebounce = (value, gap = 500) => {
 	eventBlocker.current = setTimeout(() => {
 		setDebouncedVal(value);
 	}, gap);
+	useEffect(() => {
+		return () => clearTimeout(eventBlocker.current);
+	}, []);
 	return DebouncedVal;
 };

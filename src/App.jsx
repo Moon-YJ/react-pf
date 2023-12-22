@@ -10,8 +10,8 @@ import Youtube from './components/sub/youtube/Youtube';
 import { Route } from 'react-router-dom';
 import './globalStyles/Variables.scss';
 import './globalStyles/Reset.scss';
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useRef, useCallback, StrictMode } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useMedia } from './hooks/useMedia';
 import Menu from './components/common/menu/Menu';
 import Detail from './components/sub/youtube/Detail';
@@ -21,7 +21,7 @@ export default function App() {
 	// 순서 2 - dispatch 함수 활성화(추후 fetching된 데이터를 액션에 담아서 reducer에게 전달하기 위함)
 	const dispatch = useDispatch();
 	const path = useRef(process.env.PUBLIC_URL);
-	const [Dark, setDark] = useState(false);
+	const Dark = useSelector(store => store.darkReducer.dark);
 
 	// fetching된 데이터값을 받아서 action객체에 담은 뒤 dispatch로 reducer에 전달하는 함수를 정의
 	const fetchDepartment = useCallback(async () => {
@@ -61,10 +61,7 @@ export default function App() {
 
 	return (
 		<div className={`wrap ${Dark ? 'dark' : ''} ${useMedia()}`}>
-			<Header
-				setDark={setDark}
-				Dark={Dark}
-			/>
+			<Header />
 			<Route
 				exact
 				path='/'

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Department.scss';
 import { useCustomText } from '../../../hooks/useText';
@@ -14,16 +14,10 @@ import { useSelector } from 'react-redux';
 // 해당 컴포넌트 언마운트시 state값을 true로 변경
 // 해당 state값이 true일때는 state에 값 담기는 것이 실행되지 않도록 조건문 처리
 export default function Department() {
-	const [Mounted, setMounted] = useState(true);
-
 	const MemberData = useSelector(store => store.memberReducer.members);
 	const HistoryData = useSelector(store => store.historyReducer.history);
 	const path = useRef(process.env.PUBLIC_URL);
 	const combinedTxt = useCustomText('combined');
-
-	useEffect(() => {
-		return () => setMounted(false);
-	}, [Mounted]);
 
 	return (
 		<Layout title={'Department'}>
@@ -31,42 +25,40 @@ export default function Department() {
 				<h2>{combinedTxt('history')}</h2>
 				<div className='con'>
 					{/* HistoryData가 반복도는 각각의 데이터 {년도: 배열} */}
-					{Mounted &&
-						HistoryData?.map((data, idx) => {
-							return (
-								<article key={data + idx}>
-									{/* 현재 반복돌고 있는 객체의 key값을 뽑아서 h3로 출력 :2016 */}
-									<h3>{Object.keys(data)[0]}</h3>
-									<ul>
-										{/* 현재 반복돌고 있는 객체의 value을 뽑아서 li로 반복출력 [문자열, 문자열] */}
-										{Object.values(data)[0].map((list, idx) => {
-											return <li key={list + idx}>{list}</li>;
-										})}
-									</ul>
-								</article>
-							);
-						})}
+					{HistoryData?.map((data, idx) => {
+						return (
+							<article key={data + idx}>
+								{/* 현재 반복돌고 있는 객체의 key값을 뽑아서 h3로 출력 :2016 */}
+								<h3>{Object.keys(data)[0]}</h3>
+								<ul>
+									{/* 현재 반복돌고 있는 객체의 value을 뽑아서 li로 반복출력 [문자열, 문자열] */}
+									{Object.values(data)[0].map((list, idx) => {
+										return <li key={list + idx}>{list}</li>;
+									})}
+								</ul>
+							</article>
+						);
+					})}
 				</div>
 			</section>
 
 			<section className='memberBox'>
 				<h2>{combinedTxt('members')}</h2>
 				<div className='con'>
-					{Mounted &&
-						MemberData?.map((member, idx) => {
-							return (
-								<article key={member + idx}>
-									<div className='pic'>
-										<img
-											src={`${path.current}/img/${member.pic}`}
-											alt={member.name}
-										/>
-									</div>
-									<h3>{member.name}</h3>
-									<p>{member.position}</p>
-								</article>
-							);
-						})}
+					{MemberData?.map((member, idx) => {
+						return (
+							<article key={member + idx}>
+								<div className='pic'>
+									<img
+										src={`${path.current}/img/${member.pic}`}
+										alt={member.name}
+									/>
+								</div>
+								<h3>{member.name}</h3>
+								<p>{member.position}</p>
+							</article>
+						);
+					})}
 				</div>
 			</section>
 		</Layout>

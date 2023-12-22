@@ -3,9 +3,10 @@ import * as types from '../../../redux/action';
 import './Header.scss';
 import { NavLink, Link } from 'react-router-dom';
 
-export default function Header({ setDark, Dark }) {
+export default function Header() {
 	const dispatch = useDispatch();
 	const Toggle = useSelector(store => store.menuReducer.menu);
+	const Dark = useSelector(store => store.darkReducer.dark);
 	return (
 		<header className='Header'>
 			<h1>
@@ -60,7 +61,7 @@ export default function Header({ setDark, Dark }) {
 			<div
 				className={Dark ? 'themeBox dark' : 'themeBox'}
 				onClick={() => {
-					setDark(!Dark);
+					dispatch({ type: types.DARK.start, payload: !Dark });
 				}}>
 				<div className='ball'></div>
 			</div>

@@ -20,6 +20,7 @@ export default function Gallery() {
 
 	const [Pics, setPics] = useState([]);
 	const [Index, setIndex] = useState(0);
+	const [Mounted, setMounted] = useState(true);
 
 	const activateBtn = e => {
 		const btns = refNav.current.querySelectorAll('button');
@@ -94,6 +95,7 @@ export default function Gallery() {
 	useEffect(() => {
 		refWrap.current.style.setProperty('--gap', gap.current + 'px');
 		fetchFlickr({ type: 'user', id: id.current });
+		return () => setMounted(false);
 	}, []);
 
 	return (
@@ -132,6 +134,7 @@ export default function Gallery() {
 						{Pics.length === 0 && searched.current ? (
 							<h2>해당 검색어의 결과값이 없습니다.</h2>
 						) : (
+							Mounted &&
 							Pics.map((pic, idx) => {
 								return (
 									<article key={pic.id}>
