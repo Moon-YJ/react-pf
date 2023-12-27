@@ -2,23 +2,12 @@ import { useCallback, useEffect, useState } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Detail.scss';
 import { useParams } from 'react-router-dom';
+import { useYoutubeByIdQuery } from '../../../hooks/useYoutubeQuery';
 
 export default function Detail() {
 	const { id } = useParams();
-	const [YoutubeData, setYoutubeData] = useState(null);
 
-	const fetchYoutube = useCallback(async () => {
-		const api_key = process.env.REACT_APP_YOUTUBE_API;
-		const baseURL = `https://www.googleapis.com/youtube/v3/playlistItems?key=${api_key}&part=snippet&id=${id}`;
-
-		const data = await fetch(baseURL);
-		const json = await data.json();
-		setYoutubeData(json.items[0].snippet);
-	}, [id]);
-
-	useEffect(() => {
-		fetchYoutube();
-	}, [fetchYoutube]);
+	const { data: YoutubeData, isSuccess } = useYoutubeByIdQuery(id);
 
 	return (
 		<Layout
@@ -28,7 +17,7 @@ export default function Detail() {
         - Optional Chaining: 객체명?.property 
           : 해당 객체에 값이 없을때는 무시하고 값이 있을때만 property에 접근
       */}
-			{YoutubeData && (
+			{isSuccess && (
 				<article>
 					<div className='videoBox'>
 						<iframe
