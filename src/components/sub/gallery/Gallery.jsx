@@ -5,6 +5,7 @@ import Masonry from 'react-masonry-component';
 import { RiSearchLine } from 'react-icons/ri';
 import Modal from '../../common/modal/Modal';
 import { useFlickrQuery } from '../../../hooks/useFlickrQuery';
+import { useGlobalData } from '../../../hooks/useGlobalData';
 
 export default function Gallery() {
 	const id = useRef('195294341@N02');
@@ -16,11 +17,11 @@ export default function Gallery() {
 	// search 함수가 실행됐는지 확인하기 위한 참조객체
 	const searched = useRef(false);
 
-	const [Open, setOpen] = useState(false);
 	const [Index, setIndex] = useState(0);
 	const [Opt, setOpt] = useState({ type: 'user', id: id.current });
 
 	const { data: Pics, isSuccess } = useFlickrQuery(Opt);
+	const { setModalOpen } = useGlobalData();
 
 	const activateBtn = e => {
 		const btns = refNav.current.querySelectorAll('button');
@@ -115,7 +116,7 @@ export default function Gallery() {
 										<div
 											className='pic'
 											onClick={e => {
-												setOpen(true);
+												setModalOpen(true);
 												setIndex(idx);
 											}}>
 											<img
@@ -140,9 +141,7 @@ export default function Gallery() {
 				</section>
 			</Layout>
 
-			<Modal
-				Open={Open}
-				setOpen={setOpen}>
+			<Modal>
 				{isSuccess && Pics.length !== 0 && (
 					<img
 						src={`https://live.staticflickr.com/${Pics[Index].server}/${Pics[Index].id}_${Pics[Index].secret}_b.jpg`}

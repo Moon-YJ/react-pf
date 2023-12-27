@@ -16,21 +16,16 @@ import Menu from './components/common/menu/Menu';
 import Detail from './components/sub/youtube/Detail';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { useGlobalData } from './hooks/useGlobalData';
 
 export default function App() {
 	const queryClient = new QueryClient();
-	const [Dark, setDark] = useState(false);
-	const [MenuToggle, SetMenuToggle] = useState(false);
+	const { Dark } = useGlobalData();
 
 	return (
 		<QueryClientProvider client={queryClient}>
 			<div className={`wrap ${Dark ? 'dark' : ''} ${useMedia()}`}>
-				<Header
-					setDark={setDark}
-					Dark={Dark}
-					MenuToggle={MenuToggle}
-					SetMenuToggle={SetMenuToggle}
-				/>
+				<Header />
 				<Route
 					exact
 					path='/'
@@ -65,7 +60,7 @@ export default function App() {
 					component={Detail}
 				/>
 				<Footer />
-				{MenuToggle && <Menu SetMenuToggle={SetMenuToggle} />}
+				<Menu />
 			</div>
 			<ReactQueryDevtools />
 		</QueryClientProvider>
