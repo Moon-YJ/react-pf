@@ -11,6 +11,7 @@ export default function Department() {
 
 	const { data: HistoryData, isSuccess: isHistory } = useHistoryQuery();
 	const { data: MemberData, isSuccess: isMembers } = useMembersQuery();
+	console.log(MemberData);
 
 	return (
 		<Layout title={'Department'}>
