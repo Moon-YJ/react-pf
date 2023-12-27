@@ -8,10 +8,11 @@ export default function Youtube() {
 	const customText = useCustomText('combined');
 	const shortenText = useCustomText('shorten');
 
-	const { data: Vids, isSuccess } = useYoutubeQuery();
+	const { data: Vids, isSuccess, isError, error, isLoading } = useYoutubeQuery();
 
 	return (
 		<Layout title={'Youtube'}>
+			{isLoading && <p>Loading...</p>}
 			{isSuccess &&
 				Vids.map((data, idx) => {
 					const [date, time] = data.snippet.publishedAt.split('T');
@@ -39,6 +40,7 @@ export default function Youtube() {
 						</article>
 					);
 				})}
+			{isError && <p>데이터 반환에 실패했습니다.</p>}
 		</Layout>
 	);
 }

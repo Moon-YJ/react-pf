@@ -6,9 +6,13 @@ const fetchYoutube = async () => {
 	const num = 7;
 	const baseURL = `https://www.googleapis.com/youtube/v3/playlistItems?key=${api_key}&part=snippet&playlistId=${pid}&maxResults=${num}`;
 
-	const data = await fetch(baseURL);
-	const json = await data.json();
-	return json.items;
+	try {
+		const data = await fetch(baseURL);
+		const json = await data.json();
+		return json.items;
+	} catch (err) {
+		throw err;
+	}
 };
 
 export const useYoutubeQuery = () => {
@@ -25,7 +29,6 @@ export const useYoutubeQuery = () => {
 const fetchYoutubeById = async ({ queryKey }) => {
 	const api_key = process.env.REACT_APP_YOUTUBE_API;
 	const baseURL = `https://www.googleapis.com/youtube/v3/playlistItems?key=${api_key}&part=snippet&id=${queryKey[1]}`;
-
 	const data = await fetch(baseURL);
 	const json = await data.json();
 	return json.items[0].snippet;
