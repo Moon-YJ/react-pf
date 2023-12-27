@@ -12,6 +12,7 @@ export const fetchYoutube = createAsyncThunk('youtube', async () => {
 
 	const data = await fetch(baseURL);
 	const json = await data.json();
+	console.log(json);
 	return json.items;
 });
 
