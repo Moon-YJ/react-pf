@@ -21,6 +21,7 @@ export const useYoutubeQuery = () => {
 	});
 };
 
+// 상세페이지를 전역에 저장할 필요까진 없으므로 redux에서는 굳이 적용하지 않았음
 const fetchYoutubeById = async ({ queryKey }) => {
 	const api_key = process.env.REACT_APP_YOUTUBE_API;
 	const baseURL = `https://www.googleapis.com/youtube/v3/playlistItems?key=${api_key}&part=snippet&id=${queryKey[1]}`;
@@ -31,7 +32,7 @@ const fetchYoutubeById = async ({ queryKey }) => {
 };
 
 export const useYoutubeByIdQuery = id => {
-	return useQuery(['fetchYoutube', id], fetchYoutubeById, {
+	return useQuery(['fetchYoutubeById', id], fetchYoutubeById, {
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
 		cacheTime: 1000 * 60 * 60 * 24,

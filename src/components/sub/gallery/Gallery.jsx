@@ -4,6 +4,7 @@ import './Gallery.scss';
 import Masonry from 'react-masonry-component';
 import { RiSearchLine } from 'react-icons/ri';
 import Modal from '../../common/modal/Modal';
+import { useFlickrQuery } from '../../../hooks/useFlickrQuery';
 
 export default function Gallery() {
 	const id = useRef('195294341@N02');
@@ -15,43 +16,45 @@ export default function Gallery() {
 	// search 함수가 실행됐는지 확인하기 위한 참조객체
 	const searched = useRef(false);
 
-	const [Pics, setPics] = useState([]);
 	const [Open, setOpen] = useState(false);
 	const [Index, setIndex] = useState(0);
+	const [Opt, setOpt] = useState({ type: 'user', id: id.current });
 
-	const activateBtn = (e) => {
+	const { data: Pics, isSuccess } = useFlickrQuery(Opt);
+
+	const activateBtn = e => {
 		const btns = refNav.current.querySelectorAll('button');
-		btns.forEach((btn) => btn.classList.remove('on'));
+		btns.forEach(btn => btn.classList.remove('on'));
 		e && e.target.classList.add('on');
 	};
 
-	const handleInterest = (e) => {
+	const handleInterest = e => {
 		if (e.target.classList.contains('on')) return;
 		// handleInterest함수 호출시 isUser값을 빈문자열로 초기화(false로 인식되는 값)
 		isUser.current = '';
 		activateBtn(e);
-		fetchFlickr({ type: 'interest' });
+		setOpt({ type: 'interest' });
 	};
 
-	const handleUser = (e) => {
+	const handleUser = e => {
 		// isUser의 값과 id값이 동일할때만 함수 중지
 		if (e.target.classList.contains('on') || isUser.current === id.current) return;
 		isUser.current = id.current;
 		activateBtn(e);
-		fetchFlickr({ type: 'user', id: id.current });
+		setOpt({ type: 'user', id: id.current });
 	};
 
-	const handleOwner = (e) => {
+	const handleOwner = e => {
 		// isUser값이 비어있을때만 함수 실행
 		// 값이 있으면 함수 중지
 		//if (isUser.current !== '') return;
 		if (isUser.current) return;
 		isUser.current = e.target.innerText;
 		activateBtn();
-		fetchFlickr({ type: 'user', id: e.target.innerText });
+		setOpt({ type: 'user', id: e.target.innerText });
 	};
 
-	const handleSearch = (e) => {
+	const handleSearch = e => {
 		// 기본적으로 submit 이벤트는 전송기능이기 때문에 무조건 화면이 새로고침됨
 		// 전송을 하는것이 아니라 리액트로 추가 로직구현을 해야하므로 기본 전송기능 막음
 		e.preventDefault();
@@ -60,75 +63,61 @@ export default function Gallery() {
 		const searchTxt = e.target.children[0].value;
 		if (!searchTxt.trim()) return;
 		e.target.children[0].value = '';
-		fetchFlickr({ type: 'search', keyword: searchTxt });
+		setOpt({ type: 'search', keyword: searchTxt });
 		// 검색함수가 한번이라도 실행되면 true로 변경
 		searched.current = true;
 	};
 
-	const fetchFlickr = async (opt) => {
-		const num = 20;
-		const flickr_api = process.env.REACT_APP_FLICKR_API;
-		const baseURL = `https://www.flickr.com/services/rest/?&api_key=${flickr_api}&per_page=${num}&format=json&nojsoncallback=1&method=`;
-		const method_interest = 'flickr.interestingness.getList';
-		const method_user = 'flickr.people.getPhotos';
-		const method_search = 'flickr.photos.search';
-		const interestURL = `${baseURL}${method_interest}`;
-		const userURL = `${baseURL}${method_user}&user_id=${opt.id}`;
-		const searchURL = `${baseURL}${method_search}&tags=${opt.keyword}`;
-
-		let url = '';
-		opt.type === 'user' && (url = userURL);
-		opt.type === 'interest' && (url = interestURL);
-		opt.type === 'search' && (url = searchURL);
-
-		const data = await fetch(url);
-		const json = await data.json();
-		/*
-			if (json.photos.photo.length === 0) return alert('해당 검색어의 결과값이 없습니다.');
-		*/
-		setPics(json.photos.photo);
-	};
-
 	useEffect(() => {
 		refWrap.current.style.setProperty('--gap', gap.current + 'px');
-		fetchFlickr({ type: 'user', id: id.current });
 	}, []);
 
 	return (
 		<>
 			<Layout title={'Gallery'}>
 				<article className='controls'>
-					<nav ref={refNav} className='btn-set'>
+					<nav
+						ref={refNav}
+						className='btn-set'>
 						<button onClick={handleInterest}>Interest Gallery</button>
-						<button className='on' onClick={handleUser}>
+						<button
+							className='on'
+							onClick={handleUser}>
 							My Gallery
 						</button>
 					</nav>
 
 					<form onSubmit={handleSearch}>
-						<input type='text' placeholder='Search' />
+						<input
+							type='text'
+							placeholder='Search'
+						/>
 						<button className='btn-search'>
 							<RiSearchLine />
 						</button>
 					</form>
 				</article>
 
-				<section className='wrap-con' ref={refWrap}>
-					<Masonry className={'container'} options={{ transitionDuration: '0.5s', gutter: gap.current }}>
+				<section
+					className='wrap-con'
+					ref={refWrap}>
+					<Masonry
+						className={'container'}
+						options={{ transitionDuration: '0.5s', gutter: gap.current }}>
 						{/* 처음 마운트 됐을때는 실행 안되고 검색했을때만 실행되게 처리 */}
-						{Pics.length === 0 && searched.current ? (
+						{isSuccess && Pics.length === 0 && searched.current ? (
 							<h2>해당 검색어의 결과값이 없습니다.</h2>
 						) : (
+							isSuccess &&
 							Pics.map((pic, idx) => {
 								return (
 									<article key={pic.id}>
 										<div
 											className='pic'
-											onClick={(e) => {
+											onClick={e => {
 												setOpen(true);
 												setIndex(idx);
-											}}
-										>
+											}}>
 											<img
 												src={`https://live.staticflickr.com/${pic.server}/${pic.id}_${pic.secret}_b.jpg`}
 												alt={pic.title}
@@ -139,7 +128,7 @@ export default function Gallery() {
 											<img
 												src={`http://farm${pic.farm}.staticflickr.com/${pic.server}/buddyicons/${pic.owner}.jpg`}
 												alt={pic.owner}
-												onError={(e) => e.target.setAttribute('src', 'https://www.flickr.com/images/buddyicon.gif')}
+												onError={e => e.target.setAttribute('src', 'https://www.flickr.com/images/buddyicon.gif')}
 											/>
 											<span onClick={handleOwner}>{pic.owner}</span>
 										</div>
@@ -151,8 +140,10 @@ export default function Gallery() {
 				</section>
 			</Layout>
 
-			<Modal Open={Open} setOpen={setOpen}>
-				{Pics.length !== 0 && (
+			<Modal
+				Open={Open}
+				setOpen={setOpen}>
+				{isSuccess && Pics.length !== 0 && (
 					<img
 						src={`https://live.staticflickr.com/${Pics[Index].server}/${Pics[Index].id}_${Pics[Index].secret}_b.jpg`}
 						alt={Pics[Index].title}
