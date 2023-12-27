@@ -1,82 +1,59 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Department.scss';
 import { useCustomText } from '../../../hooks/useText';
+import { useHistoryQuery } from '../../../hooks/useHistoryQuery';
+import { useMembersQuery } from '../../../hooks/useMembersQuery';
 
 export default function Department() {
 	const path = useRef(process.env.PUBLIC_URL);
-
-	const [HistoryTit, setHistoryTit] = useState('');
-	const [HistoryData, setHistoryData] = useState([]);
-
-	const fetchHistory = () => {
-		fetch(`${path.current}/DB/history.json`)
-			.then((data) => data.json())
-			.then((json) => {
-				//setHistoryData(json.history);
-				setHistoryData(Object.values(json)[0]);
-				setHistoryTit(Object.keys(json)[0]);
-			});
-	};
-
-	const [MemberData, setMemberData] = useState([]);
-	const [MemberTit, setMemberTit] = useState('');
-
 	const combinedTxt = useCustomText('combined');
 
-	const fetchDepartment = () => {
-		fetch(`${path.current}/DB/department.json`)
-			.then((data) => data.json())
-			.catch((err) => console.log(err))
-			.then((json) => {
-				//setMemberData(json.members); //객체 반복돌면서 value값만 배열로 반환
-				setMemberData(Object.values(json)[0]);
-				setMemberTit(Object.keys(json)[0]); //객체 반복돌면서 key값만 배열로 반환
-			});
-	};
-
-	useEffect(() => {
-		fetchDepartment();
-		fetchHistory();
-	}, []);
+	const { data: HistoryData, isSuccess: isHistory } = useHistoryQuery();
+	const { data: MemberData, isSuccess: isMembers } = useMembersQuery();
 
 	return (
 		<Layout title={'Department'}>
 			<section className='historyBox'>
-				<h2>{combinedTxt(HistoryTit)}</h2>
+				<h2>{combinedTxt('history')}</h2>
 				<div className='con'>
 					{/* HistoryData가 반복도는 각각의 데이터 {년도: 배열} */}
-					{HistoryData.map((data, idx) => {
-						return (
-							<article key={data + idx}>
-								{/* 현재 반복돌고 있는 객체의 key값을 뽑아서 h3로 출력 :2016 */}
-								<h3>{Object.keys(data)[0]}</h3>
-								<ul>
-									{/* 현재 반복돌고 있는 객체의 value을 뽑아서 li로 반복출력 [문자열, 문자열] */}
-									{Object.values(data)[0].map((list, idx) => {
-										return <li key={list + idx}>{list}</li>;
-									})}
-								</ul>
-							</article>
-						);
-					})}
+					{isHistory &&
+						HistoryData.map((data, idx) => {
+							return (
+								<article key={data + idx}>
+									{/* 현재 반복돌고 있는 객체의 key값을 뽑아서 h3로 출력 :2016 */}
+									<h3>{Object.keys(data)[0]}</h3>
+									<ul>
+										{/* 현재 반복돌고 있는 객체의 value을 뽑아서 li로 반복출력 [문자열, 문자열] */}
+										{Object.values(data)[0].map((list, idx) => {
+											return <li key={list + idx}>{list}</li>;
+										})}
+									</ul>
+								</article>
+							);
+						})}
 				</div>
 			</section>
 
 			<section className='memberBox'>
-				<h2>{combinedTxt(MemberTit)}</h2>
+				<h2>{combinedTxt('members')}</h2>
 				<div className='con'>
-					{MemberData.map((member, idx) => {
-						return (
-							<article key={member + idx}>
-								<div className='pic'>
-									<img src={`${path.current}/img/${member.pic}`} alt={member.name} />
-								</div>
-								<h3>{member.name}</h3>
-								<p>{member.position}</p>
-							</article>
-						);
-					})}
+					{isMembers &&
+						MemberData.map((member, idx) => {
+							return (
+								<article key={member + idx}>
+									<div className='pic'>
+										<img
+											src={`${path.current}/img/${member.pic}`}
+											alt={member.name}
+										/>
+									</div>
+									<h3>{member.name}</h3>
+									<p>{member.position}</p>
+								</article>
+							);
+						})}
 				</div>
 			</section>
 		</Layout>

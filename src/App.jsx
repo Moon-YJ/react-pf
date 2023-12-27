@@ -14,24 +14,60 @@ import { useState } from 'react';
 import { useMedia } from './hooks/useMedia';
 import Menu from './components/common/menu/Menu';
 import Detail from './components/sub/youtube/Detail';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export default function App() {
+	const queryClient = new QueryClient();
 	const [Dark, setDark] = useState(false);
 	const [MenuToggle, SetMenuToggle] = useState(false);
 
 	return (
-		<div className={`wrap ${Dark ? 'dark' : ''} ${useMedia()}`}>
-			<Header setDark={setDark} Dark={Dark} MenuToggle={MenuToggle} SetMenuToggle={SetMenuToggle} />
-			<Route exact path='/' component={MainWrap} />
-			<Route path='/department' component={Department} />
-			<Route path='/gallery' component={Gallery} />
-			<Route path='/community' component={Community} />
-			<Route path='/members' component={Members} />
-			<Route path='/contact' component={Contact} />
-			<Route path='/youtube' component={Youtube} />
-			<Route path='/detail/:id' component={Detail} />
-			<Footer />
-			{MenuToggle && <Menu SetMenuToggle={SetMenuToggle} />}
-		</div>
+		<QueryClientProvider client={queryClient}>
+			<div className={`wrap ${Dark ? 'dark' : ''} ${useMedia()}`}>
+				<Header
+					setDark={setDark}
+					Dark={Dark}
+					MenuToggle={MenuToggle}
+					SetMenuToggle={SetMenuToggle}
+				/>
+				<Route
+					exact
+					path='/'
+					component={MainWrap}
+				/>
+				<Route
+					path='/department'
+					component={Department}
+				/>
+				<Route
+					path='/gallery'
+					component={Gallery}
+				/>
+				<Route
+					path='/community'
+					component={Community}
+				/>
+				<Route
+					path='/members'
+					component={Members}
+				/>
+				<Route
+					path='/contact'
+					component={Contact}
+				/>
+				<Route
+					path='/youtube'
+					component={Youtube}
+				/>
+				<Route
+					path='/detail/:id'
+					component={Detail}
+				/>
+				<Footer />
+				{MenuToggle && <Menu SetMenuToggle={SetMenuToggle} />}
+			</div>
+			<ReactQueryDevtools />
+		</QueryClientProvider>
 	);
 }
