@@ -21,13 +21,13 @@ import CookieModal from './components/common/cookieModal/CookieModal';
 
 export default function App() {
 	const queryClient = new QueryClient();
-	const { Dark } = useGlobalData();
+	const { Mode } = useGlobalData();
 
 	//useCookie('today', 'done', 20);
 
 	return (
 		<QueryClientProvider client={queryClient}>
-			<div className={`wrap ${Dark ? 'dark' : ''} ${useMedia()}`}>
+			<div className={`wrap ${Mode === 'light' ? 'light' : 'dark'} ${useMedia()}`}>
 				<Header />
 				<Route
 					exact
@@ -67,7 +67,9 @@ export default function App() {
 
 				<CookieModal
 					wid={300}
-					ht={200}></CookieModal>
+					ht={200}>
+					<h1>쿠키팝업</h1>
+				</CookieModal>
 			</div>
 			<ReactQueryDevtools />
 		</QueryClientProvider>

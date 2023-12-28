@@ -7,9 +7,9 @@ export const GlobalContext = createContext(null);
 export function GlobalProvider({ children }) {
 	const [MenuOpen, setMenuOpen] = useState(false);
 	const [ModalOpen, setModalOpen] = useState(false);
-	const [Dark, setDark] = useState(false);
+	const [Mode, setMode] = useState('light');
 
-	return <GlobalContext.Provider value={{ MenuOpen, setMenuOpen, ModalOpen, setModalOpen, Dark, setDark }}>{children}</GlobalContext.Provider>;
+	return <GlobalContext.Provider value={{ MenuOpen, setMenuOpen, ModalOpen, setModalOpen, Mode, setMode }}>{children}</GlobalContext.Provider>;
 }
 
 // GlobalContext의 값을 호출할 수 있는 custom hook
