@@ -16,11 +16,13 @@ import Detail from './components/sub/youtube/Detail';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useGlobalData } from './hooks/useGlobalData';
+import CookieModal from './components/common/cookieModal/CookieModal';
 //import { useCookie } from './hooks/useCookie';
 
 export default function App() {
 	const queryClient = new QueryClient();
 	const { Dark } = useGlobalData();
+
 	//useCookie('today', 'done', 20);
 
 	return (
@@ -62,6 +64,10 @@ export default function App() {
 				/>
 				<Footer />
 				<Menu />
+
+				<CookieModal
+					wid={300}
+					ht={200}></CookieModal>
 			</div>
 			<ReactQueryDevtools />
 		</QueryClientProvider>

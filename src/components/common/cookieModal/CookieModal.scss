@@ -1,0 +1,26 @@
+.CookieModal {
+	z-index: 5;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	display: flex;
+	align-content: space-between;
+	flex-wrap: wrap;
+	padding: 30px;
+	background-color: var(--baseColor);
+	color: var(--bgColor);
+	* {
+		color: inherit;
+	}
+	.content {
+		width: 100%;
+	}
+	.controls {
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+		span {
+			cursor: pointer;
+		}
+	}
+}
