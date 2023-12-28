@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useCookie } from '../../../hooks/useCookie';
 import './ThemeControl.scss';
 
@@ -7,21 +7,33 @@ export default function ThemeControl() {
 
 	const { setCookie, isCookie } = useCookie();
 
-	if (isCookie('theme')) {
-		if (inputEl.current) {
-			inputEl.current.value = document.cookie.split('theme=')[1].split(';')[0];
-		}
-		document.body.style.setProperty('--pointColor', document.cookie.split('theme=')[1].split(';')[0]);
-	}
-
 	const changeThemeColor = () => {
 		const color = inputEl.current.value;
 		console.log(color);
 		setCookie('theme', color, 10);
 		// 스크립트로 넣은 값이 아니고 css에 등록해놓은 값이므로 getComputedStyle로 가져옴
-		console.log(getComputedStyle(document.body).getPropertyValue('--pointColor'));
 		document.body.style.setProperty('--pointColor', document.cookie.split('theme=')[1].split(';')[0]);
 	};
+
+	const handleReset = () => {
+		setCookie('theme', 'done', 0);
+		const resetColor = '#ff69b4';
+		if (inputEl.current) {
+			inputEl.current.value = resetColor;
+		}
+		document.body.style.setProperty('--pointColor', resetColor);
+	};
+
+	useEffect(() => {
+		const resetColor = getComputedStyle(document.body).getPropertyValue('--pointColor');
+		if (isCookie('theme')) {
+			const changedColor = document.cookie.split('theme=')[1].split(';')[0];
+			if (inputEl.current) inputEl.current.value = changedColor;
+			document.body.style.setProperty('--pointColor', changedColor);
+		} else {
+			if (inputEl.current) inputEl.current.value = resetColor;
+		}
+	}, [isCookie]);
 
 	return (
 		<nav className='ThemeControl'>
@@ -30,7 +42,7 @@ export default function ThemeControl() {
 				type='color'
 				onChange={changeThemeColor}
 			/>
-			{/* <button>theme color</button> */}
+			<button onClick={handleReset}>reset</button>
 		</nav>
 	);
 }

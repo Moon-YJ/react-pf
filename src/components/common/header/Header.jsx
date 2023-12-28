@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useCookie } from '../../../hooks/useCookie';
 import { useGlobalData } from '../../../hooks/useGlobalData';
 import ThemeControl from '../themeControl/ThemeControl';
 import './Header.scss';
@@ -5,6 +7,7 @@ import { NavLink, Link } from 'react-router-dom';
 
 export default function Header() {
 	const { MenuOpen, setMenuOpen, Dark, setDark } = useGlobalData();
+
 	return (
 		<header className='Header'>
 			<h1>
@@ -58,9 +61,7 @@ export default function Header() {
 
 			<div
 				className={Dark ? 'themeBox dark' : 'themeBox'}
-				onClick={() => {
-					setDark(!Dark);
-				}}>
+				onClick={() => setDark(!Dark)}>
 				<div className='ball'></div>
 			</div>
 
