@@ -6,11 +6,17 @@ import { useSwiper } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination, Autoplay } from 'swiper';
+import { useEffect } from 'react';
 
 function Btns() {
 	// Swiper 컴포넌트 안쪽에 있는 또다른 자식 컴포넌트 안쪽에서만 useSwiper hook 사용 가능
 	// hook으로부터 생성된 인스턴스 객체에 있는 다양한 prototype 메서드와 property값 활용 가능
 	const swiper = useSwiper();
+	// 처음 마운트시 마지막 슬라이드가 보이는 이슈(loop사용때문) - 강제로 처음에만 다음슬라이드 넘겨서 해결
+	useEffect(() => {
+		swiper.slideNext(200);
+	}, [swiper]);
+
 	return (
 		<nav className='swiper-controller'>
 			<button
