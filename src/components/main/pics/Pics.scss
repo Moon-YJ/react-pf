@@ -13,5 +13,53 @@
 		width: 300px;
 		height: 300px;
 		border: 1px solid #333;
+		&.box1 {
+			&::before,
+			&::after,
+			span {
+				position: absolute;
+				top: 50%;
+				right: 50px;
+				content: '';
+				//부모에 display:flex 속성이 있거나 해당 요소가 position:absolute 속성이 있으면 자동으로 block속성 갖게됨
+				//display: block;
+				width: 100px;
+				height: 1px;
+				background-color: #333;
+				transform-origin: right center;
+				transition-property: opacity, transform;
+				transition-duration: 0.5s;
+				opacity: 0;
+			}
+			&::before {
+				transform: rotate(145deg);
+				transition-delay: 0s;
+			}
+			&::after {
+				transform: rotate(-145deg);
+				transition-delay: 0.3s;
+			}
+			span {
+				width: 0px;
+				transition-property: opacity, width;
+				transition-delay: 0.7s;
+			}
+			&:hover {
+				&::before,
+				&::after,
+				span {
+					opacity: 1;
+				}
+				&::before {
+					transform: rotate(45deg);
+				}
+				&::after {
+					transform: rotate(-45deg);
+				}
+				span {
+					width: 150px;
+				}
+			}
+		}
 	}
 }
