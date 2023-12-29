@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useCookie } from '../../../hooks/useCookie';
 import './ThemeControl.scss';
+import { useThrottle } from '../../../hooks/useThrottle';
 
 export default function ThemeControl() {
 	const inputEl = useRef(null);
@@ -29,6 +30,8 @@ export default function ThemeControl() {
 		inputEl.current.value = color;
 	};
 
+	const throttled = useThrottle(changeThemeColor, 300);
+
 	const handleReset = () => {
 		setCookie('theme', 'done', 0);
 		const resetColor = '#ff69b4';
@@ -46,7 +49,7 @@ export default function ThemeControl() {
 			<input
 				ref={inputEl}
 				type='color'
-				onChange={changeThemeColor}
+				onChange={throttled}
 			/>
 			<button onClick={handleReset}>reset</button>
 		</nav>
