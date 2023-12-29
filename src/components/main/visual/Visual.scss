@@ -24,5 +24,16 @@
 				}
 			}
 		}
+		.swiper-pagination {
+			bottom: 50px;
+			.swiper-pagination-bullet {
+				transition: 0.3s;
+				border-radius: 8px;
+				&-active {
+					width: 60px;
+					background-color: #111;
+				}
+			}
+		}
 	}
 }
