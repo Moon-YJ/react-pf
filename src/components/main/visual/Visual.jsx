@@ -13,7 +13,15 @@ function Btns() {
 	const swiper = useSwiper();
 	return (
 		<nav className='swiper-controller'>
-			<button onClick={() => swiper.autoplay.start()}>play</button>
+			<button
+				onClick={() => {
+					// 다시 롤링시작 버튼 클릭시 delay 없이 바로 slide 넘기기 위해서
+					// 일단 다음 슬라이드 넘기고 동시에 롤링 재시작
+					swiper.slideNext(200);
+					swiper.autoplay.start();
+				}}>
+				play
+			</button>
 			<button onClick={() => swiper.autoplay.stop()}>stop</button>
 		</nav>
 	);
