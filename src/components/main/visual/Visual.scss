@@ -35,5 +35,11 @@
 				}
 			}
 		}
+		.swiper-controller {
+			z-index: 6;
+			position: absolute;
+			bottom: 10px;
+			right: 100px;
+		}
 	}
 }
