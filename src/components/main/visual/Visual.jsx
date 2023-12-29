@@ -9,34 +9,10 @@ import { Pagination, Autoplay } from 'swiper';
 import { useEffect } from 'react';
 import { useCustomText } from '../../../hooks/useText';
 import { Link } from 'react-router-dom';
-
-function Btns() {
-	// Swiper 컴포넌트 안쪽에 있는 또다른 자식 컴포넌트 안쪽에서만 useSwiper hook 사용 가능
-	// hook으로부터 생성된 인스턴스 객체에 있는 다양한 prototype 메서드와 property값 활용 가능
-	const swiper = useSwiper();
-	// 처음 마운트시 마지막 슬라이드가 보이는 이슈(loop사용때문) - 강제로 처음에만 다음슬라이드 넘겨서 해결
-	useEffect(() => {
-		swiper.init(0);
-		swiper.slideNext(300);
-	}, [swiper]);
-
-	return (
-		<nav className='swiper-controller'>
-			<button
-				onClick={() => {
-					// 다시 롤링시작 버튼 클릭시 delay 없이 바로 slide 넘기기 위해서
-					// 일단 다음 슬라이드 넘기고 동시에 롤링 재시작
-					swiper.slideNext(200);
-					swiper.autoplay.start();
-				}}>
-				play
-			</button>
-			<button onClick={() => swiper.autoplay.stop()}>stop</button>
-		</nav>
-	);
-}
+import { useRef } from 'react';
 
 export default function Visual() {
+	const swiperRef = useRef(null);
 	const { youtube } = useSelector(store => store.youtubeReducer);
 	const shortenText = useCustomText('shorten');
 
@@ -48,7 +24,7 @@ export default function Visual() {
 					clickable: true
 				}}
 				autoplay={{
-					delay: 4000,
+					delay: 2000,
 					disableOnInteraction: true
 				}}
 				loop={true}>
@@ -73,7 +49,10 @@ export default function Visual() {
 								</div>
 								<div className='txt-box'>
 									<h2>{shortenText(vid.snippet.title, 50)}</h2>
-									<Link to={`/detail/${vid.id}`}>
+									<Link
+										to={`/detail/${vid.id}`}
+										onMouseEnter={swiperRef.current.autoplay.stop}
+										onMouseLeave={swiperRef.current.autoplay.start}>
 										<span></span>View Detail
 									</Link>
 								</div>
@@ -82,9 +61,35 @@ export default function Visual() {
 					);
 				})}
 
-				<Btns />
+				<Btns swiperRef={swiperRef} />
 			</Swiper>
 		</figure>
+	);
+}
+
+function Btns({ swiperRef }) {
+	// Swiper 컴포넌트 안쪽에 있는 또다른 자식 컴포넌트 안쪽에서만 useSwiper hook 사용 가능
+	// hook으로부터 생성된 인스턴스 객체에 있는 다양한 prototype 메서드와 property값 활용 가능
+	swiperRef.current = useSwiper();
+	// 처음 마운트시 마지막 슬라이드가 보이는 이슈(loop사용때문) - 강제로 처음에만 다음슬라이드 넘겨서 해결
+	useEffect(() => {
+		swiperRef.current.init(0);
+		swiperRef.current.slideNext(300);
+	}, [swiperRef]);
+
+	return (
+		<nav className='swiper-controller'>
+			<button
+				onClick={() => {
+					// 다시 롤링시작 버튼 클릭시 delay 없이 바로 slide 넘기기 위해서
+					// 일단 다음 슬라이드 넘기고 동시에 롤링 재시작
+					swiperRef.current.slideNext(200);
+					swiperRef.current.autoplay.start();
+				}}>
+				play
+			</button>
+			<button onClick={() => swiperRef.current.autoplay.stop()}>stop</button>
+		</nav>
 	);
 }
 
