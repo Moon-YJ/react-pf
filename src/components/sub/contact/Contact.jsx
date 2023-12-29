@@ -4,6 +4,7 @@ import './Contact.scss';
 import emailjs from '@emailjs/browser';
 import { GoMail } from 'react-icons/go';
 import { BsTelephone } from 'react-icons/bs';
+import { useThrottle } from '../../../hooks/useThrottle';
 
 export default function Contact() {
 	const form = useRef();
@@ -95,11 +96,12 @@ export default function Contact() {
 		image: new kakao.current.maps.MarkerImage(mapInfo.current[Index].imgSrc, mapInfo.current[Index].imgSize, mapInfo.current[Index].imgPos)
 	});
 
-	const roadview = useRef(() => {
+	// useRef로 하면 안됨 - 이유: 지도정보 바뀌면서 Index값 바뀔때 로드뷰 초기화안되는 이슈 생김
+	const roadview = useCallback(() => {
 		new kakao.current.maps.RoadviewClient().getNearestPanoId(mapInfo.current[Index].latlng, 50, panoId => {
 			new kakao.current.maps.Roadview(viewFrame.current).setPanoId(panoId, mapInfo.current[Index].latlng);
 		});
-	});
+	}, [Index]);
 	/*
 		const roadview = () => {
 			new kakao.current.maps.RoadviewClient().getNearestPanoId(mapInfo.current[Index].latlng, 50, panoId => {
@@ -111,14 +113,16 @@ export default function Contact() {
 	// 윈도우에 등록된 함수(언마운트시 호출되는 클린업함수)는 참조객체에 담으면 안되고 useCallback으로 처리해야함
 	// 내부에 변경될만한 state값이 있으면 배열에 등록해서 해당 값이 바뀔때는 memoization 풀어줌
 	const setCenter = useCallback(() => {
-		roadview.current();
 		mapInstance.current.setCenter(mapInfo.current[Index].latlng);
 	}, [Index]);
+
+	const throttled = useThrottle(setCenter);
 
 	// 컴포넌트 마운시 참조객체에 담아놓은 DOM 프레임에 지도 인스턴스 출력 및 마커 세팅
 	useEffect(() => {
 		// 버튼 클릭시 지도 중첩되는 오류 해결
 		mapFrame.current.innerHTML = '';
+		viewFrame.current.innerHTML = '';
 		mapInstance.current = new kakao.current.maps.Map(mapFrame.current, {
 			center: mapInfo.current[Index].latlng,
 			level: 3
@@ -128,26 +132,30 @@ export default function Contact() {
 		setTraffic(false);
 		setRoadView(false);
 
-		// 로드뷰 출력
-		// 50은 반경 50m이내의 로드뷰를 출력한다는 의미 (ex. 만약 규모가 큰 장소라면 해당 숫자를 늘려야 함)
-		roadview.current();
 		// 지도 타입 컨트롤러 추가
 		mapInstance.current.addControl(new kakao.current.maps.MapTypeControl(), kakao.current.maps.ControlPosition.TOPRIGHT);
 		// 지도 줌 컨트롤러 추가
 		mapInstance.current.addControl(new kakao.current.maps.ZoomControl(), kakao.current.maps.ControlPosition.RIGHT);
 		// 마우스 휠 줌 기능 비활성화
 		mapInstance.current.setZoomable(false);
-		// 지도 중심 이동
-		window.addEventListener('resize', setCenter);
-
-		return () => window.removeEventListener('resize', setCenter);
-	}, [Index, setCenter]);
+	}, [Index]);
 
 	useEffect(() => {
 		Traffic
 			? mapInstance.current.addOverlayMapTypeId(kakao.current.maps.MapTypeId.TRAFFIC)
 			: mapInstance.current.removeOverlayMapTypeId(kakao.current.maps.MapTypeId.TRAFFIC);
 	}, [Traffic]);
+
+	useEffect(() => {
+		// 지도 중심 이동
+		window.addEventListener('resize', throttled);
+
+		return () => window.removeEventListener('resize', throttled);
+	}, [throttled]);
+
+	useEffect(() => {
+		RoadView && viewFrame.current.children.length === 0 && roadview();
+	}, [RoadView, roadview]);
 
 	return (
 		<Layout title={'Contact'}>
