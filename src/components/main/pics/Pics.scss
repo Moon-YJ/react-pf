@@ -33,7 +33,7 @@
 			}
 			&::before {
 				transform: rotate(145deg);
-				transition-delay: 0s;
+				transition-delay: 0.7s;
 			}
 			&::after {
 				transform: rotate(-145deg);
@@ -42,7 +42,7 @@
 			span {
 				width: 0px;
 				transition-property: opacity, width;
-				transition-delay: 0.7s;
+				transition-delay: 0s;
 			}
 			&:hover {
 				&::before,
@@ -52,14 +52,30 @@
 				}
 				&::before {
 					transform: rotate(45deg);
+					transition-delay: 0s;
 				}
 				&::after {
 					transform: rotate(-45deg);
+					transition-delay: 0.3s;
 				}
 				span {
 					width: 150px;
+					transition-delay: 0.7s;
 				}
 			}
 		}
 	}
 }
+
+// 처음 호버시 동작
+// before 회전(delay: 0s) -> after 회전(delay: 0.3s) -> span 선 그어지기(delay: 0.7s)
+
+// 호버 아웃시 동작
+// before 회전아웃 -> after 회전아웃 -> span 아웃 ==> 이렇게 동작됨
+
+// 하지만 원하는 모션은 반대
+// span 아웃 -> after 회전아웃 -> before 회전아웃
+
+// ==> 호버 인과 호버아웃의 딜레이값을 반대로 입력해야함
+// :hover에 설정하는 delay값은 (hover in될때 적용됨)
+// 원래 값에(:hover이전) 설정하는 delay값은 (hover out될때 적용됨)
