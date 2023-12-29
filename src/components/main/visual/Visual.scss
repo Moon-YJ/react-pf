@@ -6,21 +6,45 @@
 	.swiper {
 		width: 100%;
 		height: 100%;
-		border: 1px solid red;
 		.swiper-wrapper {
 			.swiper-slide {
 				padding: 100px 0;
 				> .inner {
 					display: flex;
-					justify-content: center;
-					align-items: center;
+					justify-content: space-between;
 					flex-wrap: wrap;
+					align-content: center;
 					width: 70%;
 					height: 100%;
 					margin: 0 auto;
-					color: var(--bgColor);
-					background-color: var(--pointColor);
-					border: 1px solid blue;
+					.pic-box {
+						position: relative;
+						display: flex;
+						width: 40%;
+						height: 100%;
+						img {
+							position: absolute;
+							top: 0;
+							left: 0;
+							width: 100%;
+							height: 100%;
+							object-fit: cover;
+							&:nth-of-type(1) {
+								top: 30px;
+								left: 30px;
+								filter: blur(20px) saturate(1.2);
+								opacity: 0.7;
+							}
+						}
+					}
+					.txt-box {
+						width: 50%;
+						height: 100%;
+						h2 {
+							font-size: 4rem;
+							font-weight: normal;
+						}
+					}
 				}
 			}
 		}

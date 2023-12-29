@@ -7,6 +7,8 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination, Autoplay } from 'swiper';
 import { useEffect } from 'react';
+import { useCustomText } from '../../../hooks/useText';
+import { Link } from 'react-router-dom';
 
 function Btns() {
 	// Swiper 컴포넌트 안쪽에 있는 또다른 자식 컴포넌트 안쪽에서만 useSwiper hook 사용 가능
@@ -14,7 +16,13 @@ function Btns() {
 	const swiper = useSwiper();
 	// 처음 마운트시 마지막 슬라이드가 보이는 이슈(loop사용때문) - 강제로 처음에만 다음슬라이드 넘겨서 해결
 	useEffect(() => {
-		swiper.slideNext(200);
+		swiper.init(0);
+		swiper.slideNext(0);
+
+		return () => {
+			//swiper.init(0);
+			//swiper.autoplay.stop();
+		};
 	}, [swiper]);
 
 	return (
@@ -35,6 +43,8 @@ function Btns() {
 
 export default function Visual() {
 	const { youtube } = useSelector(store => store.youtubeReducer);
+	const shortenTxt = useCustomText('shorten');
+
 	return (
 		<figure className='Visual'>
 			<Swiper
@@ -45,12 +55,25 @@ export default function Visual() {
 				}}
 				modules={[Pagination, Autoplay]}
 				loop={true}>
-				{youtube.map((vid, idx) => {
+				{youtube?.map((vid, idx) => {
 					if (idx >= 5) return null;
 					return (
 						<SwiperSlide key={vid.id}>
 							<div className='inner'>
-								<h3>{vid.snippet.title}</h3>
+								<div className='pic-box'>
+									<img
+										src={vid.snippet.thumbnails.standard.url}
+										alt={vid.snippet.title}
+									/>
+									<img
+										src={vid.snippet.thumbnails.standard.url}
+										alt={vid.snippet.title}
+									/>
+								</div>
+								<div className='txt-box'>
+									<h2>{shortenTxt(vid.snippet.title, 50)}</h2>
+									<Link to={`/detail/${vid.id}`}>View Detail</Link>
+								</div>
 							</div>
 						</SwiperSlide>
 					);
