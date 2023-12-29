@@ -2,4 +2,27 @@
 	position: relative;
 	width: 100%;
 	height: calc(100vh - 90px);
+	margin: 0 auto;
+	.swiper {
+		width: 100%;
+		height: 100%;
+		border: 1px solid red;
+		.swiper-wrapper {
+			.swiper-slide {
+				padding: 100px 0;
+				> .inner {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					flex-wrap: wrap;
+					width: 70%;
+					height: 100%;
+					margin: 0 auto;
+					color: var(--bgColor);
+					background-color: var(--pointColor);
+					border: 1px solid blue;
+				}
+			}
+		}
+	}
 }
