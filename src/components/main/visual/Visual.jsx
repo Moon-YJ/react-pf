@@ -15,19 +15,17 @@ export default function Visual() {
 	const swiperRef = useRef(null);
 	const { youtube } = useSelector(store => store.youtubeReducer);
 	const shortenText = useCustomText('shorten');
+	const swiperOption = useRef({
+		modules: [Pagination, Autoplay],
+		pagination: { clickable: true },
+		//pagination: { clickable: true, renderBullet: (index, className) => `<span class=${className}>${index + 1}</span>` },
+		autoplay: { delay: 2000, disableOnInteraction: true },
+		loop: true
+	});
 
 	return (
 		<figure className='Visual'>
-			<Swiper
-				modules={[Pagination, Autoplay]}
-				pagination={{
-					clickable: true
-				}}
-				autoplay={{
-					delay: 2000,
-					disableOnInteraction: true
-				}}
-				loop={true}>
+			<Swiper {...swiperOption.current}>
 				{youtube.map((vid, idx) => {
 					if (idx >= 5) return null;
 					return (
