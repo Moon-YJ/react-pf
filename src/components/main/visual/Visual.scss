@@ -6,25 +6,40 @@
 	height: calc(100vh - 90px);
 	.txt-box {
 		position: relative;
-		width: 40%;
+		width: 60%;
 		height: 100%;
-		li {
-			position: absolute;
-			top: 20%;
-			left: 0;
-			font-size: 2rem;
-			opacity: 0;
-			transform: scale(1.5);
-			transition: opacity 0.5s, transform 1s;
-			&.on {
-				opacity: 1;
-				transform: scale(1);
+		padding-left: 15vw;
+		ul {
+			width: 100%;
+			height: 100%;
+			position: relative;
+			li {
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				top: 0;
+				left: 0;
+				display: flex;
+				flex-wrap: wrap;
+				align-content: center;
+				font-size: 3rem;
+				opacity: 0;
+				transform: scale(1.5);
+				transition: opacity 1s, transform 1s;
+				h3 {
+					font-weight: normal;
+					color: var(--baseColor);
+				}
+				&.on {
+					opacity: 1;
+					transform: scale(1);
+				}
 			}
 		}
 	}
 	.swiper {
 		display: inline-block;
-		width: 60%;
+		width: 100%;
 		height: 100%;
 		padding: 10vw 0;
 		.swiper-wrapper {
@@ -77,6 +92,26 @@
 						opacity: 0.7;
 					}
 				}
+			}
+		}
+	}
+	.preview {
+		> p {
+			position: absolute;
+			bottom: 5vh;
+			width: 200px;
+			height: 80px;
+			overflow: hidden;
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+			&.prev-box {
+				left: 0;
+			}
+			&.next-box {
+				right: 0;
 			}
 		}
 	}

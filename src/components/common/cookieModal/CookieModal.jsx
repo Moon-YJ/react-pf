@@ -10,7 +10,7 @@ export default function CookieModal({ wid, ht, children }) {
 
 	const handleClose = () => {
 		const isChk = chkVal.current.checked;
-		if (isChk) setCookie('today', 'done', 20);
+		if (isChk) setCookie('today', 'done', 60 * 60 * 12);
 		setClose(true);
 	};
 
