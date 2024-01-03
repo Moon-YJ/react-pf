@@ -21,10 +21,14 @@ export default function Visual() {
 		//pagination: { clickable: true, renderBullet: (index, className) => `<span class=${className}>${index + 1}</span>` },
 		autoplay: { delay: 2000, disableOnInteraction: true },
 		loop: true
+		// slidesPerView: 3,
+		// spaceBetween: 30,
+		// centeredSlides: true
 	});
 
 	return (
 		<figure className='Visual'>
+			{/* <Swiper modules={[Pagination, Autoplay]} pagination={{ clickable: true }} autoplay={{ delay: 2000, disableOnInteraction: true }} loop={true}> */}
 			<Swiper {...swiperOption.current}>
 				{youtube.map((vid, idx) => {
 					if (idx >= 5) return null;
@@ -58,7 +62,6 @@ export default function Visual() {
 						</SwiperSlide>
 					);
 				})}
-
 				<Btns swiperRef={swiperRef} />
 			</Swiper>
 		</figure>
@@ -69,10 +72,10 @@ function Btns({ swiperRef }) {
 	// Swiper 컴포넌트 안쪽에 있는 또다른 자식 컴포넌트 안쪽에서만 useSwiper hook 사용 가능
 	// hook으로부터 생성된 인스턴스 객체에 있는 다양한 prototype 메서드와 property값 활용 가능
 	swiperRef.current = useSwiper();
-	// 처음 마운트시 마지막 슬라이드가 보이는 이슈(loop사용때문) - 강제로 처음에만 다음슬라이드 넘겨서 해결
+
+	// 처음 마운트시 마지막 슬라이드가 보이는 이슈(loop사용때문) - activeIndex 설정하여 해결
 	useEffect(() => {
-		swiperRef.current.init(0);
-		swiperRef.current.slideNext(300);
+		swiperRef.current.activeIndex = 1;
 	}, [swiperRef]);
 
 	return (
