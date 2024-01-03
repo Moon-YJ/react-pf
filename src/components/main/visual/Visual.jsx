@@ -15,7 +15,6 @@ export default function Visual() {
 		autoplay: { delay: 2000, disableOnInteraction: true },
 		loop: true,
 		slidesPerView: 3,
-		spaceBetween: 30,
 		centeredSlides: true,
 		// 맨 처음에 왼쪽 첫번째 슬라이드 비워져있는 부분 없게 처리
 		onSwiper: swiper => {
@@ -37,6 +36,9 @@ export default function Visual() {
 											alt={data.snippet.title}
 										/>
 									</Link>
+								</div>
+								<div className='txt-box'>
+									<h2>{data.snippet.title}</h2>
 								</div>
 							</div>
 						</SwiperSlide>
