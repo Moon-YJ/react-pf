@@ -2,16 +2,21 @@ import { useYoutubeQuery } from '../../../hooks/useYoutubeQuery';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import './Visual.scss';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 export default function Visual() {
 	const { data, isSuccess } = useYoutubeQuery();
+	const [Index, setIndex] = useState(0);
+	console.log(Index);
+
 	const swiperOpt = useRef({
 		loop: true,
 		slidesPerView: 1,
 		spaceBetween: 50,
 		centeredSlides: true,
 		onSwiper: swiper => swiper.slideNext(300),
+		// loop: true이면 realIndex 사용, false이면 activeIndex 사용
+		onSlideChange: swiper => setIndex(swiper.realIndex),
 		breakpoints: {
 			1000: { slidesPerView: 2 },
 			1400: { slidesPerView: 3 }
