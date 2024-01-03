@@ -90,7 +90,7 @@ function Btns({ swiperRef }) {
 	// 처음 마운트시 마지막 슬라이드가 보이는 이슈(loop사용때문) - activeIndex 설정하여 해결
 	useEffect(() => {
 		swiperRef.current.activeIndex = 1;
-		swiperRef.current.on('slideChange', () => {
+		swiperRef.current.on('click', () => {
 			swiperRef.current.autoplay.running ? setRolling(true) : setRolling(false);
 		});
 	}, [swiperRef]);
