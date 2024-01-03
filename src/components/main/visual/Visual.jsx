@@ -14,8 +14,14 @@ export default function Visual() {
 		pagination: { clickable: true },
 		autoplay: { delay: 2000, disableOnInteraction: true },
 		loop: true,
-		slidesPerView: 3,
+		slidesPerView: 1,
 		centeredSlides: true,
+		// 반응형 작업
+		breakpoints: {
+			1000: {
+				slidesPerView: 3
+			}
+		},
 		// 맨 처음에 왼쪽 첫번째 슬라이드 비워져있는 부분 없게 처리
 		onSwiper: swiper => {
 			swiper.slideNext(300);
