@@ -6,7 +6,7 @@ import { useSwiper } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination, Autoplay } from 'swiper';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useCustomText } from '../../../hooks/useText';
 import { Link } from 'react-router-dom';
 import { useRef } from 'react';
@@ -72,25 +72,31 @@ function Btns({ swiperRef }) {
 	// Swiper 컴포넌트 안쪽에 있는 또다른 자식 컴포넌트 안쪽에서만 useSwiper hook 사용 가능
 	// hook으로부터 생성된 인스턴스 객체에 있는 다양한 prototype 메서드와 property값 활용 가능
 	swiperRef.current = useSwiper();
+	const [Rolling, setRolling] = useState(true);
+
+	const startRolling = () => {
+		// 다시 롤링시작 버튼 클릭시 delay 없이 바로 slide 넘기기 위해서
+		// 일단 다음 슬라이드 넘기고 동시에 롤링 재시작
+		swiperRef.current.slideNext(200);
+		swiperRef.current.autoplay.start();
+		setRolling(true);
+	};
+
+	const stopRolling = () => {
+		swiperRef.current.autoplay.stop();
+		setRolling(false);
+	};
 
 	// 처음 마운트시 마지막 슬라이드가 보이는 이슈(loop사용때문) - activeIndex 설정하여 해결
 	useEffect(() => {
 		swiperRef.current.activeIndex = 1;
+		swiperRef.current.on('slideChange', () => {
+			swiperRef.current.autoplay.running ? setRolling(true) : setRolling(false);
+		});
 	}, [swiperRef]);
 
 	return (
-		<nav className='swiper-controller'>
-			<button
-				onClick={() => {
-					// 다시 롤링시작 버튼 클릭시 delay 없이 바로 slide 넘기기 위해서
-					// 일단 다음 슬라이드 넘기고 동시에 롤링 재시작
-					swiperRef.current.slideNext(200);
-					swiperRef.current.autoplay.start();
-				}}>
-				play
-			</button>
-			<button onClick={() => swiperRef.current.autoplay.stop()}>stop</button>
-		</nav>
+		<nav className='swiper-controller'>{Rolling ? <button onClick={stopRolling}>stop</button> : <button onClick={startRolling}>play</button>}</nav>
 	);
 }
 
