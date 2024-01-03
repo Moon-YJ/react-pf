@@ -9,19 +9,12 @@ export default function Visual() {
 	const swiperOpt = useRef({
 		loop: true,
 		slidesPerView: 1,
+		spaceBetween: 50,
 		centeredSlides: true,
+		onSwiper: swiper => swiper.slideNext(300),
 		breakpoints: {
-			1000: {
-				slidesPerView: 2,
-				spaceBetween: 50
-			},
-			1400: {
-				slidesPerView: 3,
-				spaceBetween: 50
-			}
-		},
-		onSwiper: swiper => {
-			swiper.slideNext(300);
+			1000: { slidesPerView: 2 },
+			1400: { slidesPerView: 3 }
 		}
 	});
 	return (
