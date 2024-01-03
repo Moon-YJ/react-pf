@@ -1,5 +1,45 @@
 .Visual {
 	position: relative;
+	display: flex;
+	justify-content: flex-end;
 	width: 100%;
 	height: calc(100vh - 90px);
+	.txt-box {
+		width: 30%;
+		height: 100%;
+		border: 1px solid blue;
+	}
+	.swiper {
+		display: inline-block;
+		width: 70%;
+		height: 100%;
+		padding: 10vw 0;
+		border: 1px solid red;
+		.swiper-wrapper {
+			height: inherit;
+			.swiper-slide {
+				width: 100%;
+				height: inherit;
+				.pic {
+					position: relative;
+					width: 100%;
+					height: 100%;
+					> p {
+						position: absolute;
+						top: 0;
+						left: 0;
+						width: 100%;
+						height: 100%;
+						overflow: hidden;
+						img {
+							width: 100%;
+							height: 100%;
+							object-fit: cover;
+							transform: scale(1.4);
+						}
+					}
+				}
+			}
+		}
+	}
 }
