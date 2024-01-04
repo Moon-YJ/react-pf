@@ -47,7 +47,7 @@ export default function Btns() {
 							// new Anime(선택자, {속성명1: 속성값1, 속성명2:속성값2}, {duration: 속도, easeType: 가속도, callback: 컴플리트함수})
 							onClick={() => {
 								if (sections.current[idx].offsetTop === wrap.current.scrollTop) return null;
-								else new Anime(wrap.current, { scroll: sections.current[idx].offsetTop }, { duration: 700, easeType: 'ease2' });
+								else new Anime(wrap.current, { scroll: sections.current[idx].offsetTop }, { ease: [0.43, -1.06, 0.69, 1.72], duration: 700 });
 							}}></li>
 					);
 				})}
