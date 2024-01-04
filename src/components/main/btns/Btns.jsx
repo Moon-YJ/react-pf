@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import './Btns.scss';
 import Anime from '../../../asset/anime';
 import { useThrottle } from '../../../hooks/useThrottle';
@@ -26,10 +26,34 @@ export default function Btns() {
 		});
 	};
 
-	const handleClick = idx => {
+	const handleScroll = idx => {
 		if (sections.current[idx].offsetTop === wrap.current.scrollTop) return null;
-		else new Anime(wrap.current, { scroll: sections.current[idx].offsetTop }, { ease: [0.43, -1.06, 0.69, 1.72], duration: 700 });
+		else new Anime(wrap.current, { scroll: sections.current[idx].offsetTop }, { duration: 500 });
 	};
+
+	const handleWheel = useCallback(
+		e => {
+			const btnArr = Array.from(btns.current.children);
+			const activeEl = btns.current.querySelector('li.on');
+			// 현재 활성화된 버튼의 순번 구하기
+			const activeIdx = btnArr.indexOf(activeEl);
+			console.log(activeIdx);
+			// e.deltaY 속성은 해당 이벤트의 스크롤 이동에 대한 정보를 제공 마우스휠 위로 올리면 -100, 아래로 내리면 100
+			// console.dir(e.deltaY);
+			// 마우스휠 내렸을때
+			if (e.deltaY > 0) {
+				console.log('wheel down');
+				// 현재 활성화된 순번이 마지막순번이 아니면 다음순번 섹션위치로 모션이동
+				activeIdx !== Num - 1 && handleScroll(activeIdx + 1);
+				// 마우스휠 올릴때
+			} else {
+				console.log('wheel up');
+				// 현재 순번이 첫번째 순번이 아니면 이전순번 섹션 위치로 모션이동
+				activeIdx !== 0 && handleScroll(activeIdx - 1);
+			}
+		},
+		[Num]
+	);
 
 	const throttled = useThrottle(activation);
 
@@ -39,8 +63,12 @@ export default function Btns() {
 		setNum(sections.current.length);
 
 		wrap.current.addEventListener('scroll', throttled);
-		return () => wrap.current.removeEventListener('scroll', throttled);
-	}, [throttled]);
+		wrap.current.addEventListener('mousewheel', handleWheel);
+		return () => {
+			wrap.current.removeEventListener('scroll', throttled);
+			wrap.current.removeEventListener('mousewheel', handleWheel);
+		};
+	}, [throttled, handleWheel]);
 
 	return (
 		<ul
@@ -54,7 +82,7 @@ export default function Btns() {
 							key={idx}
 							className={idx === 0 ? 'on' : ''}
 							// new Anime(선택자, {속성명1: 속성값1, 속성명2:속성값2}, {duration: 속도, easeType: 가속도, callback: 컴플리트함수})
-							onClick={() => handleClick(idx)}></li>
+							onClick={() => handleScroll(idx)}></li>
 					);
 				})}
 		</ul>
