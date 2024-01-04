@@ -8,12 +8,12 @@ import { useThrottle } from '../../../hooks/useThrottle';
 // DOM.offsetTop: 문서에서 해당 돔요소의 세로 위치값 (정적인 값)
 
 export default function Btns() {
-	const [Index, setIndex] = useState(0);
 	const [Num, setNum] = useState(0);
 	const sections = useRef(null);
 	const wrap = useRef(null);
 	const btns = useRef(null);
-	const base = useRef(-450);
+	// 1/3이상이 보이는 순간부터 다음버튼으로 활성화
+	const base = useRef(-window.innerHeight / 3);
 
 	const activation = () => {
 		const scroll = wrap.current.scrollTop;
@@ -47,7 +47,7 @@ export default function Btns() {
 					return (
 						<li
 							key={idx}
-							className={idx === Index ? 'on' : ''}
+							className={idx === 0 ? 'on' : ''}
 							// new Anime(선택자, {속성명1: 속성값1, 속성명2:속성값2}, {duration: 속도, easeType: 가속도, callback: 컴플리트함수})
 							onClick={() => {
 								if (sections.current[idx].offsetTop === wrap.current.scrollTop) return null;

@@ -11,7 +11,7 @@ export default function Info() {
 		if (data) return JSON.parse(data);
 		else return postData.dummyPosts;
 	};
-	const [Post] = useState(getLocalData);
+	const [Post] = useState(getLocalData());
 
 	return (
 		<section className='Info myScroll'>
