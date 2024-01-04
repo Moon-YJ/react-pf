@@ -1,29 +1,26 @@
 import { useYoutubeQuery } from '../../../hooks/useYoutubeQuery';
-import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import './Visual.scss';
 import { useEffect, useRef, useState } from 'react';
 
 export default function Visual() {
 	const { data, isSuccess } = useYoutubeQuery();
-	console.log(data, '::data');
-	const [Index, setIndex] = useState(1);
-	const [PrevIndex, setPrevIndex] = useState(0);
-	const [NextIndex, setNextIndex] = useState(2);
-	console.log(PrevIndex, '::prev');
-	console.log(NextIndex, '::next');
+	const [Index, setIndex] = useState(2);
+	const [PrevIndex, setPrevIndex] = useState(1);
+	const [NextIndex, setNextIndex] = useState(3);
+	const swiperRef = useRef(null);
 	const num = useRef(5);
 	const swiperOpt = useRef({
 		loop: true,
 		slidesPerView: 1,
 		spaceBetween: 30,
 		centeredSlides: true,
-		//onSwiper: swiper => swiper.slideNext(300),
-		//onSwiper: swiper => (swiper.activeIndex = 3),
+		onSwiper: swiper => (swiperRef.current = swiper),
 		// loop: true이면 realIndex 사용, false이면 activeIndex 사용
 		onSlideChange: swiper => setIndex(swiper.realIndex),
 		breakpoints: {
-			600: { slidesPerView: 2 },
+			640: { slidesPerView: 2 },
 			1200: { slidesPerView: 3 }
 		}
 	});
@@ -56,7 +53,6 @@ export default function Visual() {
 						if (idx >= num.current) return null;
 						return (
 							<SwiperSlide key={el.id}>
-								<h1>{idx}</h1>
 								<div className='pic'>
 									<p>
 										<img
@@ -77,13 +73,17 @@ export default function Visual() {
 			</Swiper>
 			{isSuccess && (
 				<nav className='preview'>
-					<p className='prev-box'>
+					<p
+						className='prev-box'
+						onClick={() => swiperRef.current.slidePrev(400)}>
 						<img
 							src={data[PrevIndex].snippet.thumbnails.standard.url}
 							alt={data[PrevIndex].snippet.title}
 						/>
 					</p>
-					<p className='next-box'>
+					<p
+						className='next-box'
+						onClick={() => swiperRef.current.slideNext(400)}>
 						<img
 							src={data[NextIndex].snippet.thumbnails.standard.url}
 							alt={data[NextIndex].snippet.title}

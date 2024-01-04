@@ -1,24 +1,25 @@
 .Visual {
 	position: relative;
-	display: flex;
-	justify-content: flex-end;
 	width: 100%;
 	height: calc(100vh - 90px);
 	.txt-box {
-		position: relative;
-		width: 60%;
+		z-index: 2;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 40%;
 		height: 100%;
 		padding-left: 15vw;
 		ul {
+			position: relative;
 			width: 100%;
 			height: 100%;
-			position: relative;
 			li {
-				width: 100%;
-				height: 100%;
 				position: absolute;
 				top: 0;
 				left: 0;
+				width: 100%;
+				height: 100%;
 				display: flex;
 				flex-wrap: wrap;
 				align-content: center;
@@ -38,8 +39,11 @@
 		}
 	}
 	.swiper {
+		position: absolute;
+		top: 0;
+		right: 0;
 		display: inline-block;
-		width: 100%;
+		width: 80%;
 		height: 100%;
 		padding: 10vw 0;
 		.swiper-wrapper {
@@ -97,6 +101,7 @@
 	}
 	.preview {
 		> p {
+			z-index: 6;
 			position: absolute;
 			bottom: 5vh;
 			width: 200px;
