@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import './Btns.scss';
+import Anime from '../../../asset/anime';
 
 // window.scrollY: 브라우저를 스크롤할때마다 스크롤되고있는 거리값 (동적인 값)
 // DOM.scrollTop: DOM요소 안쪽에서 스크롤할때마다 스크롤되는 거리값 (동적인 값)
@@ -29,6 +30,7 @@ export default function Btns() {
 		setNum(sections.current.length);
 
 		wrap.current.addEventListener('scroll', activation);
+		return () => wrap.current.removeEventListener('scroll', activation);
 	}, []);
 
 	return (
@@ -41,7 +43,20 @@ export default function Btns() {
 					return (
 						<li
 							key={idx}
-							className={idx === Index ? 'on' : ''}></li>
+							className={idx === Index ? 'on' : ''}
+							onClick={() => {
+								if (idx === Index) return null;
+								else
+									new Anime(
+										wrap.current,
+										{ scroll: sections.current[idx].offsetTop }
+										// {
+										// 	callback: () => {
+										// 		new Anime(wrap.current, { scroll: 0 });
+										// 	}
+										// }
+									);
+							}}></li>
 					);
 				})}
 		</ul>
