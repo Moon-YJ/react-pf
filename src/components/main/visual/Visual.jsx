@@ -14,10 +14,10 @@ export default function Visual() {
 	const num = useRef(5);
 	const swiperOpt = useRef({
 		modules: [Autoplay],
-		observer: true,
 		loop: true,
 		slidesPerView: 1,
 		spaceBetween: 30,
+		loopedSlides: num.current, // loop모드일때 실제 동작될 슬라이드 개수 지정하면 초기 슬라이드 인식해서 1번부터 보여줌
 		centeredSlides: true,
 		autoplay: { delay: 2500, disableOnInteraction: true },
 		onSwiper: swiper => (swiperRef.current = swiper),
