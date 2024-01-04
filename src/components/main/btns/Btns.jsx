@@ -7,14 +7,15 @@ import './Btns.scss';
 
 export default function Btns() {
 	const [Index, setIndex] = useState(0);
-	const num = useRef(4);
-	const btns = useRef(null);
+	const [Num, setNum] = useState(0);
 	const sections = useRef(null);
 	const wrap = useRef(null);
 
 	useEffect(() => {
 		wrap.current = document.querySelector('.wrap');
 		sections.current = document.querySelectorAll('.myScroll');
+		setNum(sections.current.length);
+
 		wrap.current.addEventListener('scroll', e => {
 			console.log(e.target.scrollTop, '::scroll');
 			console.log(sections.current[1].offsetTop, '::offset');
@@ -23,7 +24,7 @@ export default function Btns() {
 
 	return (
 		<ul className='Btns'>
-			{Array(num.current)
+			{Array(Num)
 				.fill()
 				.map((_, idx) => {
 					return (
