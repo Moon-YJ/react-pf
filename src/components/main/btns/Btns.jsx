@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import './Btns.scss';
 import Anime from '../../../asset/anime';
+import { useThrottle } from '../../../hooks/useThrottle';
 
 // window.scrollY: 브라우저를 스크롤할때마다 스크롤되고있는 거리값 (동적인 값)
 // DOM.scrollTop: DOM요소 안쪽에서 스크롤할때마다 스크롤되는 거리값 (동적인 값)
@@ -12,26 +13,29 @@ export default function Btns() {
 	const sections = useRef(null);
 	const wrap = useRef(null);
 	const btns = useRef(null);
+	const base = useRef(-450);
 
 	const activation = () => {
 		const scroll = wrap.current.scrollTop;
 		// children으로 받아진 요소는 유사배열이므로 Array.from 사용해서 순수배열로 변경 ==> forEach 사용가능
 		sections.current.forEach((_, idx) => {
-			if (scroll >= sections.current[idx].offsetTop) {
+			if (scroll >= sections.current[idx].offsetTop + base.current) {
 				Array.from(btns.current.children).forEach(btn => btn.classList.remove('on'));
 				btns.current.children[idx].classList.add('on');
 			}
 		});
 	};
 
+	const throttled = useThrottle(activation);
+
 	useEffect(() => {
 		wrap.current = document.querySelector('.wrap');
 		sections.current = document.querySelectorAll('.myScroll');
 		setNum(sections.current.length);
 
-		wrap.current.addEventListener('scroll', activation);
-		return () => wrap.current.removeEventListener('scroll', activation);
-	}, []);
+		wrap.current.addEventListener('scroll', throttled);
+		return () => wrap.current.removeEventListener('scroll', throttled);
+	}, [throttled]);
 
 	return (
 		<ul
