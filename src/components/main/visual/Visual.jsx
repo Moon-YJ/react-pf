@@ -20,8 +20,8 @@ export default function Visual() {
 		// loop: true이면 realIndex 사용, false이면 activeIndex 사용
 		onSlideChange: swiper => setIndex(swiper.realIndex),
 		breakpoints: {
-			640: { slidesPerView: 2 },
-			1200: { slidesPerView: 3 }
+			1000: { slidesPerView: 2 },
+			1400: { slidesPerView: 3 }
 		}
 	});
 
