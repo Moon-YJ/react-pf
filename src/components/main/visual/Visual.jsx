@@ -14,6 +14,7 @@ export default function Visual() {
 	const num = useRef(5);
 	const swiperOpt = useRef({
 		modules: [Autoplay],
+		observer: true,
 		loop: true,
 		slidesPerView: 1,
 		spaceBetween: 30,
@@ -26,9 +27,13 @@ export default function Visual() {
 			swiper.realIndex === 0 ? setPrevIndex(num.current - 1) : setPrevIndex(swiper.realIndex - 1);
 			swiper.realIndex === num.current - 1 ? setNextIndex(0) : setNextIndex(swiper.realIndex + 1);
 		},
+		onResize: () => {
+			if (window.innerWidth < 1000) console.log('aa');
+		},
 		breakpoints: {
-			1000: { slidesPerView: 2 },
-			1400: { slidesPerView: 3 }
+			//1000: { slidesPerView: 2 },
+			//1400: { slidesPerView: 3 }
+			1000: { slidesPerView: 3 }
 		}
 	});
 
@@ -40,7 +45,7 @@ export default function Visual() {
 	*/
 
 	return (
-		<figure className='Visual myScroll'>
+		<figure className='Visual'>
 			<div className='txt-box'>
 				<ul>
 					{isSuccess &&

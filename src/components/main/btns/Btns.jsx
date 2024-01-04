@@ -14,6 +14,10 @@ export default function Btns() {
 	const btns = useRef(null);
 	// 1/3이상이 보이는 순간부터 다음버튼으로 활성화
 	const base = useRef(-window.innerHeight / 3);
+	// isMotion.current 값이 true이면 모션중이므로 재실행 방지, false이면 모션중이 아니므로 재실행 가능하게 처리
+	const isMotion = useRef(false);
+	// auto 스크롤 기능 사용 유무
+	const isAutoScroll = useRef(false);
 
 	const activation = () => {
 		const scroll = wrap.current.scrollTop;
@@ -27,8 +31,22 @@ export default function Btns() {
 	};
 
 	const handleScroll = idx => {
+		// 초기값이 false이므로 처음 한번은 해당 조건문이 무시되면서 아래 코드 실행됨
+		if (isMotion.current) return;
+		// 위 조건문을 통과하자마자 바로 값을 true로 변경해서 다음부터는 재호출되지 않도록 막음
+		isMotion.current = true;
+		console.log('move');
 		if (sections.current[idx].offsetTop === wrap.current.scrollTop) return null;
-		else new Anime(wrap.current, { scroll: sections.current[idx].offsetTop }, { duration: 500 });
+		// 모션함수가 실행되고 모션이 끝나는 순간 실행되는 callback으로 다시 isMotion.current값을 false로 변경해서 모션 재실행 가능하게 설정
+		// 결론 - isMotion.current값을 이용해서 모션중에는 중복으로 함수 호출 불가능하도록 모션 중 재이벤트 방지 처리(useThrottle이나 useDebounce 사용 불가)
+		else
+			new Anime(
+				wrap.current,
+				{ scroll: sections.current[idx].offsetTop },
+				{
+					callback: () => (isMotion.current = false)
+				}
+			);
 	};
 
 	const handleWheel = useCallback(
@@ -37,17 +55,15 @@ export default function Btns() {
 			const activeEl = btns.current.querySelector('li.on');
 			// 현재 활성화된 버튼의 순번 구하기
 			const activeIdx = btnArr.indexOf(activeEl);
-			console.log(activeIdx);
+
 			// e.deltaY 속성은 해당 이벤트의 스크롤 이동에 대한 정보를 제공 마우스휠 위로 올리면 -100, 아래로 내리면 100
 			// console.dir(e.deltaY);
 			// 마우스휠 내렸을때
 			if (e.deltaY > 0) {
-				console.log('wheel down');
 				// 현재 활성화된 순번이 마지막순번이 아니면 다음순번 섹션위치로 모션이동
 				activeIdx !== Num - 1 && handleScroll(activeIdx + 1);
 				// 마우스휠 올릴때
 			} else {
-				console.log('wheel up');
 				// 현재 순번이 첫번째 순번이 아니면 이전순번 섹션 위치로 모션이동
 				activeIdx !== 0 && handleScroll(activeIdx - 1);
 			}
@@ -55,20 +71,31 @@ export default function Btns() {
 		[Num]
 	);
 
-	const throttled = useThrottle(activation);
+	const modifyPos = () => {
+		const btnArr = Array.from(btns.current.children);
+		const activeEl = btns.current.querySelector('li.on');
+		const activeIdx = btnArr.indexOf(activeEl);
+		wrap.current.style.scrollTop = sections.current[activeIdx].offsetTop;
+	};
+
+	const throttledAct = useThrottle(activation);
+	const throttledPos = useThrottle(modifyPos, 200);
 
 	useEffect(() => {
 		wrap.current = document.querySelector('.wrap');
 		sections.current = document.querySelectorAll('.myScroll');
 		setNum(sections.current.length);
 
-		wrap.current.addEventListener('scroll', throttled);
-		wrap.current.addEventListener('mousewheel', handleWheel);
+		wrap.current.addEventListener('scroll', throttledAct);
+		// auto 스크롤 기능 사용 안하는 경우
+		isAutoScroll.current && wrap.current.addEventListener('mousewheel', handleWheel);
+		window.addEventListener('resize', throttledPos);
 		return () => {
-			wrap.current.removeEventListener('scroll', throttled);
+			wrap.current.removeEventListener('scroll', throttledAct);
 			wrap.current.removeEventListener('mousewheel', handleWheel);
+			window.removeEventListener('resize', throttledPos);
 		};
-	}, [throttled, handleWheel]);
+	}, [throttledAct, handleWheel, throttledPos]);
 
 	return (
 		<ul

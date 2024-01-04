@@ -8,7 +8,7 @@ export default function Header() {
 	const { MenuOpen, setMenuOpen } = useGlobalData();
 
 	return (
-		<header className='Header'>
+		<header className='Header myScroll'>
 			<h1>
 				<Link to='/'>DCODELAB</Link>
 			</h1>
