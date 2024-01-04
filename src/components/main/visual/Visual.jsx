@@ -21,6 +21,7 @@ export default function Visual() {
 		//pagination: { clickable: true, renderBullet: (index, className) => `<span class=${className}>${index + 1}</span>` },
 		autoplay: { delay: 2000, disableOnInteraction: true },
 		loop: true,
+		loopedSlides: 5,
 		onSwiper: swiper => {
 			swiperRef.current = swiper;
 			swiperRef.current.pagination.el.addEventListener('click', () => {
