@@ -44,18 +44,10 @@ export default function Btns() {
 						<li
 							key={idx}
 							className={idx === Index ? 'on' : ''}
+							// new Anime(선택자, {속성명1: 속성값1, 속성명2:속성값2}, {duration: 속도, easeType: 가속도, callback: 컴플리트함수})
 							onClick={() => {
-								if (idx === Index) return null;
-								else
-									new Anime(
-										wrap.current,
-										{ scroll: sections.current[idx].offsetTop }
-										// {
-										// 	callback: () => {
-										// 		new Anime(wrap.current, { scroll: 0 });
-										// 	}
-										// }
-									);
+								if (sections.current[idx].offsetTop === wrap.current.scrollTop) return null;
+								else new Anime(wrap.current, { scroll: sections.current[idx].offsetTop }, { duration: 700, easeType: 'ease2' });
 							}}></li>
 					);
 				})}
