@@ -10,20 +10,31 @@ export default function Btns() {
 	const [Num, setNum] = useState(0);
 	const sections = useRef(null);
 	const wrap = useRef(null);
+	const btns = useRef(null);
+
+	const activation = () => {
+		const scroll = wrap.current.scrollTop;
+		// children으로 받아진 요소는 유사배열이므로 Array.from 사용해서 순수배열로 변경 ==> forEach 사용가능
+		sections.current.forEach((_, idx) => {
+			if (scroll >= sections.current[idx].offsetTop) {
+				Array.from(btns.current.children).forEach(btn => btn.classList.remove('on'));
+				btns.current.children[idx].classList.add('on');
+			}
+		});
+	};
 
 	useEffect(() => {
 		wrap.current = document.querySelector('.wrap');
 		sections.current = document.querySelectorAll('.myScroll');
 		setNum(sections.current.length);
 
-		wrap.current.addEventListener('scroll', e => {
-			console.log(e.target.scrollTop, '::scroll');
-			console.log(sections.current[1].offsetTop, '::offset');
-		});
+		wrap.current.addEventListener('scroll', activation);
 	}, []);
 
 	return (
-		<ul className='Btns'>
+		<ul
+			className='Btns'
+			ref={btns}>
 			{Array(Num)
 				.fill()
 				.map((_, idx) => {

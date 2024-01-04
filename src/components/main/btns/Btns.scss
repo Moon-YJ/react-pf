@@ -11,6 +11,7 @@
 		background-color: var(--baseColor);
 		border-radius: 5px;
 		cursor: pointer;
+		transition: 0.3s;
 		&.on {
 			height: 60px;
 			background-color: orangered;
