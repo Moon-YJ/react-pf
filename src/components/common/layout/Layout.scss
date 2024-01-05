@@ -2,12 +2,12 @@
 	position: relative;
 	width: 70vw;
 	margin: 100px auto;
-	padding-top: 200px;
+	top: 200px;
 	min-height: 60vh;
 	opacity: 0;
 	//transform-origin: left top;
 	//transform: translateY(200px);
-	transition: opacity 1s, padding 0.7s;
+	transition: opacity 1s, top 0.7s;
 
 	h1 {
 		font-size: 0;
@@ -45,7 +45,7 @@
 	}
 
 	&.on {
-		padding-top: 0;
+		top: 0;
 		opacity: 1;
 		//transform: translateY(0px);
 		h1 {
