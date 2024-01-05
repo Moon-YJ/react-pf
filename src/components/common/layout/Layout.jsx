@@ -25,7 +25,7 @@ export default function Layout({ children, title }) {
 		}, 300);
 
 		// window에 연결된게 아니고 언마운트시 사라지는 참조객체에 연결되어있으므로 클린업함수 적용하지 않아도 됨
-		scrollFrame.current.addEventListener('scroll', () => handleScroll(300));
+		scrollFrame?.addEventListener('scroll', () => handleScroll(300));
 	}, [splitTxt, title, scrollTo, scrollFrame, getCurrentScroll, handleScroll]);
 
 	return (
