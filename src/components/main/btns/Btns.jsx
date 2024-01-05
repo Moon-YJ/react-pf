@@ -104,12 +104,17 @@ export default function Btns(opt) {
 		isAutoScroll.current && wrap.current.addEventListener('mousewheel', handleWheel);
 		window.addEventListener('resize', throttledPos);
 		return () => {
-			setMounted(false);
 			wrap.current.removeEventListener('scroll', throttledAct);
 			wrap.current.removeEventListener('mousewheel', handleWheel);
 			window.removeEventListener('resize', throttledPos);
 		};
 	}, [throttledAct, handleWheel, throttledPos, resultOpt.current.frame, resultOpt.current.items]);
+
+	// 컴포넌트 언마운트시 한번만 동작되어야 하기 때문에
+	// 의존성 배열이 비어있는 useEffect 안쪽의 클린업 함수에서 Mounted 값 변경 (위에 useEffect에 넣으면 activation함수 동작 안하는 오류 생김)
+	useEffect(() => {
+		return () => setMounted(false);
+	}, []);
 
 	return (
 		<ul
