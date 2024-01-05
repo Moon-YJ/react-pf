@@ -11,9 +11,10 @@ export function useScroll(frame = '.wrap') {
 	};
 
 	// 실시간 scroll값 반환 메서드
-	const getCurrentScroll = () => {
+	const getCurrentScroll = selfEl => {
 		const scroll = scrollFrame.current.scrollTop;
-		return scroll;
+		const modifiedScroll = scroll - selfEl?.offsetTop;
+		return modifiedScroll;
 	};
 
 	// 컴포넌트 마운트시 scrollFrame에 선택자 담기
