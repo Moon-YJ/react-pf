@@ -126,3 +126,13 @@ export default function Btns(opt) {
 		</ul>
 	);
 }
+
+/*
+	VirtualDOM vs RealDOM (리액트에서 쓰는 개념)
+	- VirtualDOM: 스크립트를 통해서 가상으로 만든 DOM
+	- RealDOM: HTML을 통해서 생성한 DOM
+
+	LiveDOM vs StaticDOM (둘다 RealDOM)
+	- LiveDOM: 계속 속성값이 갱신되는 DOM
+	- StaticDOM: 변수에 할당된 순간의 정보값으로 고정된 DOM
+*/
