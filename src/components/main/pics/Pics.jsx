@@ -1,20 +1,26 @@
 import './Pics.scss';
 import { useScroll } from '../../../hooks/useScroll';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export default function Pics() {
+	const [Frame, setFrame] = useState(null);
 	const thisEl = useRef(null);
 	const boxEl = useRef(null);
-	const { scrollFrame, getCurrentScroll } = useScroll();
+	const { getCurrentScroll } = useScroll(Frame);
+
+	const handleScroll = useCallback(() => {
+		const scroll = getCurrentScroll(thisEl.current, -window.innerHeight / 2);
+		if (scroll >= 0) boxEl.current.style.transform = `translateX(${scroll}px)`;
+		//boxEl.current.style.transform = `translateX(${scroll}px)`;
+	}, [getCurrentScroll]);
 
 	useEffect(() => {
-		scrollFrame?.addEventListener('scroll', () => {
-			const scroll = getCurrentScroll(thisEl.current);
-			// 닫는 순간부터 움직이게
-			if (scroll >= 0) boxEl.current.style.transform = `translateX(${scroll}px)`;
-			//boxEl.current.style.transform = `translateX(${scroll}px)`;
-		});
-	}, [scrollFrame, getCurrentScroll]);
+		setFrame(thisEl.current?.closest('.wrap'));
+	}, []);
+
+	useEffect(() => {
+		Frame?.addEventListener('scroll', handleScroll);
+	}, [Frame, getCurrentScroll, handleScroll]);
 
 	return (
 		<section
