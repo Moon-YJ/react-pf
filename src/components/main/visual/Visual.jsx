@@ -7,9 +7,9 @@ import { useRef, useState } from 'react';
 
 export default function Visual() {
 	const { data, isSuccess } = useYoutubeQuery();
-	const [Index, setIndex] = useState(2);
-	const [PrevIndex, setPrevIndex] = useState(1);
-	const [NextIndex, setNextIndex] = useState(3);
+	const [Index, setIndex] = useState(0);
+	const [PrevIndex, setPrevIndex] = useState(0);
+	const [NextIndex, setNextIndex] = useState(0);
 	const swiperRef = useRef(null);
 	const num = useRef(5);
 	const swiperOpt = useRef({
@@ -27,9 +27,6 @@ export default function Visual() {
 			swiper.realIndex === 0 ? setPrevIndex(num.current - 1) : setPrevIndex(swiper.realIndex - 1);
 			swiper.realIndex === num.current - 1 ? setNextIndex(0) : setNextIndex(swiper.realIndex + 1);
 		},
-		onResize: () => {
-			if (window.innerWidth < 1000) console.log('aa');
-		},
 		breakpoints: {
 			//1000: { slidesPerView: 2 },
 			//1400: { slidesPerView: 3 }
@@ -46,6 +43,14 @@ export default function Visual() {
 
 	return (
 		<figure className='Visual'>
+			<div className='barFrame'>
+				<p
+					className='bar'
+					style={{ width: (100 / num.current) * (Index + 1) + '%' }}></p>
+			</div>
+			<div className='counter'>
+				<strong>0{Index + 1}</strong>/<span>0{num.current}</span>
+			</div>
 			<div className='txt-box'>
 				<ul>
 					{isSuccess &&
@@ -85,26 +90,42 @@ export default function Visual() {
 						);
 					})}
 			</Swiper>
-			{isSuccess && (
-				<nav className='preview'>
-					<p
-						className='prev-box'
-						onClick={() => swiperRef.current.slidePrev(400)}>
-						<img
-							src={data[PrevIndex].snippet.thumbnails.standard.url}
-							alt={data[PrevIndex].snippet.title}
-						/>
-					</p>
-					<p
-						className='next-box'
-						onClick={() => swiperRef.current.slideNext(400)}>
-						<img
-							src={data[NextIndex].snippet.thumbnails.standard.url}
-							alt={data[NextIndex].snippet.title}
-						/>
-					</p>
-				</nav>
-			)}
+
+			<nav className='preview'>
+				{isSuccess && (
+					<>
+						<p
+							className='prev-box'
+							onClick={() => swiperRef.current.slidePrev(400)}>
+							<img
+								src={data[PrevIndex].snippet.thumbnails.standard.url}
+								alt={data[PrevIndex].snippet.title}
+							/>
+						</p>
+						<p
+							className='next-box'
+							onClick={() => swiperRef.current.slideNext(400)}>
+							<img
+								src={data[NextIndex].snippet.thumbnails.standard.url}
+								alt={data[NextIndex].snippet.title}
+							/>
+						</p>
+					</>
+				)}
+			</nav>
+
+			<ul className='pagination'>
+				{Array(num.current)
+					.fill()
+					.map((_, idx) => {
+						return (
+							<li
+								key={idx}
+								className={idx === Index ? 'on' : ''}
+								onClick={() => swiperRef.current.slideToLoop(idx, 400)}></li>
+						);
+					})}
+			</ul>
 		</figure>
 	);
 }

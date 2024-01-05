@@ -2,6 +2,33 @@
 	position: relative;
 	width: 100%;
 	height: calc(100vh - 90px);
+	.barFrame {
+		position: absolute;
+		bottom: 50px;
+		left: 15%;
+		width: 70%;
+		height: 2px;
+		background-color: #888;
+		.bar {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 0%;
+			height: 100%;
+			background: var(--pointColor);
+			transition: width 0.5s;
+		}
+	}
+	.counter {
+		position: absolute;
+		bottom: 80px;
+		right: 15vw;
+		color: var(--baseColor);
+		font-size: 1.5rem;
+		strong {
+			font-size: 2.5rem;
+		}
+	}
 	.txt-box {
 		z-index: 2;
 		position: absolute;
@@ -100,23 +127,41 @@
 		}
 	}
 	.preview {
-		> p {
+		p {
 			z-index: 6;
 			position: absolute;
 			bottom: 5vh;
-			width: 200px;
-			height: 80px;
+			width: 120px;
+			height: 60px;
 			overflow: hidden;
+			cursor: pointer;
 			img {
 				width: 100%;
 				height: 100%;
 				object-fit: cover;
 			}
 			&.prev-box {
-				left: 0;
+				left: 50px;
 			}
 			&.next-box {
-				right: 0;
+				right: 50px;
+			}
+		}
+	}
+	.pagination {
+		z-index: 6;
+		position: absolute;
+		bottom: 100px;
+		left: 15%;
+		display: flex;
+		gap: 10px;
+		li {
+			width: 10px;
+			height: 10px;
+			background-color: #888;
+			cursor: pointer;
+			&.on {
+				background-color: var(--pointColor);
 			}
 		}
 	}
