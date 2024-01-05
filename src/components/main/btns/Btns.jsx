@@ -12,7 +12,6 @@ export default function Btns(opt) {
 	const resultOpt = useRef({ ...defOpt.current, ...opt });
 
 	const [Num, setNum] = useState(0);
-	const [Mounted, setMounted] = useState(true);
 	const sections = useRef(null);
 	const wrap = useRef(null);
 	const btns = useRef(null);
@@ -26,19 +25,18 @@ export default function Btns(opt) {
 	// activation에서 null요소의 값을 읽을 수 없다는 오류 생기는 이유(throttle과는 무관)
 	// 아래 함수는 scroll이 동작될때마다 실행되는 함수
 	const activation = () => {
-		if (!Mounted) return;
 		const scroll = wrap.current.scrollTop;
 
-		// 내부적으로 scroll시 모든 section요소와 btns요소를 탐색해서 가져와야함
-		// 이때 스크롤하자마자 바로 라우터 이동하면 모든 section요소를 참조객체에 담기기전에 컴포넌트가 언마운트됨
-		// 따라서 컴포넌트 언마운트시 비어있는 참조객체를 호출하려고하기 때문에 에러 발생
-		// 컴포넌트가 언마운트되면 return문으로 참조객체활용 구문 자체를 무시
-
-		// children으로 받아진 요소는 유사배열이므로 Array.from 사용해서 순수배열로 변경 ==> forEach 사용가능
 		sections.current.forEach((_, idx) => {
 			if (scroll >= sections.current[idx].offsetTop + baseLine.current) {
-				Array.from(btns.current.children).forEach(btn => btn.classList.remove('on'));
-				btns.current.children[idx].classList.add('on');
+				// 아래 구문에서 children이 아닌 querySelectorAll을 써야 되는 이유
+				// children(HTMLCollections반환 LiveDOM) vs querySelectorAll(NodeList반환, Static DOM)
+				// 버튼 li요소를 Btns컴포넌트 마운트시 동적으로 생성하기 때문에
+				// 만약 컴포넌트 언마운트시 querySelector로 찾은 NodeList는 optionial chaining 처리가능하나
+				// children으로 구한 HTMLCollection은 실시간으로 DOM의 상태값을 추적하기 떄문에 optional chaining 처리 불가
+				const btnsArr = btns.current?.querySelectorAll('li');
+				btnsArr?.forEach(btn => btn.classList.remove('on'));
+				btns.current?.querySelectorAll('li')[idx]?.classList.add('on');
 			}
 		});
 	};
@@ -109,12 +107,6 @@ export default function Btns(opt) {
 			window.removeEventListener('resize', throttledPos);
 		};
 	}, [throttledAct, handleWheel, throttledPos, resultOpt.current.frame, resultOpt.current.items]);
-
-	// 컴포넌트 언마운트시 한번만 동작되어야 하기 때문에
-	// 의존성 배열이 비어있는 useEffect 안쪽의 클린업 함수에서 Mounted 값 변경 (위에 useEffect에 넣으면 activation함수 동작 안하는 오류 생김)
-	useEffect(() => {
-		return () => setMounted(false);
-	}, []);
 
 	return (
 		<ul
