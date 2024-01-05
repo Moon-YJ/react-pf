@@ -12,6 +12,7 @@ export default function Btns(opt) {
 	const resultOpt = useRef({ ...defOpt.current, ...opt });
 
 	const [Num, setNum] = useState(0);
+	const [Mounted, setMounted] = useState(true);
 	const sections = useRef(null);
 	const wrap = useRef(null);
 	const btns = useRef(null);
@@ -23,6 +24,7 @@ export default function Btns(opt) {
 	const isAutoScroll = useRef(resultOpt.current.isAuto);
 
 	const activation = () => {
+		if (!Mounted) return;
 		const scroll = wrap.current.scrollTop;
 		// children으로 받아진 요소는 유사배열이므로 Array.from 사용해서 순수배열로 변경 ==> forEach 사용가능
 		sections.current.forEach((_, idx) => {
@@ -94,6 +96,7 @@ export default function Btns(opt) {
 		isAutoScroll.current && wrap.current.addEventListener('mousewheel', handleWheel);
 		window.addEventListener('resize', throttledPos);
 		return () => {
+			setMounted(false);
 			wrap.current.removeEventListener('scroll', throttledAct);
 			wrap.current.removeEventListener('mousewheel', handleWheel);
 			window.removeEventListener('resize', throttledPos);
