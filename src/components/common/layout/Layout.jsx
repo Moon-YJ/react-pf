@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import './Layout.scss';
 import { useSplitText } from '../../../hooks/useText';
 import { useScroll } from '../../../hooks/useScroll';
@@ -6,8 +6,16 @@ import { useScroll } from '../../../hooks/useScroll';
 export default function Layout({ children, title }) {
 	const refFrame = useRef(null);
 	const refTitle = useRef(null);
+	const refBtnTop = useRef(null);
 	const splitTxt = useSplitText();
-	const { scrollTo } = useScroll('.wrap');
+	const { scrollTo, getCurrentScroll, scrollFrame } = useScroll();
+
+	const handleScroll = useCallback(
+		num => {
+			getCurrentScroll() >= num ? refBtnTop.current?.classList.add('on') : refBtnTop.current?.classList.remove('on');
+		},
+		[getCurrentScroll]
+	);
 
 	useEffect(() => {
 		scrollTo(0);
@@ -15,7 +23,9 @@ export default function Layout({ children, title }) {
 		setTimeout(() => {
 			refFrame.current?.classList.add('on');
 		}, 300);
-	}, [splitTxt, title, scrollTo]);
+
+		scrollFrame.current.addEventListener('scroll', () => handleScroll(300));
+	}, [splitTxt, title, scrollTo, scrollFrame, getCurrentScroll, handleScroll]);
 
 	return (
 		<main
@@ -27,6 +37,7 @@ export default function Layout({ children, title }) {
 			{children}
 			<button
 				className='btnTop'
+				ref={refBtnTop}
 				onClick={() => scrollTo(0)}>
 				Top
 			</button>

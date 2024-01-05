@@ -7,7 +7,7 @@ import Visual from '../visual/Visual';
 import './MainWrap.scss';
 
 export default function MainWrap() {
-	const { scrollTo } = useScroll('.wrap');
+	const { scrollTo } = useScroll();
 	return (
 		<div className='MainWrap'>
 			<Visual />
