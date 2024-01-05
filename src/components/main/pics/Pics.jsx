@@ -12,7 +12,7 @@ export default function Pics() {
 	const handleScroll = useCallback(() => {
 		const scroll = getCurrentScroll(thisEl.current, -window.innerHeight / 2);
 		if (scroll >= 0) {
-			titEl.current.style.transform = `translateX(${scroll}px)`;
+			titEl.current.style.transform = `translateX(${scroll * 1.5}px)`;
 			titEl.current.style.opacity = 1 - scroll / 800;
 			titEl2.current.style.transform = `scale(${1 + scroll / 400}) translateX(${scroll}px)`;
 			titEl2.current.style.opacity = 1 - scroll / 500;
