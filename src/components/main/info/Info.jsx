@@ -13,6 +13,10 @@ export default function Info() {
 	};
 	const [Post] = useState(getLocalData());
 
+	useEffect(() => {
+		localStorage.setItem('post', JSON.stringify(Post));
+	}, [Post]);
+
 	return (
 		<section className='Info myScroll'>
 			<div className='show-box'>

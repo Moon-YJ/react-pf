@@ -14,7 +14,7 @@ export default function Community() {
 		return JSON.parse(data);
 	};
 
-	const [Post, setPost] = useState(getLocalData);
+	const [Post, setPost] = useState(getLocalData());
 	const [CurNum, setCurNum] = useState(0); //페이징 버튼 클릭시 현재 보일 페이지 번호가 담길 state
 	const [PageNum, setPageNum] = useState(0); //전체 PageNum이 담길 state
 
