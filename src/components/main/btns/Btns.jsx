@@ -132,7 +132,28 @@ export default function Btns(opt) {
 	- VirtualDOM: 스크립트를 통해서 가상으로 만든 DOM
 	- RealDOM: HTML을 통해서 생성한 DOM
 
-	LiveDOM vs StaticDOM (둘다 RealDOM)
-	- LiveDOM: 계속 속성값이 갱신되는 DOM
-	- StaticDOM: 변수에 할당된 순간의 정보값으로 고정된 DOM
+	LiveDOM vs StaticDOM (둘다 RealDOM으로 RealDOM의 하위개념)
+	- LiveDOM: 계속 속성값이 갱신되는 DOM (추후에 동적으로 스크립트를 사용하여  추가된 요소도 반환 - ex. HTMLCollection)
+	- StaticDOM: 변수에 할당된 순간의 정보값으로 고정된 DOM (스크립트로 추가된 요소 반환하지 않음 - ex. NodeList)
+*/
+
+/*
+	<ul id="test">
+		<li>list1</li>
+		<li>list2</li>
+	</ul>
+
+	<script>
+		const ul = document.getElementById('test');
+		const liveDOM = ul.getElementsByTagName('li'); //HTMLCollection;
+		const staticDOM = ul.querySelectorAll('li'); //NodeList
+		const newLi = document.createElement('li');
+		newLi.innterText = 'list3';
+
+		console.log('first', liveDOM, staticDOM);
+		ul.append(newLi);
+		//HTMLCollection은 추후에 동적으로 속성값이 변경되도 변경값이 실시간으로 갱신됨 (LiveDOM)
+		//NodeList는 추후에 변경사항이 생겨도 초기 할당될때의 값만 고정적으로 가지고 있음 (StaticDOM)
+		console.log('second', liveDOM, staticDOM);
+	</script>
 */
