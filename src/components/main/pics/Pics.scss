@@ -5,9 +5,12 @@
 	padding: 10vw;
 	background-color: lightblue;
 	overflow: hidden;
-	.box {
-		width: 300px;
-		height: 300px;
-		background-color: #fff;
+	.tit {
+		font-size: 8rem;
+		color: var(--baseColor);
+	}
+	.tit2 {
+		font-size: 6rem;
+		color: var(--pointColor);
 	}
 }
