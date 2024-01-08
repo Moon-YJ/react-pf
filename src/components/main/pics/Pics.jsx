@@ -1,15 +1,14 @@
 import './Pics.scss';
 import { useScroll } from '../../../hooks/useScroll';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 export default function Pics() {
-	const thisEl = useRef(null);
 	const titEl = useRef(null);
 	const titEl2 = useRef(null);
-	const { getCurrentScroll, Frame } = useScroll();
+	const { getCurrentScroll, Frame, refEl } = useScroll();
 
 	const handleScroll = useCallback(() => {
-		const scroll = getCurrentScroll(thisEl.current, -window.innerHeight / 2);
+		const scroll = getCurrentScroll(-window.innerHeight / 2);
 		if (scroll >= 0) {
 			titEl.current.style.transform = `translateX(${scroll * 1.5}px)`;
 			titEl.current.style.opacity = 1 - scroll / 800;
@@ -25,7 +24,7 @@ export default function Pics() {
 	return (
 		<section
 			className='Pics myScroll'
-			ref={thisEl}>
+			ref={refEl}>
 			<h3
 				className='tit'
 				ref={titEl}>
