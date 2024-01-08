@@ -1,21 +1,23 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useScroll } from '../../../hooks/useScroll';
 import './Banner.scss';
 
 export default function Banner() {
-	const [Frame, setFrame] = useState(null);
-	const [Scrolled, setScrolled] = useState(0);
 	const refBanner = useRef(null);
-	const { getCurrentScroll } = useScroll(Frame);
-	console.log(Scrolled);
+	const box = useRef(null);
+	const { getCurrentScroll, Frame } = useScroll();
+
+	const handleScroll = useCallback(() => {
+		const scroll = getCurrentScroll(refBanner.current, -window.innerHeight / 2);
+		if (scroll >= 0) {
+			box.current.style.transform = `rotate(${scroll / 2}deg) scale(${1 + scroll / 400})`;
+			box.current.style.opacity = 1 - scroll / 400;
+		}
+	}, [getCurrentScroll]);
 
 	useEffect(() => {
-		setFrame(refBanner.current?.closest('.wrap'));
-		Frame?.addEventListener('scroll', () => {
-			const scroll = getCurrentScroll(refBanner.current, -window.innerHeight / 2);
-			scroll >= 0 && setScrolled(scroll);
-		});
-	}, [Frame, getCurrentScroll]);
+		Frame?.addEventListener('scroll', handleScroll);
+	}, [Frame, handleScroll]);
 
 	return (
 		<section
@@ -23,10 +25,7 @@ export default function Banner() {
 			ref={refBanner}>
 			<div
 				className='box'
-				style={{
-					transform: `rotate(${Scrolled / 2}deg) scale(${1 + Scrolled / 400})`,
-					opacity: 1 - Scrolled / 400
-				}}></div>
+				ref={box}></div>
 		</section>
 	);
 }

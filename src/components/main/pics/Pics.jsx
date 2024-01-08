@@ -3,11 +3,10 @@ import { useScroll } from '../../../hooks/useScroll';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 export default function Pics() {
-	const [Frame, setFrame] = useState(null);
 	const thisEl = useRef(null);
 	const titEl = useRef(null);
 	const titEl2 = useRef(null);
-	const { getCurrentScroll } = useScroll(Frame);
+	const { getCurrentScroll, Frame } = useScroll();
 
 	const handleScroll = useCallback(() => {
 		const scroll = getCurrentScroll(thisEl.current, -window.innerHeight / 2);
@@ -18,10 +17,6 @@ export default function Pics() {
 			titEl2.current.style.opacity = 1 - scroll / 500;
 		}
 	}, [getCurrentScroll]);
-
-	useEffect(() => {
-		setFrame(thisEl.current?.closest('.wrap'));
-	}, []);
 
 	useEffect(() => {
 		Frame?.addEventListener('scroll', handleScroll);
