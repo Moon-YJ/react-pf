@@ -7,10 +7,10 @@ export default function Layout({ children, title }) {
 	const refTitle = useRef(null);
 	const refBtnTop = useRef(null);
 	const splitTxt = useSplitText();
-	const customScroll = scroll => {
+	const handleCustomScroll = scroll => {
 		scroll >= 100 ? refBtnTop.current?.classList.add('on') : refBtnTop.current?.classList.remove('on');
 	};
-	const { scrollTo, refEl } = useScroll(customScroll, 0);
+	const { scrollTo, refEl } = useScroll(handleCustomScroll, 0);
 
 	useEffect(() => {
 		scrollTo(0);

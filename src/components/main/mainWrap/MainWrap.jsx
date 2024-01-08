@@ -1,4 +1,4 @@
-import { useScroll } from '../../../hooks/useScroll';
+//import { useScroll } from '../../../hooks/useScroll';
 import Banner from '../banner/Banner';
 import Btns from '../btns/Btns';
 import Illust from '../illust/Illust';
@@ -8,7 +8,7 @@ import Visual from '../visual/Visual';
 import './MainWrap.scss';
 
 export default function MainWrap() {
-	const { scrollTo } = useScroll();
+	//const { scrollTo } = useScroll();
 	return (
 		<div className='MainWrap'>
 			<Visual />
@@ -19,11 +19,11 @@ export default function MainWrap() {
 			{/* <Btns frame={스크롤 제어할 프레임 요소의 클래스명} items={스크롤이 걸릴 영역의 공통 클래스명} base={활성화될 기준점} isAuto={autoScroll 적용 여부(boolean)}
 			/> */}
 			<Btns />
-			<button
+			{/* <button
 				className='btnTop'
 				onClick={() => scrollTo(0)}>
 				Top
-			</button>
+			</button> */}
 		</div>
 	);
 }

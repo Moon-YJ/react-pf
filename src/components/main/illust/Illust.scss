@@ -20,7 +20,7 @@
 				stroke-width: 2;
 				stroke-dasharray: 1510; // 가시영역에서 path의 전체 길이(개발자 도구에서 직접 찍어서 구해야함)
 				stroke-dashoffset: -1510; // 가시영역에서 선이 시작되는 기준점을 전체 길이만큼 비가시영역으로 보내서 가시영역에는 빈공간이 보이도록 설정
-				transition: stroke-dashoffset 1.5s;
+				transition: stroke-dashoffset 1s;
 			}
 		}
 		/*

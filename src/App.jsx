@@ -33,8 +33,6 @@ export default function App() {
 	};
 
 	const changeState = () => {
-		// promise가 반환되는 핸들러 안쪽에서 복수개의 state가 변경되면 Batching 기능이 풀리면서 state의 개수만큼 재랜더링됨
-		// 해당 기능을 개선한것이 react 18의 Automatic Batching
 		returnPromise().then(() => {
 			setCount1(Count1 + 1);
 			setCount2(Count2 + 1);
