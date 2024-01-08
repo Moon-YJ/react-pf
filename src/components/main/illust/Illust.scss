@@ -11,12 +11,24 @@
 	.svg-box {
 		width: 60vh;
 		height: 60vh;
-		border: 1px solid #333;
 		svg {
+			// stroke-dasharray: 해당 path의 빈칸 비율, 빈칸 비율과 그어진 선의 크기는 동일한 비율로 설정됨
+			// stroke-dashoffeset: 가시영역에서의 stroke이 보여지는 시작 기준점
 			path {
-				fill: hotpink;
-				stroke: blue;
-				stroke-width: 10;
+				fill: transparent;
+				stroke: var(--baseColor);
+				stroke-width: 2;
+				stroke-dasharray: 1510; // 가시영역에서 path의 전체 길이(개발자 도구에서 직접 찍어서 구해야함)
+				stroke-dashoffset: -1510; // 가시영역에서 선이 시작되는 기준점을 전체 길이만큼 비가시영역으로 보내서 가시영역에는 빈공간이 보이도록 설정
+				transition: stroke-dashoffset 1.5s;
+			}
+		}
+		&:hover {
+			svg {
+				path {
+					// 호버시 기준점을 0으로 변경하면 왼쪽 비가시영역에 있던 선이 가시영역으로 들어오면서 마치 선이 그어지는것 같은 모션효과
+					stroke-dashoffset: 0;
+				}
 			}
 		}
 	}
