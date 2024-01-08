@@ -1,25 +1,17 @@
 import './Pics.scss';
 import { useScroll } from '../../../hooks/useScroll';
-import { useCallback, useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
 export default function Pics() {
 	const titEl = useRef(null);
 	const titEl2 = useRef(null);
-	const { getCurrentScroll, Frame, refEl } = useScroll();
-
-	const handleScroll = useCallback(() => {
-		const scroll = getCurrentScroll(-window.innerHeight / 2);
-		if (scroll >= 0) {
-			titEl.current.style.transform = `translateX(${scroll * 1.5}px)`;
-			titEl.current.style.opacity = 1 - scroll / 800;
-			titEl2.current.style.transform = `scale(${1 + scroll / 400}) translateX(${scroll}px)`;
-			titEl2.current.style.opacity = 1 - scroll / 500;
-		}
-	}, [getCurrentScroll]);
-
-	useEffect(() => {
-		Frame?.addEventListener('scroll', handleScroll);
-	}, [Frame, getCurrentScroll, handleScroll]);
+	const customScroll = scroll => {
+		titEl.current.style.transform = `translateX(${scroll * 1.5}px)`;
+		titEl.current.style.opacity = 1 - scroll / 800;
+		titEl2.current.style.transform = `scale(${1 + scroll / 400}) translateX(${scroll}px)`;
+		titEl2.current.style.opacity = 1 - scroll / 500;
+	};
+	const { refEl } = useScroll(customScroll);
 
 	return (
 		<section
