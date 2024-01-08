@@ -1,0 +1,23 @@
+.Illust {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100vh;
+	padding: 10vw;
+	background-color: lightgreen;
+	overflow: hidden;
+	.svg-box {
+		width: 60vh;
+		height: 60vh;
+		border: 1px solid #333;
+		svg {
+			path {
+				fill: hotpink;
+				stroke: blue;
+				stroke-width: 10;
+			}
+		}
+	}
+}
