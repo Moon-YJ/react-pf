@@ -17,17 +17,37 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useGlobalData } from './hooks/useGlobalData';
 import CookieModal from './components/common/cookieModal/CookieModal';
+import { useState } from 'react';
 //import { useCookie } from './hooks/useCookie';
 
 export default function App() {
+	console.log('re-render');
 	const queryClient = new QueryClient();
 	const { Mode } = useGlobalData();
+	const [Count1, setCount1] = useState(1);
+	const [Count2, setCount2] = useState(2);
+	const [Count3, setCount3] = useState(3);
+
+	const returnPromise = () => {
+		return new Promise(res => setTimeout(res, 500));
+	};
+
+	const changeState = () => {
+		// promise가 반환되는 핸들러 안쪽에서 복수개의 state가 변경되면 Batching 기능이 풀리면서 state의 개수만큼 재랜더링됨
+		// 해당 기능을 개선한것이 react 18의 Automatic Batching
+		returnPromise().then(() => {
+			setCount1(Count1 + 1);
+			setCount2(Count2 + 1);
+			setCount3(Count3 + 1);
+		});
+	};
 
 	//useCookie('today', 'done', 20);
 
 	return (
 		<QueryClientProvider client={queryClient}>
 			<div className={`wrap ${Mode === 'light' ? 'light' : 'dark'} ${useMedia()}`}>
+				<button onClick={changeState}>버튼</button>
 				<Header />
 				<Route
 					exact

@@ -14,8 +14,8 @@ export default function MainWrap() {
 			<Visual />
 			<Info />
 			<Illust />
-			{/* <Pics />
-			<Banner /> */}
+			<Pics />
+			<Banner />
 			{/* <Btns frame={스크롤 제어할 프레임 요소의 클래스명} items={스크롤이 걸릴 영역의 공통 클래스명} base={활성화될 기준점} isAuto={autoScroll 적용 여부(boolean)}
 			/> */}
 			<Btns />

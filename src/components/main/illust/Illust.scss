@@ -23,13 +23,15 @@
 				transition: stroke-dashoffset 1.5s;
 			}
 		}
-		&:hover {
-			svg {
-				path {
-					// 호버시 기준점을 0으로 변경하면 왼쪽 비가시영역에 있던 선이 가시영역으로 들어오면서 마치 선이 그어지는것 같은 모션효과
-					stroke-dashoffset: 0;
-				}
-			}
-		}
+		/*
+      &:hover {
+        svg {
+          path {
+            // 호버시 기준점을 0으로 변경하면 왼쪽 비가시영역에 있던 선이 가시영역으로 들어오면서 마치 선이 그어지는것 같은 모션효과
+            stroke-dashoffset: 0;
+          }
+        }
+      }
+    */
 	}
 }

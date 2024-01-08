@@ -5,7 +5,7 @@ import { useRef } from 'react';
 export default function Pics() {
 	const titEl = useRef(null);
 	const titEl2 = useRef(null);
-	const customScroll = scroll => {
+	const handleCustomScroll = scroll => {
 		if (scroll >= 0) {
 			titEl.current.style.transform = `translateX(${scroll}px)`;
 			titEl.current.style.opacity = 1 - scroll / 800;
@@ -18,7 +18,8 @@ export default function Pics() {
 			titEl2.current.style.opacity = 1;
 		}
 	};
-	const { refEl } = useScroll(customScroll);
+
+	const { refEl } = useScroll(handleCustomScroll);
 
 	return (
 		<section
