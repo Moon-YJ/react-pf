@@ -38,6 +38,13 @@ ReactDOM.render(
 /*
 	[코딩가이드 들어갈 내용 및 면접 예상 질문 정리]
 
+	- Redux 작업 흐름
+			1. redux 폴더 안쪽에 store 생성하는 함수, reducer 함수, actionType문자열 저장객체 파일 준비
+			2. index.js에서 redux폴더 안쪽에서 생성한 store객체를 Provider컴포넌트를 통해서 App에 전달 (모든 컴포넌트는 store에 useSelector hook으로 접근 가능)
+			3. 루트 컴포넌트인 App이 마운트되자마자 비동기데이터를 fetching후 action객체에 액션타입과 같이 담아주고 dispatch로 reducer함수에 전달
+			4. reducer 함수가 컴포넌트로부터 전달된 action객체의 타입을 확인해서 같이 전달된 payload값으로 store에 데이터를 변경 처리
+			5. 단 클라이언트 데이터(Modal open, Darktheme 관련)는 애초에 reducer 함수에서 초기값 할당해서 저장
+
 	- 해당 프로젝트에서 Redux를 사용한 이유(코딩가이드)
 		1. 서브 컴포넌트에서 활용하는 멤버 정보, 유튜브, 플리커같은 정보값을 메인 컴포넌트에서 미리보기 형식으로 출력하고싶음
 		2. 같은 데이터를 불러오는데 다시 fetching은 비효율적이고, props로 전달하기에는 컴포넌트가 지저분해져서 전역 데이터 관리의 필요성을 느끼게 됨
