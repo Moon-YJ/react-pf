@@ -98,6 +98,7 @@ export default function Department() {
 	- Department.jsx 작업흐름
 		1. public > DB폴더 안쪽에 json파일을 임의로 생성해서 data fetching처리
 		2. 데이터를 기반으로 멤버 소개 페이지 구현
+		3. 텍스트 데이터를 편하게 가공하기 위해 useText custom hook을 제작해서 다양한 방식으로 문자열 처리할수 있게 작업(--> useText hook 가이드 문서 p.100)
 
 	- 이슈사항
 		1. 리액트 지식이 부족할때 만든 컴포넌트라서 static한 데이터를 일일이 JSX에 담아서 랜더링
